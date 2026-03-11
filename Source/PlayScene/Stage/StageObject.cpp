@@ -1,21 +1,21 @@
 #include "StageObject.h"
 #include <assert.h>
 
-StageObject::StageObject(const std::string& fileName, const Transform& t, int hp, int score)
+StageObject::StageObject(Data::ObjectData objectData)
 {
 	const std::string folder = "data/model/";
-	hModel_ = MV1LoadModel((folder + fileName + ".mv1").c_str());
+	hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
 	assert(hModel_ > 0);
-	hitModel_ = MV1LoadModel((folder + fileName + "_c.mv1").c_str());
+	hitModel_ = MV1LoadModel((folder + objectData.path + "_c.mv1").c_str());
 	assert(hitModel_ > 0);
 
-	transform_ = t;
+	transform_ = objectData.t;
 	transform_.MakeLocalMatrix();
 	MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
 	MV1SetupCollInfo(hitModel_);
 
-	hp_ = hp;
-	if (hp > 0)
+	hp_ = objectData.hp;
+	if (hp_ > 0)
 	{
 		isDestructible_ = true;
 		objectNumber_ = OBJECT_SORT::OBJ_OBJECT_D;
@@ -26,7 +26,7 @@ StageObject::StageObject(const std::string& fileName, const Transform& t, int hp
 		objectNumber_ = OBJECT_SORT::OBJ_OBJECT;
 	}
 
-	score_ = score;
+	score_ = objectData.score;
 
 }
 

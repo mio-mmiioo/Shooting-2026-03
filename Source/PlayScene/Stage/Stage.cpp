@@ -1,8 +1,10 @@
 #include "Stage.h"
 #include "../../../MyLibrary/CsvReader.h"
+#include "../../Data.h"
 
 // 各オブジェクト
 #include "../Player/Player.h"
+#include "../Enemy/Enemy.h"
 #include "StageObject.h"
 
 namespace STAGE
@@ -26,44 +28,46 @@ Stage::~Stage()
 void Stage::ReadMappingData(std::string fileName)
 {
 	CsvReader* csv = new CsvReader(STAGE::FOLDER + fileName + ".csv");
-	Transform t;
-	int sortNumber;
-	int hp;
-	int score;
+	Data::ObjectData o;
 	char file[STAGE::DATA_SIZE];
 
 	for (int line = 0; line < csv->GetLines(); line++)
 	{
-		sortNumber = csv->GetInt(line, DATA_NUM::OBJECT);
-		t.position_.x = csv->GetFloat(line, DATA_NUM::POSITION_X);
-		t.position_.y = csv->GetFloat(line, DATA_NUM::POSITION_Y);
-		t.position_.z = csv->GetFloat(line, DATA_NUM::POSITION_Z);
-		t.position_ += STAGE::ADD_POSITION;
-		hp = csv->GetInt(line, DATA_NUM::HP);
+		o.objectSortNumber = csv->GetInt(line, DATA_NUM::OBJECT);
+		o.objectNumber = csv->GetInt(line, DATA_NUM::NUMBER);
+		o.t.position_.x = csv->GetFloat(line, DATA_NUM::POSITION_X);
+		o.t.position_.y = csv->GetFloat(line, DATA_NUM::POSITION_Y);
+		o.t.position_.z = csv->GetFloat(line, DATA_NUM::POSITION_Z);
+		o.t.position_ += STAGE::ADD_POSITION;
+		o.hp = csv->GetInt(line, DATA_NUM::HP);
 
-		if (sortNumber == OBJECT_SORT::OBJ_PLAYER)
+		if (o.objectSortNumber == OBJECT_SORT::OBJ_PLAYER)
 		{
 			// プレイヤーを作成
-			new Player(t.position_, hp);
+			new Player(o.t.position_, o.hp);
 		}
 		else
 		{
-			t.rotation_.x = csv->GetFloat(line, DATA_NUM::ROTATION_X);
-			t.rotation_.y = csv->GetFloat(line, DATA_NUM::ROTATION_Y);
-			t.rotation_.z = csv->GetFloat(line, DATA_NUM::ROTATION_Z);
-			t.scale_.x = csv->GetFloat(line, DATA_NUM::SCALE_X);
-			t.scale_.y = csv->GetFloat(line, DATA_NUM::SCALE_Y);
-			t.scale_.z = csv->GetFloat(line, DATA_NUM::SCALE_Z);
-			score = csv->GetInt(line, DATA_NUM::SCORE);
+			o.t.rotation_.x = csv->GetFloat(line, DATA_NUM::ROTATION_X);
+			o.t.rotation_.y = csv->GetFloat(line, DATA_NUM::ROTATION_Y);
+			o.t.rotation_.z = csv->GetFloat(line, DATA_NUM::ROTATION_Z);
+			o.t.scale_.x = csv->GetFloat(line, DATA_NUM::SCALE_X);
+			o.t.scale_.y = csv->GetFloat(line, DATA_NUM::SCALE_Y);
+			o.t.scale_.z = csv->GetFloat(line, DATA_NUM::SCALE_Z);
+			o.score = csv->GetInt(line, DATA_NUM::SCORE);
 
-			if (sortNumber == OBJECT_SORT::OBJ_CHARA)
+			if (o.objectSortNumber == OBJECT_SORT::OBJ_CHARA)
 			{
-				// 敵などの生成
+				sprintf_s<STAGE::DATA_SIZE>(file, "enemy%03d", csv->GetInt(line, DATA_NUM::NUMBER));
+				o.path = file;
+				// 敵の生成
+				Enemy::CreateEnemy(o);
 			}
-			else if (sortNumber == OBJECT_SORT::OBJ_OBJECT)
+			else if (o.objectSortNumber == OBJECT_SORT::OBJ_OBJECT)
 			{
 				sprintf_s<STAGE::DATA_SIZE>(file, "Stage_Obj%03d", csv->GetInt(line, DATA_NUM::NUMBER));
-				StageObject* obj = new StageObject(file, t, hp, score);
+				o.path = file;
+				StageObject* obj = new StageObject(o);
 			}
 		}
 	}

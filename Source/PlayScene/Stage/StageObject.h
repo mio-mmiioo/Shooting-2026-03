@@ -1,10 +1,11 @@
 #pragma once
 #include "../../../MyLibrary/Object3D.h"
+#include "../../Data.h"
 
 class StageObject : public Object3D
 {
 public:
-	StageObject(const std::string& fileName, const Transform& t, int hp, int score);
+	StageObject(Data::ObjectData objectData);
 	~StageObject();
 
 	void Update() override;

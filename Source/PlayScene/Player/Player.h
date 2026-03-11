@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../MyLibrary/Object3D.h"
+#include "../../Data.h"
 #include "Gun.h"
 
 class Camera;

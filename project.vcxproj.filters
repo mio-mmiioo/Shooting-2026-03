@@ -71,7 +71,6 @@
     <ClCompile Include="Source\PlayScene\Stage\StageObject.cpp">
       <Filter>PlayScene\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
     <ClCompile Include="Source\PlayScene\Player\Player.cpp">
       <Filter>PlayScene\Player</Filter>
     </ClCompile>
@@ -80,6 +79,16 @@
     </ClCompile>
     <ClCompile Include="MyLibrary\Light.cpp">
       <Filter>MyLibrary</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\Enemy\Enemy.cpp">
+      <Filter>PlayScene\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\Camera\Camera.cpp">
+      <Filter>PlayScene\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Data.cpp" />
+    <ClCompile Include="Source\PlayScene\Enemy\Stone.cpp">
+      <Filter>PlayScene\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +189,13 @@
     </ClInclude>
     <ClInclude Include="MyLibrary\Light.h">
       <Filter>MyLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Enemy\Enemy.h">
+      <Filter>PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Data.h" />
+    <ClInclude Include="Source\PlayScene\Enemy\Stone.h">
+      <Filter>PlayScene\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

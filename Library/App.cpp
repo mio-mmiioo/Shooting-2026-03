@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "ObjectManager.h"
 #include "Time.h"
+#include "../Source/Data.h"
 #include "../MyLibrary/Input.h"
 #include <DxLib.h>
 
@@ -11,6 +12,7 @@ void AppInit()
 	SceneManager::Init();
 	Time::Init();
 	Input::InitActionMap();
+	Data::Init();
 }
 
 void AppUpdate()

@@ -159,7 +159,10 @@
     <ClInclude Include="MyLibrary\Object2D.h" />
     <ClInclude Include="MyLibrary\Object3D.h" />
     <ClInclude Include="Source\BootScene.h" />
+    <ClInclude Include="Source\Data.h" />
     <ClInclude Include="Source\PlayScene\Camera\Camera.h" />
+    <ClInclude Include="Source\PlayScene\Enemy\Enemy.h" />
+    <ClInclude Include="Source\PlayScene\Enemy\Stone.h" />
     <ClInclude Include="Source\PlayScene\Player\Gun.h" />
     <ClInclude Include="Source\PlayScene\Player\Player.h" />
     <ClInclude Include="Source\PlayScene\PlayScene.h" />
@@ -190,7 +193,10 @@
     <ClCompile Include="MyLibrary\Object2D.cpp" />
     <ClCompile Include="MyLibrary\Object3D.cpp" />
     <ClCompile Include="Source\BootScene.cpp" />
+    <ClCompile Include="Source\Data.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
+    <ClCompile Include="Source\PlayScene\Enemy\Enemy.cpp" />
+    <ClCompile Include="Source\PlayScene\Enemy\Stone.cpp" />
     <ClCompile Include="Source\PlayScene\Player\Gun.cpp" />
     <ClCompile Include="Source\PlayScene\Player\Player.cpp" />
     <ClCompile Include="Source\PlayScene\PlayScene.cpp" />
