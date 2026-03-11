@@ -93,6 +93,9 @@
     <ClCompile Include="Source\PlayScene\Enemy\Touhu.cpp">
       <Filter>PlayScene\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="MyLibrary\Collision.cpp">
+      <Filter>MyLibrary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\Enemy\Touhu.h">
       <Filter>PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibrary\Collision.h">
+      <Filter>MyLibrary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

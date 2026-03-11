@@ -152,6 +152,7 @@
     <ClInclude Include="Library\SceneBase.h" />
     <ClInclude Include="Library\SceneManager.h" />
     <ClInclude Include="Library\Time.h" />
+    <ClInclude Include="MyLibrary\Collision.h" />
     <ClInclude Include="MyLibrary\Color.h" />
     <ClInclude Include="MyLibrary\CsvReader.h" />
     <ClInclude Include="MyLibrary\Input.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Library\ObjectManager.cpp" />
     <ClCompile Include="Library\SceneManager.cpp" />
     <ClCompile Include="Library\Time.cpp" />
+    <ClCompile Include="MyLibrary\Collision.cpp" />
     <ClCompile Include="MyLibrary\CsvReader.cpp" />
     <ClCompile Include="MyLibrary\Input.cpp" />
     <ClCompile Include="MyLibrary\Light.cpp" />
