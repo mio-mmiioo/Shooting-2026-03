@@ -78,6 +78,9 @@
     <ClCompile Include="Source\PlayScene\Player\Gun.cpp">
       <Filter>PlayScene\Player</Filter>
     </ClCompile>
+    <ClCompile Include="MyLibrary\Light.cpp">
+      <Filter>MyLibrary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -174,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\Player\Gun.h">
       <Filter>PlayScene\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibrary\Light.h">
+      <Filter>MyLibrary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

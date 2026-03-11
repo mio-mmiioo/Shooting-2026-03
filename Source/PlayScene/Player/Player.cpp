@@ -3,10 +3,15 @@
 #include "../Camera/Camera.h"
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
+#include "../../../MyLibrary/Light.h"
 #include "../../../ImGui/imgui.h"
 
 namespace PLAYER
 {
+	const float ROTATE_SPEED = 3.0f;	// 回転速度
+	const float MOVE_SPEED = 5.0f;		// 移動速度
+	
+	// 開発時のみ
 	const float DIRECTION_LENGTH = 100.0f;
 }
 
@@ -28,6 +33,9 @@ Player::Player(const VECTOR3& position, int hp)
 	SetAimingImage(hitAiming_, "data/image/pointer2.png");
 	SetAimingImage(reload_, "data/image/reload.png");
 
+	rotateSpeed_ = PLAYER::ROTATE_SPEED;
+	moveSpeed_ = PLAYER::MOVE_SPEED;
+
 	camera_ = FindGameObject<Camera>();
 
 	SetDrawOrder(-100);
@@ -46,6 +54,12 @@ void Player::Update()
 
 
 	camera_->SetPlayerPosition(transform_);
+	Light::SetPosition(transform_.position_);
+
+	// 位置情報の更新
+	transform_.MakeLocalMatrix();
+	MV1SetMatrix(hModel_, transform_.GetLocalMatrix());
+	MV1RefreshCollInfo(hModel_);
 }
 
 void Player::Draw()

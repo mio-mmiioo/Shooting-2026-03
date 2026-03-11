@@ -155,6 +155,7 @@
     <ClInclude Include="MyLibrary\Color.h" />
     <ClInclude Include="MyLibrary\CsvReader.h" />
     <ClInclude Include="MyLibrary\Input.h" />
+    <ClInclude Include="MyLibrary\Light.h" />
     <ClInclude Include="MyLibrary\Object2D.h" />
     <ClInclude Include="MyLibrary\Object3D.h" />
     <ClInclude Include="Source\BootScene.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Library\Time.cpp" />
     <ClCompile Include="MyLibrary\CsvReader.cpp" />
     <ClCompile Include="MyLibrary\Input.cpp" />
+    <ClCompile Include="MyLibrary\Light.cpp" />
     <ClCompile Include="MyLibrary\Object2D.cpp" />
     <ClCompile Include="MyLibrary\Object3D.cpp" />
     <ClCompile Include="Source\BootScene.cpp" />
