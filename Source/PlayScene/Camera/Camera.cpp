@@ -65,7 +65,7 @@ void Camera::Update()
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
 }
 
-void Camera::SetPlayerPosition(const Transform& transform)
+void Camera::SetPlayerPosition(Transform transform)
 {
 	player_ = transform;
 }

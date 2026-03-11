@@ -1,5 +1,8 @@
 #include "Stage.h"
 #include "../../../MyLibrary/CsvReader.h"
+
+// 各オブジェクト
+#include "../Player/Player.h"
 #include "StageObject.h"
 
 namespace STAGE
@@ -41,6 +44,7 @@ void Stage::ReadMappingData(std::string fileName)
 		if (sortNumber == OBJECT_SORT::OBJ_PLAYER)
 		{
 			// プレイヤーを作成
+			new Player(t.position_, hp);
 		}
 		else
 		{

@@ -6,8 +6,8 @@
 
 PlayScene::PlayScene()
 {
-	new Stage(0);
 	new Camera();
+	new Stage(12);
 }
 
 PlayScene::~PlayScene()

@@ -15,7 +15,7 @@ public:
 	Camera();
 	~Camera();
 	void Update() override;
-	void SetPlayerPosition(const Transform& transform);
+	void SetPlayerPosition(Transform transform);
 
 private:
 	void FirstUpdate();		// 一人称カメラの更新処理

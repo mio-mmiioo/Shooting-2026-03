@@ -72,6 +72,12 @@
       <Filter>PlayScene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
+    <ClCompile Include="Source\PlayScene\Player\Player.cpp">
+      <Filter>PlayScene\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\Player\Gun.cpp">
+      <Filter>PlayScene\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -162,6 +168,12 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\Camera\Camera.h">
       <Filter>PlayScene\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Player\Player.h">
+      <Filter>PlayScene\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Player\Gun.h">
+      <Filter>PlayScene\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
