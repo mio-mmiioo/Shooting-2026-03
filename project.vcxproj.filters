@@ -68,6 +68,10 @@
     <ClCompile Include="Source\PlayScene\Stage\Stage.cpp">
       <Filter>PlayScene\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Stage\StageObject.cpp">
+      <Filter>PlayScene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -153,6 +157,12 @@
     <ClInclude Include="Source\PlayScene\Stage\Stage.h">
       <Filter>PlayScene\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlayScene\Stage\StageObject.h">
+      <Filter>PlayScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Camera\Camera.h">
+      <Filter>PlayScene\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library">
@@ -181,6 +191,12 @@
     </Filter>
     <Filter Include="PlayScene\Enemy">
       <UniqueIdentifier>{3fb231c5-b2ee-4c32-ad45-d91946a650b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Player">
+      <UniqueIdentifier>{c83f4977-bd2a-40d6-b0ad-0fe51a3dea54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene\Camera">
+      <UniqueIdentifier>{ae98e7fe-0776-4c2b-90ac-913fdcadf5b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

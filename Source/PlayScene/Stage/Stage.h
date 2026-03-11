@@ -21,7 +21,7 @@ private:
 		SCALE_Y,
 		SCALE_Z,
 		HP,
-		SCPRE,
+		SCORE,
 		MAX_DATA
 	};
 

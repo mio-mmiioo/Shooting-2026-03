@@ -158,8 +158,10 @@
     <ClInclude Include="MyLibrary\Object2D.h" />
     <ClInclude Include="MyLibrary\Object3D.h" />
     <ClInclude Include="Source\BootScene.h" />
+    <ClInclude Include="Source\PlayScene\Camera\Camera.h" />
     <ClInclude Include="Source\PlayScene\PlayScene.h" />
     <ClInclude Include="Source\PlayScene\Stage\Stage.h" />
+    <ClInclude Include="Source\PlayScene\Stage\StageObject.h" />
     <ClInclude Include="Source\ResultScene\ResultScene.h" />
     <ClInclude Include="Source\Screen.h" />
     <ClInclude Include="Source\SceneFactory.h" />
@@ -184,8 +186,10 @@
     <ClCompile Include="MyLibrary\Object2D.cpp" />
     <ClCompile Include="MyLibrary\Object3D.cpp" />
     <ClCompile Include="Source\BootScene.cpp" />
+    <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
     <ClCompile Include="Source\PlayScene\PlayScene.cpp" />
     <ClCompile Include="Source\PlayScene\Stage\Stage.cpp" />
+    <ClCompile Include="Source\PlayScene\Stage\StageObject.cpp" />
     <ClCompile Include="Source\ResultScene\ResultScene.cpp" />
     <ClCompile Include="Source\SceneFactory.cpp" />
     <ClCompile Include="Source\TitleScene\TitleScene.cpp" />
