@@ -2,7 +2,7 @@
 
 // 各敵のヘッダー
 #include "Stone.h"
-
+#include "Touhu.h"
 void Enemy::CreateEnemy(Data::ObjectData objectData)
 {
 	switch (objectData.objectNumber)
@@ -11,7 +11,7 @@ void Enemy::CreateEnemy(Data::ObjectData objectData)
 		new Stone(objectData, Data::enemyDataList["stone"]);
 		break;
 	case E_SORT::TOUHU:
-		// TOUHUを生成
+		new Touhu(objectData, Data::enemyDataList["touhu"]);
 		break;
 	}
 }

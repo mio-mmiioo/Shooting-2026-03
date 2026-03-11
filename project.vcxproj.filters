@@ -90,6 +90,9 @@
     <ClCompile Include="Source\PlayScene\Enemy\Stone.cpp">
       <Filter>PlayScene\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Enemy\Touhu.cpp">
+      <Filter>PlayScene\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -195,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="Source\Data.h" />
     <ClInclude Include="Source\PlayScene\Enemy\Stone.h">
+      <Filter>PlayScene\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Enemy\Touhu.h">
       <Filter>PlayScene\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,7 +29,6 @@ void Data::InitEnemyDataList()
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
 		std::string name = csv->GetString(line, E_DATA_NUM::NAME);
-		//int sortNumber = csv->GetInt(line, E_DATA_NUM::SORT);
 		data.gravity = csv->GetFloat(line, E_DATA_NUM::GRAVITY);
 		data.moveSpeed = csv->GetFloat(line, E_DATA_NUM::MOVE_SPEED);
 		data.rotateSpeed = csv->GetFloat(line, E_DATA_NUM::ROTATE_SPEED);
