@@ -1,10 +1,12 @@
 #include "Collision.h"
 #include <assert.h>
+#include <algorithm>
 
 namespace Collision
 {
 	const VECTOR3 CHECK_ONGROUND_LENGTH = { 0.0f, 5000.0f, 0.0f };
 	std::list<Object3D*> allObjectList; // すべての銃弾が当たるオブジェクト
+	Object3D* hitObject = nullptr;
 }
 
 int Collision::Release()
@@ -29,10 +31,13 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 {
 	bool found = false;
 	VECTOR3 now;
-	Object3D* checkObject = nullptr;
 	float nowVal = ((VECTOR3)(pos2 - pos1)).Size();
 	for (Object3D* obj : allObjectList)
 	{
+		if (obj == nullptr) // この書き方はよくない
+		{
+			continue;
+		}
 		if (obj->GetObjectNumber() != OBJECT_SORT::OBJ_PLAYER)
 		{
 			VECTOR3 ret;
@@ -45,7 +50,7 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 				{
 					nowVal = len;
 					now = ret;
-					checkObject = obj;
+					hitObject = obj;
 				}
 			}
 		}
@@ -56,9 +61,9 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 	}
 
 	// 当たったオブジェクトの種類から、判別
-	if (checkObject != nullptr)
+	if (hitObject != nullptr)
 	{
-		if (checkObject->GetObjectNumber() == OBJECT_SORT::OBJ_OBJECT)
+		if (hitObject->GetObjectNumber() == OBJECT_SORT::OBJ_OBJECT)
 		{
 			found = false;
 		}
@@ -140,5 +145,11 @@ int Collision::DeleteObject(Object3D* obj)
 			ret = 1; // 解放処理をした場合に返される値
 		}
 	}
+	allObjectList.remove(nullptr);
 	return ret;
+}
+
+Object3D* Collision::GetHitObject()
+{
+	return hitObject;
 }

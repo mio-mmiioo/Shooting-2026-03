@@ -45,6 +45,9 @@ Player::Player(const VECTOR3& position, int hp)
 	
 
 	camera_ = FindGameObject<Camera>();
+	gun_ = new Gun();
+	currentGunType_ = GUN::TYPE::HAND;
+	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 
 	Collision::AddObject(this);
 
@@ -64,6 +67,12 @@ void Player::Update()
 	// 移動処理
 	DevelopmentInput();
 
+	// リロード
+	if (Input::IsKeyDown("reload"))
+	{
+		gun_->ReloadBullet();
+	}
+
 	// 照準の当たり判定
 	{
 		VECTOR ScreenPosition = { (float)mouseX_,(float)mouseY_, 1.0f };
@@ -81,6 +90,20 @@ void Player::Update()
 		}
 	}
 
+	// 発砲
+	if (Input::IsKeyDown("outBullet") && isHit_ == true)
+	{
+		if (gun_->OutBullet() == true)
+		{
+			// 銃弾がヒットするオブジェクトを攻撃する(HPを減らす)
+			Object3D* attackObject = Collision::GetHitObject();
+			if (attackObject != nullptr)
+			{
+				attackObject->AddHp(-gun_->GetAttack());
+			}
+		}
+	}
+
 	// 重力を加える
 	transform_.position_.y -= velocityY_;
 	velocityY_ += gravity_;
@@ -91,6 +114,7 @@ void Player::Update()
 		transform_.position_ = Collision::CheckOnGround(this);
 		transform_.position_ = Collision::CheckPushObject(this);
 
+		// ここに入らない
 		if (VSize(currentPosition - transform_.position_) <= 0)
 		{
 			velocityY_ = 0.0f;

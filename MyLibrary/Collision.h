@@ -11,4 +11,6 @@ namespace Collision
 	VECTOR3 CheckPushObject(Object3D* obj); // 他のオブジェクトにめり込んでいない場所に移動させた値を返す
 	VECTOR3 CheckOnGround(Object3D* obj); // 地面に足がついている場合、押し返して移動させた値を返す
 	int DeleteObject(Object3D* obj); // AddObjectを読んだ場合には必ず呼ぶ解放処理 失敗→-1
+
+	Object3D* GetHitObject();
 }

@@ -25,6 +25,7 @@ private:
 	void SetAimingImage(image& i, std::string path);
 
 	Camera* camera_;
+	Gun* gun_;
 
 	int mouseX_;
 	int mouseY_;

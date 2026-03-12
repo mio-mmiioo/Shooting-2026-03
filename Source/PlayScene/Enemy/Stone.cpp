@@ -43,7 +43,6 @@ Stone::~Stone()
 	{
 		hModel_ = -1;
 	}
-	Collision::DeleteObject(this);
 }
 
 void Stone::Update()
@@ -51,6 +50,7 @@ void Stone::Update()
 	// ‘Ì—Í‚ª0‚Ìê‡‚Ìˆ—
 	if (hp_ <= 0)
 	{
+		Collision::DeleteObject(this);
 		DestroyMe();
 		return;
 	}
