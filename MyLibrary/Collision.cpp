@@ -84,24 +84,30 @@ VECTOR3 Collision::CheckPushObject(Object3D* obj)
 {
 	VECTOR3 direction; // 押し返す方向のベクトル
 	VECTOR3 hit;
+	VECTOR3 normal;
 	VECTOR3 pos1 = obj->GetTransform().position_;
-	VECTOR3 ret = pos1;
+	VECTOR3 pushBack = { 0, 0, 0 };
 	VECTOR3 pos2;
 	float distance;
 	for (Object3D* o : allObjectList)
 	{
-		pos2 = o->GetTransform().position_;
-		if (o->CollideLine(pos1, pos2, &hit))
+		if (o == obj)
 		{
-			distance = obj->GetDistanceR() + o->GetDistanceR();
+			continue;
+		}
+
+		pos2 = o->GetTransform().position_;
+		if (o->CollideLine(pos1, pos2, &hit, &normal))
+		{
+			distance = obj->GetDistanceR();
 			if (VSize(pos1 - hit) < distance)
 			{
-				direction = VNorm(hit - pos1); // 押し返す方向のベクトル
-				ret = pos1 - (direction * (distance - VSize(pos1 - hit))); // ( 押し返す方向 ) * ( 押し返したい距離 )
+				direction = normal; // 押し返す方向のベクトル
+				pushBack += direction * (distance - VSize(pos1 - hit)); // ( 押し返す方向 ) * ( 押し返したい距離 )
 			}
 		}
 	}
-	return ret;
+	return pos1 + pushBack;
 }
 
 VECTOR3 Collision::CheckPushObjectBySphere(Object3D* obj)
