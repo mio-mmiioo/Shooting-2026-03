@@ -99,6 +99,9 @@
     <ClCompile Include="Source\PlayScene\GameMaster.cpp">
       <Filter>PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Stage\WayInfo.cpp">
+      <Filter>PlayScene\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -214,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\GameMaster.h">
       <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Stage\WayInfo.h">
+      <Filter>PlayScene\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
