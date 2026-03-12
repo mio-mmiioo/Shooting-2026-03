@@ -9,7 +9,6 @@ namespace Collision
 
 int Collision::Release()
 {
-	//checkObject = nullptr;
 	for (auto itr = allObjectList.begin(); itr != allObjectList.end(); itr++)
 	{
 		*itr = nullptr;
@@ -26,7 +25,7 @@ void Collision::AddObject(Object3D* obj)
 	}
 }
 
-bool Collision::CheckHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
+bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 {
 	bool found = false;
 	VECTOR3 now;
@@ -74,6 +73,60 @@ bool Collision::CheckDistanceVertexAndVertex(VECTOR3 pos1, VECTOR3 pos2, float d
 		return true;
 	}
 	return false;
+}
+
+VECTOR3 Collision::CheckPushObject(Object3D* obj)
+{
+	VECTOR3 direction; // 押し返す方向のベクトル
+	VECTOR3 hit;
+	VECTOR3 pos1 = obj->GetTransform().position_;
+	VECTOR3 ret = pos1;
+	VECTOR3 pos2;
+	float distance;
+	for (Object3D* o : allObjectList)
+	{
+		pos2 = o->GetTransform().position_;
+		if (o->CollideLine(pos1, pos2, &hit))
+		{
+			distance = obj->GetDistanceR() + o->GetDistanceR();
+			if (VSize(pos1 - hit) < distance)
+			{
+				direction = VNorm(hit - pos1); // 押し返す方向のベクトル
+				ret = pos1 - (direction * (distance - VSize(pos1 - hit))); // ( 押し返す方向 ) * ( 押し返したい距離 )
+			}
+		}
+	}
+	return ret;
+}
+
+VECTOR3 Collision::CheckOnGround(Object3D* obj)
+{
+	VECTOR3 hit;
+	VECTOR3 position = obj->GetTransform().position_;
+	VECTOR3 ret = position;
+
+	VECTOR3 pos1 = position + CHECK_ONGROUND_LENGTH;
+	VECTOR3 pos2 = position - CHECK_ONGROUND_LENGTH;
+
+	for (Object3D* o : allObjectList)
+	{
+		if (obj == o)
+		{
+			continue;
+		}
+
+		// 床が一つの時しか対応しない書き方
+		if (o->CollideLine(pos1, pos2, &hit))
+		{
+			if (position.y < hit.y)
+			{
+				// めり込んでいる
+				ret = position - VECTOR3(0.0f, position.y - hit.y, 0.0f);
+			}
+		}
+	}
+
+	return ret;
 }
 
 int Collision::DeleteObject(Object3D* obj)

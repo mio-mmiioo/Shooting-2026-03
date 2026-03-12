@@ -11,6 +11,9 @@ namespace PLAYER
 {
 	const float ROTATE_SPEED = 3.0f;	// 回転速度
 	const float MOVE_SPEED = 5.0f;		// 移動速度
+
+	const float DISTANCE_R = 100.0f; // 当たり判定の半径
+	const float GRAVITY = 0.05f;
 	
 	// 開発時のみ
 	const float DIRECTION_LENGTH = 100.0f;
@@ -36,14 +39,22 @@ Player::Player(const VECTOR3& position, int hp)
 
 	rotateSpeed_ = PLAYER::ROTATE_SPEED;
 	moveSpeed_ = PLAYER::MOVE_SPEED;
+	distanceR_ = PLAYER::DISTANCE_R;
+	gravity_ = PLAYER::GRAVITY;
+	velocityY_ = 0.0f;
+	
 
 	camera_ = FindGameObject<Camera>();
+
+	Collision::AddObject(this);
 
 	SetDrawOrder(-100);
 }
 
 Player::~Player()
 {
+	Collision::DeleteObject(this);
+
 }
 
 void Player::Update()
@@ -59,7 +70,7 @@ void Player::Update()
 		wPointerPosition_ = ConvScreenPosToWorldPos(ScreenPosition);
 		startPosition_ = transform_.position_ + LOOK_HEIGHT;
 		VECTOR3 hit;
-		if (Collision::CheckHitObject(startPosition_, wPointerPosition_, &hit) == true)
+		if (Collision::CheckLineHitObject(startPosition_, wPointerPosition_, &hit) == true)
 		{
 			// 銃弾が、敵or破壊可能オブジェクトにあたる
 			isHit_ = true;
@@ -69,6 +80,23 @@ void Player::Update()
 			isHit_ = false;
 		}
 	}
+
+	// 重力を加える
+	transform_.position_.y -= velocityY_;
+	velocityY_ += gravity_;
+
+	// 各オブジェクトとの距離を確認し、めり込みをなくす
+	{
+		VECTOR3 currentPosition = transform_.position_;
+		transform_.position_ = Collision::CheckOnGround(this);
+		transform_.position_ = Collision::CheckPushObject(this);
+
+		if (VSize(currentPosition - transform_.position_) <= 0)
+		{
+			velocityY_ = 0.0f;
+		}
+	}
+
 
 	camera_->SetPlayerPosition(transform_);
 	Light::SetPosition(transform_.position_);
