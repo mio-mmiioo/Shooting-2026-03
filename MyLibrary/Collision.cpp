@@ -104,6 +104,27 @@ VECTOR3 Collision::CheckPushObject(Object3D* obj)
 	return ret;
 }
 
+VECTOR3 Collision::CheckPushObjectBySphere(Object3D* obj)
+{
+	VECTOR3 direction; // 押し返す方向のベクトル
+	VECTOR3 hit;
+	VECTOR3 pos1 = obj->GetTransform().position_;
+	VECTOR3 ret = pos1;
+	VECTOR3 pos2;
+	float distance;
+	for (Object3D* o : allObjectList)
+	{
+		pos2 = o->GetTransform().position_;
+		if (o->CollideSphere(pos2, o->GetDistanceR(), &hit))
+		{
+			distance = o->GetDistanceR();
+			direction = VNorm(hit - pos1); // 押し返す方向のベクトル
+			ret = pos1 - (direction * (distance - VSize(pos1 - hit))); // ( 押し返す方向 ) * ( 押し返したい距離 )
+		}
+	}
+	return ret;
+}
+
 VECTOR3 Collision::CheckOnGround(Object3D* obj)
 {
 	VECTOR3 hit;

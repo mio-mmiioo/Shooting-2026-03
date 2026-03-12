@@ -111,16 +111,15 @@ void Player::Update()
 	// 各オブジェクトとの距離を確認し、めり込みをなくす
 	{
 		VECTOR3 currentPosition = transform_.position_;
-		transform_.position_ = Collision::CheckOnGround(this);
-		transform_.position_ = Collision::CheckPushObject(this);
+		transform_.position_ = Collision::CheckOnGround(this); // 床とのめり込みをチェックする
+		transform_.position_ = Collision::CheckPushObject(this); // 挙動がおかしい、瞬間移動する不具合がある ただアクターみんな自動移動だからとりあえず放置
+		//transform_.position_ = Collision::CheckPushObjectBySphere(this); // ワープする不具合が発生中
 
-		// ここに入らない
-		if (VSize(currentPosition - transform_.position_) <= 0)
+		if (currentPosition.y - transform_.position_.y != 0)
 		{
 			velocityY_ = 0.0f;
 		}
 	}
-
 
 	camera_->SetPlayerPosition(transform_);
 	Light::SetPosition(transform_.position_);

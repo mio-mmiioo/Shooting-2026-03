@@ -45,6 +45,23 @@ bool Object3D::CollideLine(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit) const
     return true;
 }
 
+bool Object3D::CollideSphere(VECTOR3 pos1, float r, VECTOR3* hit) const
+{
+    MV1_COLL_RESULT_POLY_DIM ret = MV1CollCheck_Sphere(hitModel_, -1, pos1, r);
+    if (ret.Dim != nullptr)
+    {
+        if (ret.Dim->HitFlag == false)
+        {
+            return false;
+        }
+        if (hit != nullptr)
+        {
+            *hit = ret.Dim->HitPosition;
+        }
+    }
+    return true;
+}
+
 void Object3D::SetMove(VECTOR3 toPosition)
 {
     VECTOR3 toGo = toPosition - transform_.position_;

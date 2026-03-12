@@ -64,6 +64,7 @@ public:
 	float GetDistanceR() { return distanceR_; } // オブジェクトの当たり判定の半径を返す
 	void SetParent(Object3D* parent) { parent_ = parent; }
 	bool CollideLine(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit = nullptr) const;
+	bool CollideSphere(VECTOR3 pos1, float r, VECTOR3* hit = nullptr) const;
 	void SetPosition(VECTOR3 newPosition) { transform_.position_ = newPosition; }
 	void SetMove(VECTOR3 toPosition); // 現在地からtoPositionの方へ移動する
 	virtual void AddHp(int add) { hp_ += add; } // hpにaddを加算
