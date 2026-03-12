@@ -64,9 +64,6 @@ void Player::Update()
 {
 	GetMousePoint(&mouseX_, &mouseY_);
 
-	// 移動処理
-	DevelopmentInput();
-
 	// リロード
 	if (Input::IsKeyDown("reload"))
 	{
@@ -108,17 +105,19 @@ void Player::Update()
 	transform_.position_.y -= velocityY_;
 	velocityY_ += gravity_;
 
+	// 移動処理
+	DevelopmentInput();
+
 	// 各オブジェクトとの距離を確認し、めり込みをなくす
 	{
 		VECTOR3 currentPosition = transform_.position_;
-		transform_.position_ = Collision::CheckOnGround(this); // 床とのめり込みをチェックする
-		transform_.position_ = Collision::CheckPushObject(this); // 挙動がおかしい、瞬間移動する不具合がある ただアクターみんな自動移動だからとりあえず放置
-		//transform_.position_ = Collision::CheckPushObjectBySphere(this); // ワープする不具合が発生中
-
-		if (currentPosition.y - transform_.position_.y != 0)
+		transform_.position_ = Collision::CheckOnGround(this, &isOnGround_); // 床とのめり込みをチェックする
+		if (isOnGround_ == true)
 		{
 			velocityY_ = 0.0f;
 		}
+		transform_.position_ = Collision::CheckPushObject(this);
+
 	}
 
 	camera_->SetPlayerPosition(transform_);

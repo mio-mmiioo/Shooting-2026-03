@@ -5,6 +5,7 @@
 namespace Collision
 {
 	const VECTOR3 CHECK_ONGROUND_LENGTH = { 0.0f, 5000.0f, 0.0f };
+	const float HIGHEST_Y = 5000.0f; // 一番高いオブジェクトのY座標
 	std::list<Object3D*> allObjectList; // すべての銃弾が当たるオブジェクト
 	Object3D* hitObject = nullptr;
 }
@@ -103,6 +104,7 @@ VECTOR3 Collision::CheckPushObject(Object3D* obj)
 			if (VSize(pos1 - hit) < distance)
 			{
 				direction = normal; // 押し返す方向のベクトル
+				direction.y = 0; // y方向はCheckOnGroundで確認しているので無視する
 				pushBack += direction * (distance - VSize(pos1 - hit)); // ( 押し返す方向 ) * ( 押し返したい距離 )
 			}
 		}
@@ -110,32 +112,13 @@ VECTOR3 Collision::CheckPushObject(Object3D* obj)
 	return pos1 + pushBack;
 }
 
-VECTOR3 Collision::CheckPushObjectBySphere(Object3D* obj)
-{
-	VECTOR3 direction; // 押し返す方向のベクトル
-	VECTOR3 hit;
-	VECTOR3 pos1 = obj->GetTransform().position_;
-	VECTOR3 ret = pos1;
-	VECTOR3 pos2;
-	float distance;
-	for (Object3D* o : allObjectList)
-	{
-		pos2 = o->GetTransform().position_;
-		if (o->CollideSphere(pos2, o->GetDistanceR(), &hit))
-		{
-			distance = o->GetDistanceR();
-			direction = VNorm(hit - pos1); // 押し返す方向のベクトル
-			ret = pos1 - (direction * (distance - VSize(pos1 - hit))); // ( 押し返す方向 ) * ( 押し返したい距離 )
-		}
-	}
-	return ret;
-}
-
-VECTOR3 Collision::CheckOnGround(Object3D* obj)
+VECTOR3 Collision::CheckOnGround(Object3D* obj, bool* isOnGround)
 {
 	VECTOR3 hit;
 	VECTOR3 position = obj->GetTransform().position_;
+	VECTOR3 highest = { 0, -HIGHEST_Y, 0 };
 	VECTOR3 ret = position;
+	*isOnGround = false;
 
 	VECTOR3 pos1 = position + CHECK_ONGROUND_LENGTH;
 	VECTOR3 pos2 = position - CHECK_ONGROUND_LENGTH;
@@ -147,15 +130,21 @@ VECTOR3 Collision::CheckOnGround(Object3D* obj)
 			continue;
 		}
 
-		// 床が一つの時しか対応しない書き方
 		if (o->CollideLine(pos1, pos2, &hit))
 		{
-			if (position.y < hit.y)
+			if (highest.y < hit.y)
 			{
 				// めり込んでいる
-				ret = position - VECTOR3(0.0f, position.y - hit.y, 0.0f);
+				highest = hit;
 			}
 		}
+	}
+
+	// めり込んでいる
+	if (position.y < highest.y)
+	{
+		ret.y = hit.y;
+		*isOnGround = true;
 	}
 
 	return ret;
