@@ -1,6 +1,7 @@
 #include "Touhu.h"
 #include <assert.h>
 #include "../../../MyLibrary/Color.h"
+#include "../../../MyLibrary/Collision.h"
 
 namespace TOUHU
 {
@@ -32,6 +33,8 @@ Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
 		distanceR_ = enemyData.distanceR;
 
 		objectNumber_ = OBJECT_SORT::OBJ_CHARA;
+
+		Collision::AddObject(this);
 	}
 }
 
@@ -45,6 +48,7 @@ Touhu::~Touhu()
 	{
 		hitModel_ = -1;
 	}
+	Collision::DeleteObject(this);
 }
 
 void Touhu::Update()

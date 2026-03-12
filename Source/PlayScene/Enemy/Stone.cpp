@@ -1,5 +1,6 @@
 #include "Stone.h"
 #include <assert.h>
+#include "../../../MyLibrary/Collision.h"
 
 namespace STONE
 {
@@ -28,6 +29,8 @@ Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
 	distanceR_ = enemyData.distanceR;
 
 	objectNumber_ = OBJECT_SORT::OBJ_CHARA;
+
+	Collision::AddObject(this);
 }
 
 Stone::~Stone()
@@ -40,6 +43,7 @@ Stone::~Stone()
 	{
 		hModel_ = -1;
 	}
+	Collision::DeleteObject(this);
 }
 
 void Stone::Update()

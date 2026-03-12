@@ -1,10 +1,21 @@
 #include "Collision.h"
+#include <assert.h>
 
 namespace Collision
 {
 	const VECTOR3 CHECK_ONGROUND_LENGTH = { 0.0f, 5000.0f, 0.0f };
 	std::list<Object3D*> allObjectList; // すべての銃弾が当たるオブジェクト
-	Object3D* checkObject;
+}
+
+int Collision::Release()
+{
+	//checkObject = nullptr;
+	for (auto itr = allObjectList.begin(); itr != allObjectList.end(); itr++)
+	{
+		*itr = nullptr;
+	}
+	allObjectList.clear();
+	return 0;
 }
 
 void Collision::AddObject(Object3D* obj)
@@ -19,6 +30,7 @@ bool Collision::CheckHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 {
 	bool found = false;
 	VECTOR3 now;
+	Object3D* checkObject = nullptr;
 	float nowVal = ((VECTOR3)(pos2 - pos1)).Size();
 	for (Object3D* obj : allObjectList)
 	{
@@ -62,4 +74,18 @@ bool Collision::CheckDistanceVertexAndVertex(VECTOR3 pos1, VECTOR3 pos2, float d
 		return true;
 	}
 	return false;
+}
+
+int Collision::DeleteObject(Object3D* obj)
+{
+	int ret = -1; // 解放できなかった時に返される値
+	for (auto itr = allObjectList.begin(); itr != allObjectList.end(); itr++)
+	{
+		if (*itr == obj)
+		{
+			*itr = nullptr;
+			ret = 1; // 解放処理をした場合に返される値
+		}
+	}
+	return ret;
 }

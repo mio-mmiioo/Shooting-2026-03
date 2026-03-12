@@ -1,5 +1,6 @@
 #include "StageObject.h"
 #include <assert.h>
+#include "../../../MyLibrary/Collision.h"
 
 StageObject::StageObject(Data::ObjectData objectData)
 {
@@ -27,11 +28,12 @@ StageObject::StageObject(Data::ObjectData objectData)
 	}
 
 	score_ = objectData.score;
-
+	Collision::AddObject(this);
 }
 
 StageObject::~StageObject()
 {
+	Collision::DeleteObject(this);
 	if (hModel_ > 0)
 	{
 		MV1DeleteModel(hModel_);

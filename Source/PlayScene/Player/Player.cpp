@@ -4,6 +4,7 @@
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
 #include "../../../MyLibrary/Light.h"
+#include "../../../MyLibrary/Collision.h"
 #include "../../../ImGui/imgui.h"
 
 namespace PLAYER
@@ -52,6 +53,22 @@ void Player::Update()
 	// à⁄ìÆèàóù
 	DevelopmentInput();
 
+	// è∆èÄÇÃìñÇΩÇËîªíË
+	{
+		VECTOR ScreenPosition = { (float)mouseX_,(float)mouseY_, 1.0f };
+		wPointerPosition_ = ConvScreenPosToWorldPos(ScreenPosition);
+		startPosition_ = transform_.position_ + LOOK_HEIGHT;
+		VECTOR3 hit;
+		if (Collision::CheckHitObject(startPosition_, wPointerPosition_, &hit) == true)
+		{
+			// èeíeÇ™ÅAìGorîjâÛâ¬î\ÉIÉuÉWÉFÉNÉgÇ…Ç†ÇΩÇÈ
+			isHit_ = true;
+		}
+		else
+		{
+			isHit_ = false;
+		}
+	}
 
 	camera_->SetPlayerPosition(transform_);
 	Light::SetPosition(transform_.position_);
@@ -71,7 +88,16 @@ void Player::Draw()
 	DrawLine3D(transform_.position_ + addPlayerHeight, transform_.position_ + addPlayerHeight + VECTOR3(0, 0, 1) * PLAYER::DIRECTION_LENGTH * transform_.GetRotationMatrix(), Color::WHITE);
 
 	// 2DÇÃï`âÊ
-	DrawGraph(mouseX_ - aiming_.halfWidth, mouseY_ - aiming_.halfHeight, aiming_.hImage, TRUE);
+
+	// è∆èÄÇÃï`âÊ
+	if (isHit_ == true)
+	{
+		DrawGraph(mouseX_ - hitAiming_.halfWidth, mouseY_ - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
+	}
+	else
+	{
+		DrawGraph(mouseX_ - aiming_.halfWidth, mouseY_ - aiming_.halfHeight, aiming_.hImage, TRUE);
+	}
 }
 
 void Player::DevelopmentInput()

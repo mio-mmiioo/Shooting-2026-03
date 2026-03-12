@@ -4,6 +4,7 @@
 #include "../../MyLibrary/Light.h"
 #include "Stage/Stage.h"
 #include "Camera/Camera.h"
+#include "../../MyLibrary/Collision.h"
 
 PlayScene::PlayScene()
 {
@@ -14,6 +15,7 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
+	Collision::Release();
 }
 
 void PlayScene::Update()
