@@ -23,6 +23,8 @@ namespace Data
 		float moveSpeed;	// ˆÚ“®‘¬“x
 		float rotateSpeed;	// ‰ñ“]‘¬“x
 		float distanceR;	// “–‚½‚è”»’è‚Ì”¼Œa
+		float distanceCurrentAndGo;		// 
+		float distanceThisAndPlayer;	// 
 	};
 
 	void Init(); // ‰Šú‰»

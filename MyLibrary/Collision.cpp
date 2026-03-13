@@ -74,6 +74,7 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 
 bool Collision::CheckDistanceVertexAndVertex(VECTOR3 pos1, VECTOR3 pos2, float distance)
 {
+	float e = VSize(pos1 - pos2);
 	if (VSize(pos1 - pos2) < distance)
 	{
 		return true;

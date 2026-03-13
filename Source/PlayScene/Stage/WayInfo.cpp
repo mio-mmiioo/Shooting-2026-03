@@ -140,7 +140,7 @@ VECTOR3 WayInfo::SetVertexPosition(VECTOR3 position, int num)
 {
 	VECTOR3 ret = position;
 	ret.x = (float)(vertexList_[num].position.x * BOX_SIZE);
-	ret.z = (float)(vertexList_[num], position.z * BOX_SIZE);
+	ret.z = (float)(vertexList_[num].position.z * BOX_SIZE);
 
 	return ret - ADD_WAY_INFO_POS + ADD_HALF_BOX_POS;
 }
@@ -279,7 +279,7 @@ void WayInfo::SetNext(point check, int vertexNum, int direction)
 bool WayInfo::CheckVertex(point p)
 {
 	bool ret = false;
-	if (p.x == 0 || p.z == 0 || p.x == vertexList_.size() - 1 || p.z - vertexList_.size() - 1)
+	if (p.x == 0 || p.z == 0 || p.x == vertexList_.size() - 1 || p.z == vertexList_.size() - 1)
 	{
 		return ret;
 	}
@@ -380,7 +380,7 @@ void WayInfo::SetShortestWay(vertex start)
 		std::vector<vertex> sortMinDistance;
 		for (int i = 0; i < startV.next.size(); i++)
 		{
-			if (vertexList_[start.next[i].number].isDicision == false)
+			if (vertexList_[startV.next[i].number].isDicision == false)
 			{
 				sortMinDistance.push_back(startV.next[i]);
 			}
@@ -397,7 +397,7 @@ void WayInfo::SetShortestWay(vertex start)
 		for (int i = 0; i < sortMinDistance.size(); i++)
 		{
 			checkVertexList_.push_back(sortMinDistance[i]);
-			for (int j = (int)checkVertexList_.size() - 2; j >= 0; j++)
+			for (int j = (int)checkVertexList_.size() - 2; j >= 0; j--)
 			{
 				if (checkVertexList_[j].distance > checkVertexList_[j + 1].distance)
 				{

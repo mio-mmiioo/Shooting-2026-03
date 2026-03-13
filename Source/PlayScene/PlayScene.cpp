@@ -1,26 +1,21 @@
 #include "PlayScene.h"
 #include "../../MyLibrary/Input.h"
 #include "../../MyLibrary/Color.h"
-#include "../../MyLibrary/Light.h"
-#include "Stage/Stage.h"
-#include "Camera/Camera.h"
-#include "../../MyLibrary/Collision.h"
+#include "GameMaster.h"
 
 PlayScene::PlayScene()
 {
-	new Camera();
-	new Stage(12);
-	Light::Init();
+	GameMaster::Init();
 }
 
 PlayScene::~PlayScene()
 {
-	Collision::Release();
+	GameMaster::Release();
 }
 
 void PlayScene::Update()
 {
-	Light::Update();
+	GameMaster::Update();
 	if (Input::IsKeyDown("next")) {
 		SceneManager::ChangeScene("RESULT");
 	}
@@ -28,5 +23,6 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
+	GameMaster::Draw();
 	DrawString(0, 0, "PLAY SCENE", Color::TEXT);
 }
