@@ -102,6 +102,9 @@
     <ClCompile Include="Source\PlayScene\Stage\WayInfo.cpp">
       <Filter>PlayScene\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Stage\StageSearch.cpp">
+      <Filter>PlayScene\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -219,6 +222,9 @@
       <Filter>PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayScene\Stage\WayInfo.h">
+      <Filter>PlayScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Stage\StageSearch.h">
       <Filter>PlayScene\Stage</Filter>
     </ClInclude>
   </ItemGroup>

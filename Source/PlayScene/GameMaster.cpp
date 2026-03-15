@@ -3,7 +3,8 @@
 #include "../../MyLibrary/Collision.h"
 #include "../../ImGui/imgui.h"
 #include "Stage/Stage.h"
-#include "Stage/WayInfo.h"
+//#include "Stage/WayInfo.h"
+#include "Stage/StageSearch.h"
 #include "Camera/Camera.h"
 #include "Enemy/Enemy.h"
 
@@ -18,7 +19,8 @@ namespace GameMaster
 
 int GameMaster::Init()
 {
-	WayInfo::Init();
+	//WayInfo::Init();
+	StageSearch::Init();
 	new Camera();
 	stage = new Stage(12);
 	Light::Init();
@@ -50,7 +52,8 @@ int GameMaster::Update()
 
 int GameMaster::Draw()
 {
-	WayInfo::WayDraw();
+	//WayInfo::WayDraw();
+	StageSearch::Draw();
 	return 0;
 }
 

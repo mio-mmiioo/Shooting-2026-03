@@ -3,7 +3,8 @@
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Collision.h"
 #include "../../Data.h"
-#include "../Stage/WayInfo.h"
+//#include "../Stage/WayInfo.h"
+#include "../Stage/StageSearch.h"
 
 namespace TOUHU
 {
@@ -128,7 +129,8 @@ void Touhu::WalkUpdate()
 	float distance;
 	if (isArrive_ == true)
 	{
-		goPosition_ = WayInfo::GetShortestWayPosition(e, p);
+		//goPosition_ = WayInfo::GetShortestWayPosition(e, p);
+		goPosition_ = StageSearch::GetShortestWayPosition(e, p);
 		isArrive_ = false;
 	}
 	else
