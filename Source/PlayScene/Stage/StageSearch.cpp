@@ -54,7 +54,6 @@ namespace StageSearch {
 	std::priority_queue<NodeAStar, std::vector<NodeAStar>, std::greater<NodeAStar>> aStarList;
 	std::vector<std::vector<int>> map; // 読み込む通れる場所のデータ
 	std::vector<std::vector<int>> way; // 経路
-	std::vector<point> shortestWay; // 最短経路
 	int height;
 	int width;
 	int distance;
@@ -127,7 +126,6 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 		if (way[next.z][next.x] == way[end.z][end.x] - 1)
 		{
 			// 座標変換をしてnextの値を返す
-			//	ret.x = (int)(v.x / BOX_SIZE + map.size() / 2);
 			float x = (next.x - (int)map.size() / 2) * BOX_SIZE;
 			float z = (next.z - (int)map.size() / 2) * BOX_SIZE;
 			VECTOR3 ret = { x, 0.0f ,z };
@@ -205,7 +203,7 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 				continue;
 			}
 
-			int nextDistance = way[current.position.z][current.position.x] + 1;
+			int nextDistance = way[current.position.z][current.position.x] /*+ map[current.position.z][current.position.x]*/ + 1;
 			if (nextDistance < way[z][x])
 			{
 				way[z][x] = nextDistance;
