@@ -47,9 +47,10 @@ namespace StageSearch {
 	const float ADD_DRAW_WAY_HEIGHT = 5.0f; // 道情報の描画のy座標
 	const VECTOR3 ADD_HALF_BOX_POS = { (float)(BOX_SIZE / 2), 0.0f, (float)(BOX_SIZE / 2) };
 
-	void ReadWay(std::string fileName);
-	int SearchData(VECTOR3 start, VECTOR3 end);
-	point Vector3ToPoint(VECTOR3 v);
+	void ReadWay(std::string fileName); // マップの読み込み
+	void DrawSearchWay(); // 探索した道の距離などの描画
+	int SearchData(VECTOR3 start, VECTOR3 end); // 経路探索のプログラム
+	point Vector3ToPoint(VECTOR3 v); // VECTOR3の座標をpointに変換する
 
 	std::priority_queue<NodeAStar, std::vector<NodeAStar>, std::greater<NodeAStar>> aStarList;
 	std::vector<std::vector<int>> map; // 読み込む通れる場所のデータ
@@ -61,6 +62,9 @@ namespace StageSearch {
 
 void StageSearch::Init()
 {
+	height = 0;
+	width = 0;
+	distance = 0;
 	ReadWay(wayDataName);
 }
 
@@ -96,6 +100,8 @@ void StageSearch::Draw()
 			DrawTriangle3D(downRight, downLeft, topLeft, color, TRUE);
 		}
 	}
+
+	//DrawSearchWay();
 }
 
 VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
@@ -111,6 +117,9 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 	}
 
 	point next;
+	point min;
+	int minSize = INIT_DISTANCE; // 大きい値で初期化
+
 	for (int d = 0; d < DIR::MAX_DIR; d++)
 	{
 		next = { end.x + direction[d].x, end.z + direction[d].z };
@@ -123,15 +132,28 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 		{
 			continue;
 		}
-		if (way[next.z][next.x] == way[end.z][end.x] - 1)
+
+		// 一番小さい値を更新していく処理
+		if (way[next.z][next.x] <= way[end.z][end.x] - 1)
 		{
-			// 座標変換をしてnextの値を返す
-			float x = (next.x - (int)map.size() / 2) * BOX_SIZE;
-			float z = (next.z - (int)map.size() / 2) * BOX_SIZE;
-			VECTOR3 ret = { x, 0.0f ,z };
-			return ret;
+			if (minSize > way[next.z][next.x])
+			{
+				minSize = way[next.z][next.x];
+				min = next;
+			}
 		}
 	}
+
+	// 一番小さい値が初期化の値じゃない場合、サイズを作って返す
+	if (minSize != INIT_DISTANCE)
+	{
+		// 座標変換をしてminの値を返す
+		float x = (min.x - (int)map.size() / 2) * BOX_SIZE;
+		float z = (min.z - (int)map.size() / 2) * BOX_SIZE;
+		VECTOR3 ret = { x, 0.0f, z };
+		return ret;
+	}
+
 	return currentPos;
 }
 
@@ -154,6 +176,45 @@ void StageSearch::ReadWay(std::string fileName)
 		map.push_back(mapLine);
 	}
 	delete csv;
+}
+
+void StageSearch::DrawSearchWay()
+{
+	int startX = 100;
+	int startY = 100;
+	int boxWidth = 20;
+	point leftTop;
+	point rightDown;
+	int color = 0;
+	int d;
+
+	if (way.empty())
+	{
+		return;
+	}
+
+	for (int y = 0; y < map.size() - 70; y++)
+	{
+		for (int x = 0; x < map.size() - 70; x++)
+		{
+			leftTop = { x * boxWidth + startX, y * boxWidth + startY };
+			rightDown = {leftTop.x + boxWidth, leftTop.z + boxWidth };
+
+			if (way[y][x] == INIT_DISTANCE)
+			{
+				color = Color::WHITE;
+				d = 0;
+			}
+			else
+			{
+				color = GetColor(255, 255, 255 / distance * (distance - way[y][x]));
+				d = way[y][x];
+			}
+
+			DrawBox(leftTop.x, leftTop.z, rightDown.x, rightDown.z, color, TRUE);
+			DrawFormatString(leftTop.x, leftTop.z, Color::BLACK, "%d", d);
+		}
+	}
 }
 
 int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
@@ -198,12 +259,12 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 			{
 				continue;
 			}
-			if (map[z][x] == MAP_NUM::WALL || map[z][x] == MAP_NUM::OBJECT_SPACE)
+			if (map[z][x] == MAP_NUM::WALL)
 			{
 				continue;
 			}
 
-			int nextDistance = way[current.position.z][current.position.x] /*+ map[current.position.z][current.position.x]*/ + 1;
+			int nextDistance = way[current.position.z][current.position.x] + map[current.position.z][current.position.x] + 1;
 			if (nextDistance < way[z][x])
 			{
 				way[z][x] = nextDistance;
