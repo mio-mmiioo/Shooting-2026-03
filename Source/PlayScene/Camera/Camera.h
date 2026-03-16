@@ -19,6 +19,7 @@ public:
 
 private:
 	void FirstUpdate();		// 一人称カメラの更新処理
+	void ModifiedFirstUpdate(); // 書き直し中の一人称カメラ
 	void ThirdUpdate();		// 三人称カメラの更新処理
 	void FixUpdate();		// 固定カメラの更新処理
 	void ChangeCamera();	// カメラの切り替え処理
@@ -37,4 +38,5 @@ private:
 	VECTOR3 fixAddPosition_; // 固定カメラの時に使用する、加算された位置
 
 	int wheelRot_; // マウスホイール
+	bool isMoveFixCamera_; // 固定カメラの移動フラグ
 };

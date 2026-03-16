@@ -1,6 +1,7 @@
 #include "Camera.h"
 #include "../../../MyLibrary/Input.h"
 #include "../../../ImGui/imgui.h"
+#include "../../../MyLibrary/Collision.h"
 
 namespace
 {
@@ -32,6 +33,8 @@ Camera::Camera()
 	state_ = CAM_STATE::FIX;
 	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
 	wheelRot_ = 0;
+	isMoveFixCamera_ = true;
+	transform_.position_ = cameraPosition_;
 }
 
 Camera::~Camera()
@@ -51,7 +54,8 @@ void Camera::Update()
 	switch (state_)
 	{
 	case CAM_STATE::FIRST:
-		FirstUpdate();
+		//FirstUpdate();
+		ModifiedFirstUpdate();
 		break;
 	case CAM_STATE::THIRD:
 		ThirdUpdate();
@@ -73,6 +77,32 @@ void Camera::SetPlayerPosition(Transform transform)
 void Camera::FirstUpdate()
 {
 	cameraPosition_ = player_.position_ + LOOK_HEIGHT; // 目線の高さに合わせている
+	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
+}
+
+void Camera::ModifiedFirstUpdate()
+{
+	// 移動処理
+	{
+		VECTOR3 toGo = player_.position_ - cameraPosition_;
+		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // 正面
+		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform_.rotation_.y); // 右　回転の確認に使用
+
+		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
+		{
+			transform_.rotation_.y = atan2f(toGo.x, toGo.z);
+		}
+		else if (VDot(right, toGo) > 0)
+		{
+			transform_.rotation_.y += rotateSpeed_;
+		}
+		else
+		{
+			transform_.rotation_.y -= rotateSpeed_;
+		}
+		cameraPosition_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
+	}
+
 	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
 }
 
@@ -107,10 +137,7 @@ void Camera::FixUpdate()
 {
 	wheelRot_ += GetMouseWheelRotVol();
 
-	// 移動処理
-	{
-
-	}
+	// 移動処理 ImGuiInputに記述
 
 	cameraPosition_ = FIX_BASE_POSITION + VECTOR3(0.0f, -(float)(wheelRot_ * ADD_DISTANCE), 0.0f) + fixAddPosition_;
 	targetPosition_ = fixAddPosition_;
@@ -142,6 +169,9 @@ void Camera::ImGuiInput()
 	ImGui::RadioButton("Third", &state, CAM_STATE::THIRD);
 	ImGui::RadioButton("Fix", &state, CAM_STATE::FIX);
 
+	VECTOR3 p = cameraPosition_;
+	ImGui::Text("x : %04d, y : %04d, z : %04d", (int)p.x, (int)p.y, (int)p.z);
+
 	switch (state)
 	{
 	case CAM_STATE::FIRST:
@@ -152,6 +182,17 @@ void Camera::ImGuiInput()
 		break;
 	case CAM_STATE::FIX:
 		state_ = CAM_STATE::FIX;
+
+		int x = (int)fixAddPosition_.x;
+		int y = (int)fixAddPosition_.y;
+		int z = (int)fixAddPosition_.z;
+
+		ImGui::InputInt("x", &x);
+		ImGui::InputInt("y", &y);
+		ImGui::InputInt("z", &z);
+
+		fixAddPosition_ = VECTOR3((float)x, (float)y, (float)z);
+
 		break;
 	}
 	ImGui::End();
