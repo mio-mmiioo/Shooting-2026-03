@@ -51,6 +51,11 @@ void Data::SetImage(std::string name, image* i)
 
 VECTOR3 Data::GetPlayerNextPosition(int phaseCount)
 {
+	int max = playerPhasePosition.size() - 1;
+	if (phaseCount > max)
+	{
+		return playerPhasePosition[max];
+	}
 	return playerPhasePosition[phaseCount];
 }
 
