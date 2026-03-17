@@ -27,7 +27,16 @@ namespace Data
 		float distanceThisAndPlayer;	// 
 	};
 
-	void Init(); // 初期化
+	struct image
+	{
+		int hImage;		// 画像のハンドル
+		int halfWidth;	// 画像の半分の横幅
+		int halfHeight; // 画像の半分の縦幅
+	};
 
-	extern std::map<std::string, EnemyData> enemyDataList;
+	void Init(); // 初期化
+	void SetImage(std::string name, image* i); // iにnameの画像をセットする
+
+	extern std::map<std::string, EnemyData> enemyDataList; // 各敵のデータのリスト
+	extern std::map<std::string, int> images; // ゲームで使用する画像
 }

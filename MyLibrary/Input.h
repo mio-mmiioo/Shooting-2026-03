@@ -9,4 +9,6 @@ namespace Input
 	bool IsKeyDown(const std::string& action);		// 押された瞬間→true
 	bool IsKeyKeepDown(const std::string& action);	// 押し続けている→true
 	bool IsKeyUp(const std::string& action);		// 離された瞬間
+
+	VECTOR GetMousePosition(); // マウスの座標を入手する
 }

@@ -33,9 +33,9 @@ Player::Player(const VECTOR3& position, int hp)
 	MV1SetupCollInfo(hModel_);
 
 	// Æ€(aiming)
-	SetAimingImage(aiming_, "data/image/pointer1.png");
-	SetAimingImage(hitAiming_, "data/image/pointer2.png");
-	SetAimingImage(reload_, "data/image/reload.png");
+	Data::SetImage("aiming", &aiming_);
+	Data::SetImage("hitAiming", &hitAiming_);
+	Data::SetImage("reload", &reload_);
 
 	rotateSpeed_ = PLAYER::ROTATE_SPEED;
 	moveSpeed_ = PLAYER::MOVE_SPEED;
@@ -62,8 +62,6 @@ Player::~Player()
 
 void Player::Update()
 {
-	GetMousePoint(&mouseX_, &mouseY_);
-
 	// ƒŠƒ[ƒh
 	if (Input::IsKeyDown("reload"))
 	{
@@ -72,7 +70,7 @@ void Player::Update()
 
 	// Æ€‚Ì“–‚½‚è”»’è
 	{
-		VECTOR ScreenPosition = { (float)mouseX_,(float)mouseY_, 1.0f };
+		VECTOR ScreenPosition = Input::GetMousePosition(); // { xÀ•W, yÀ•W, 1.0f }‚ª‘ã“ü‚³‚ê‚é
 		wPointerPosition_ = ConvScreenPosToWorldPos(ScreenPosition);
 		startPosition_ = transform_.position_ + LOOK_HEIGHT;
 		VECTOR3 hit;
@@ -140,13 +138,15 @@ void Player::Draw()
 	// 2D‚Ì•`‰æ
 
 	// Æ€‚Ì•`‰æ
+	int x = (int)Input::GetMousePosition().x;
+	int y = (int)Input::GetMousePosition().y;
 	if (isHit_ == true)
 	{
-		DrawGraph(mouseX_ - hitAiming_.halfWidth, mouseY_ - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
+		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 	}
 	else
 	{
-		DrawGraph(mouseX_ - aiming_.halfWidth, mouseY_ - aiming_.halfHeight, aiming_.hImage, TRUE);
+		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
 	}
 }
 
@@ -194,13 +194,4 @@ void Player::DevelopmentInput()
 			transform_.position_ -= velocity;
 		}
 	}
-}
-
-void Player::SetAimingImage(image& i, std::string path)
-{
-	i.hImage = LoadGraph(path.c_str());
-	assert(i.hImage > 0);
-	GetGraphSize(i.hImage, &i.halfWidth, &i.halfHeight);
-	i.halfWidth = i.halfWidth / 2;
-	i.halfHeight = i.halfHeight / 2;
 }

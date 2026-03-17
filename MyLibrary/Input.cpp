@@ -27,6 +27,8 @@ namespace Input
     char keyState[KEY_MAX];     // keyboard入力
     int padState;               // gamepad入力
     int mouseState;             // mouse入力
+
+    VECTOR mousePoint; // マウスの座標
 }
 
 void Input::InitActionMap()
@@ -36,37 +38,47 @@ void Input::InitActionMap()
     inputActionMap["reload"] = { {InputType::keyboard, KEY_INPUT_R},{InputType::mouse, MOUSE_INPUT_RIGHT} };
 
     // 開発時のみ使用
-    inputActionMap["rotateRight"] = { {InputType::keyboard,KEY_INPUT_D} }; // 右回転
-    inputActionMap["rotateLeft"] = { {InputType::keyboard,KEY_INPUT_A} }; // 左回転
-    inputActionMap["moveFront"] = { {InputType::keyboard, KEY_INPUT_W} }; // 前進
-    inputActionMap["moveBack"] = { {InputType::keyboard, KEY_INPUT_S} }; // 後退
+    inputActionMap["rotateRight"] = { {InputType::keyboard,KEY_INPUT_D} };  // 右回転
+    inputActionMap["rotateLeft"] = { {InputType::keyboard,KEY_INPUT_A} };   // 左回転
+    inputActionMap["moveFront"] = { {InputType::keyboard, KEY_INPUT_W} };   // 前進
+    inputActionMap["moveBack"] = { {InputType::keyboard, KEY_INPUT_S} };    // 後退
 
     inputActionMap["changeCamera"] = { {InputType::keyboard, KEY_INPUT_C} }; // カメラ切り替え
 }
 
 void Input::StateUpdate()
 {
-    GetHitKeyStateAll(keyState);
-    padState = GetJoypadInputState(DX_INPUT_PAD1);
-    mouseState = GetMouseInput();
-    previousInput = currentInput;
-
-    for (const auto& mapInfo : inputActionMap)
+    // 入力関連の更新処理
     {
-        bool isDown = false;
-        for (const auto& inputInfo : mapInfo.second)
+        GetHitKeyStateAll(keyState);
+        padState = GetJoypadInputState(DX_INPUT_PAD1);
+        mouseState = GetMouseInput();
+        previousInput = currentInput;
+
+        for (const auto& mapInfo : inputActionMap)
         {
-            isDown = (inputInfo.type == InputType::keyboard && keyState[inputInfo.buttonID]) ||
-                ((inputInfo.type == InputType::gamepad) && (padState & inputInfo.buttonID)) ||
-                ((inputInfo.type == InputType::mouse) && (mouseState & inputInfo.buttonID));
-            if (isDown == true)
+            bool isDown = false;
+            for (const auto& inputInfo : mapInfo.second)
             {
-                break;
+                isDown = (inputInfo.type == InputType::keyboard && keyState[inputInfo.buttonID]) ||
+                    ((inputInfo.type == InputType::gamepad) && (padState & inputInfo.buttonID)) ||
+                    ((inputInfo.type == InputType::mouse) && (mouseState & inputInfo.buttonID));
+                if (isDown == true)
+                {
+                    break;
+                }
             }
+            currentInput[mapInfo.first] = isDown;
         }
-        currentInput[mapInfo.first] = isDown;
     }
 
+    // マウスの座標の更新処理
+    {
+        int x;
+        int y;
+        GetMousePoint(&x, &y);
+        mousePoint = { (float)x, (float)y, 1.0f };
+    }
 }
 
 bool Input::IsKeyDown(const std::string& action)
@@ -109,4 +121,9 @@ bool Input::IsKeyUp(const std::string& action)
         return true;
     }
     return false;
+}
+
+VECTOR Input::GetMousePosition()
+{
+    return mousePoint;
 }

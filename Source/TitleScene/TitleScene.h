@@ -1,5 +1,7 @@
 #pragma once
 #include "../../Library/SceneBase.h"
+#include "../../MyLibrary/ClickArea.h"
+#include "../Data.h"
 
 class TitleScene : public SceneBase
 {
@@ -8,4 +10,10 @@ public:
 	~TitleScene();
 	void Update() override;
 	void Draw() override;
+
+private:
+	Data::image aiming_;
+	Data::image hitAiming_;
+
+	button start_;
 };

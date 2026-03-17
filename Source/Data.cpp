@@ -1,4 +1,5 @@
 #include "Data.h"
+#include <assert.h>
 #include "../MyLibrary/CsvReader.h"
 
 namespace Data
@@ -15,13 +16,25 @@ namespace Data
 		MAX_E_DATA_NUM
 	};
 	std::map<std::string, EnemyData> enemyDataList;
+	std::map<std::string, int> images;
 
 	void InitEnemyDataList();
+	void InitImage();
 }
 
 void Data::Init()
 {
 	InitEnemyDataList();
+	InitImage();
+}
+
+void Data::SetImage(std::string name, image* i)
+{
+	(*i).hImage = images[name];
+	assert((*i).hImage > 0);
+	GetGraphSize((*i).hImage, &(*i).halfWidth, &(*i).halfHeight);
+	(*i).halfWidth = (*i).halfWidth / 2;
+	(*i).halfHeight = (*i).halfHeight / 2;
 }
 
 void Data::InitEnemyDataList()
@@ -39,4 +52,11 @@ void Data::InitEnemyDataList()
 		data.distanceThisAndPlayer = csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
 		enemyDataList[name] = data;
 	}
+}
+
+void Data::InitImage()
+{
+	images["aiming"] = LoadGraph("data/image/pointer1.png");
+	images["hitAiming"] = LoadGraph("data/image/pointer2.png");
+	images["reload"] = LoadGraph("data/image/reload.png");
 }

@@ -105,6 +105,9 @@
     <ClCompile Include="Source\PlayScene\Stage\StageSearch.cpp">
       <Filter>PlayScene\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="MyLibrary\ClickArea.cpp">
+      <Filter>MyLibrary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\Stage\StageSearch.h">
       <Filter>PlayScene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibrary\ClickArea.h">
+      <Filter>MyLibrary</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
