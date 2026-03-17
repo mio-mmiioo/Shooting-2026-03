@@ -15,7 +15,7 @@ public:
 
 private:
 	void DevelopmentInput();
-	//void SetAimingImage(image& i, std::string path);
+	void AutoMove();
 
 	Camera* camera_;
 	Gun* gun_;
@@ -28,7 +28,10 @@ private:
 
 	// 照準の画像関連
 	Data::image aiming_;		// 照準の画像
-	Data::image hitAiming_;	// 照準が何かにあたるときの画像
+	Data::image hitAiming_;		// 照準が何かにあたるときの画像
 	Data::image reload_;		// リロードの画像
 
+
+	VECTOR3 phasePosition_; // 次に向かう場所を管理する配列
+	int phaseCount_;
 };

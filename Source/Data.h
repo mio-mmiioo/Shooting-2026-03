@@ -36,6 +36,7 @@ namespace Data
 
 	void Init(); // 初期化
 	void SetImage(std::string name, image* i); // iにnameの画像をセットする
+	VECTOR3 GetPlayerNextPosition(int phaseCount);
 
 	extern std::map<std::string, EnemyData> enemyDataList; // 各敵のデータのリスト
 	extern std::map<std::string, int> images; // ゲームで使用する画像

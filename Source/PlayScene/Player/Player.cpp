@@ -49,6 +49,9 @@ Player::Player(const VECTOR3& position, int hp)
 	currentGunType_ = GUN::TYPE::HAND;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 
+	phaseCount_ = 0;
+
+
 	Collision::AddObject(this);
 
 	SetDrawOrder(-100);
@@ -104,6 +107,7 @@ void Player::Update()
 	velocityY_ += gravity_;
 
 	// 移動処理
+	AutoMove();
 	DevelopmentInput();
 
 	// 各オブジェクトとの距離を確認し、めり込みをなくす
@@ -193,5 +197,14 @@ void Player::DevelopmentInput()
 		{
 			transform_.position_ -= velocity;
 		}
+	}
+}
+
+void Player::AutoMove()
+{
+	Object3D::SetMove(Data::GetPlayerNextPosition(phaseCount_));
+	if (ImGui::Button("nextPosition"))
+	{
+		phaseCount_ += 1;
 	}
 }

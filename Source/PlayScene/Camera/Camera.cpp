@@ -84,9 +84,9 @@ void Camera::ModifiedFirstUpdate()
 {
 	// 移動処理
 	{
-		VECTOR3 toGo = player_.position_ - cameraPosition_;
-		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // 正面
-		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform_.rotation_.y); // 右　回転の確認に使用
+		VECTOR3 toGo = player_.position_ + LOOK_HEIGHT - cameraPosition_;
+		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(player_.rotation_.y); // 正面
+		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(player_.rotation_.y); // 右　回転の確認に使用
 
 		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
 		{
@@ -100,7 +100,7 @@ void Camera::ModifiedFirstUpdate()
 		{
 			transform_.rotation_.y -= rotateSpeed_;
 		}
-		cameraPosition_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
+		cameraPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
 	}
 
 	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);

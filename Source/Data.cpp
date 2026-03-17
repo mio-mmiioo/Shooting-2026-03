@@ -15,15 +15,27 @@ namespace Data
 		DISTANCE2,		// 自身とプレイヤーの距離
 		MAX_E_DATA_NUM
 	};
+
+	enum P_POSITION_DATA_NUM {
+		COUNT,	// 回数
+		X,		// x座標
+		Y,		// y座標
+		Z,		// z座標
+		MAX_P_POSITION_DATA_NUM
+	};
+
+	std::vector<VECTOR3> playerPhasePosition;
 	std::map<std::string, EnemyData> enemyDataList;
 	std::map<std::string, int> images;
 
+	void InitPlayerPhasePosition();
 	void InitEnemyDataList();
 	void InitImage();
 }
 
 void Data::Init()
 {
+	InitPlayerPhasePosition();
 	InitEnemyDataList();
 	InitImage();
 }
@@ -35,6 +47,24 @@ void Data::SetImage(std::string name, image* i)
 	GetGraphSize((*i).hImage, &(*i).halfWidth, &(*i).halfHeight);
 	(*i).halfWidth = (*i).halfWidth / 2;
 	(*i).halfHeight = (*i).halfHeight / 2;
+}
+
+VECTOR3 Data::GetPlayerNextPosition(int phaseCount)
+{
+	return playerPhasePosition[phaseCount];
+}
+
+void Data::InitPlayerPhasePosition()
+{
+	CsvReader* csv = new CsvReader("data/playerPhasePosition.csv");
+	VECTOR3 current;
+	for (int line = 1; line < csv->GetLines(); line++)
+	{
+		current.x = csv->GetInt(line, P_POSITION_DATA_NUM::X);
+		current.y = csv->GetInt(line, P_POSITION_DATA_NUM::Y);
+		current.z = csv->GetInt(line, P_POSITION_DATA_NUM::Z);
+		playerPhasePosition.push_back(current);
+	}
 }
 
 void Data::InitEnemyDataList()
@@ -52,6 +82,8 @@ void Data::InitEnemyDataList()
 		data.distanceThisAndPlayer = csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
 		enemyDataList[name] = data;
 	}
+
+	delete csv;
 }
 
 void Data::InitImage()
