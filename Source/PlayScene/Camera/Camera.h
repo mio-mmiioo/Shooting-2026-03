@@ -19,8 +19,9 @@ public:
 
 private:
 	void FirstUpdate();		// 一人称カメラの更新処理
-	void ModifiedFirstUpdate(); // 書き直し中の一人称カメラ
+	void ModifiedFirstUpdate(); // 書き直しの一人称カメラ
 	void ThirdUpdate();		// 三人称カメラの更新処理
+	void ModifiedThirdUpdate(); // 書き直しの三人称カメラ
 	void FixUpdate();		// 固定カメラの更新処理
 	void ChangeCamera();	// カメラの切り替え処理
 	void ImGuiInput();		// 開発時のみ使用する
@@ -36,6 +37,8 @@ private:
 	VECTOR3 cameraPosition_; // 視点の位置
 	VECTOR3 targetPosition_; // 注視点の位置
 	VECTOR3 fixAddPosition_; // 固定カメラの時に使用する、加算された位置
+
+	VECTOR3 prevPlayerPosition_; // 前回のプレイヤーの位置
 
 	int wheelRot_; // マウスホイール
 	bool isMoveFixCamera_; // 固定カメラの移動フラグ

@@ -50,7 +50,7 @@ Player::Player(const VECTOR3& position, int hp)
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 
 	phaseCount_ = 0;
-
+	phasePosition_ = Data::GetPlayerNextPosition(phaseCount_);
 
 	Collision::AddObject(this);
 
@@ -77,7 +77,7 @@ void Player::Update()
 		wPointerPosition_ = ConvScreenPosToWorldPos(ScreenPosition);
 		startPosition_ = transform_.position_ + LOOK_HEIGHT;
 		VECTOR3 hit;
-		if (Collision::CheckLineHitObject(startPosition_, wPointerPosition_, &hit) == true)
+		if (Collision::CheckBulletLineHitObject(startPosition_, wPointerPosition_, &hit) == true)
 		{
 			// 銃弾が、敵or破壊可能オブジェクトにあたる
 			isHit_ = true;
@@ -202,9 +202,32 @@ void Player::DevelopmentInput()
 
 void Player::AutoMove()
 {
-	Object3D::SetMove(Data::GetPlayerNextPosition(phaseCount_));
+	if (VSize(phasePosition_ - transform_.position_) > 100.0f)
+	{
+		Object3D::SetMove(phasePosition_);
+	}
 	if (ImGui::Button("nextPosition"))
 	{
 		phaseCount_ += 1;
+		phasePosition_ = Data::GetPlayerNextPosition(phaseCount_);
+
+		VECTOR3 toGo = Data::GetPlayerNextPosition(phaseCount_ + 1) - transform_.position_;
+		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // 正面
+		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform_.rotation_.y); // 右　回転の確認に使用
+
+		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
+		{
+			transform_.rotation_.y = atan2f(toGo.x, toGo.z);
+		}
+		else if (VDot(right, toGo) > 0)
+		{
+			transform_.rotation_.y += rotateSpeed_;
+		}
+		else
+		{
+			transform_.rotation_.y -= rotateSpeed_;
+		}
+		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
 	}
+	ImGui::InputInt("phase count", &phaseCount_);
 }

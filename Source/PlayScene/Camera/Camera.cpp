@@ -11,7 +11,7 @@ namespace
 	const float CAMERA_FAR = 15000.0f;
 
 	// 一人称視点関連
-	const float FIRST_DISTANCE = 1000.0f; // 視点と注視点の距離
+	const float FIRST_DISTANCE = 300.0f; // 視点と注視点の距離
 
 	// 三人称視点関連
 	const float MAX_ROTATE_X = 80.0f;
@@ -28,6 +28,7 @@ Camera::Camera()
 {
 	GetMousePoint(&prevMouseX_, &prevMouseY_);
 	fixAddPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
+	prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
 	FixUpdate();
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
 	state_ = CAM_STATE::FIX;
@@ -58,7 +59,8 @@ void Camera::Update()
 		ModifiedFirstUpdate();
 		break;
 	case CAM_STATE::THIRD:
-		ThirdUpdate();
+		//ThirdUpdate();
+		ModifiedThirdUpdate();
 		break;
 	case CAM_STATE::FIX:
 		FixUpdate();
@@ -108,9 +110,8 @@ void Camera::ModifiedFirstUpdate()
 
 void Camera::ThirdUpdate()
 {
-	GetMousePoint(&mouseX_, &mouseY_);
-	int moveX = mouseX_ - prevMouseX_;
-	int moveY = mouseY_ - prevMouseY_;
+	int moveX = Input::GetMousePosition().x - prevMouseX_;
+	int moveY = Input::GetMousePosition().y - prevMouseY_;
 
 	VECTOR3& rot = transform_.rotation_;
 	rot.y += CAMERA_ROTATE_SPEED * moveX;
@@ -129,8 +130,59 @@ void Camera::ThirdUpdate()
 	cameraPosition_ = player_.position_ + camPos + LOOK_HEIGHT;
 	targetPosition_ = player_.position_ + ADD_HEIGHT;
 
-	prevMouseX_ = mouseX_;
-	prevMouseY_ = mouseY_;
+	prevMouseX_ = Input::GetMousePosition().x;
+	prevMouseY_ = Input::GetMousePosition().y;
+}
+
+void Camera::ModifiedThirdUpdate()
+{
+	float moveX = player_.position_.x - prevPlayerPosition_.x;
+	float moveY = player_.position_.y - prevPlayerPosition_.y;
+
+	VECTOR3& rot = player_.rotation_;
+	rot.y += CAMERA_ROTATE_SPEED * moveX;
+	rot.x -= CAMERA_ROTATE_SPEED * moveY;
+
+	if (rot.x >= MAX_ROTATE_X * DegToRad)
+	{
+		rot.x = MAX_ROTATE_X * DegToRad;
+	}
+	if (rot.x < MIN_ROTATE_X * DegToRad)
+	{
+		rot.x = MIN_ROTATE_X * DegToRad;
+	}
+
+	VECTOR camPos = THIRD_BASE_POSITION * MGetRotX(rot.x) * MGetRotY(rot.y);
+	cameraPosition_ = player_.position_ + camPos + LOOK_HEIGHT;
+	{
+		VECTOR3 toGo = cameraPosition_ - prevPlayerPosition_;
+		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(player_.rotation_.y); // 正面
+		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(player_.rotation_.y); // 右　回転の確認に使用
+
+		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
+		{
+			player_.rotation_.y = atan2f(toGo.x, toGo.z);
+		}
+		else if (VDot(right, toGo) > 0)
+		{
+			player_.rotation_.y += rotateSpeed_;
+		}
+		else
+		{
+			player_.rotation_.y -= rotateSpeed_;
+		}
+		cameraPosition_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(player_.rotation_.y);
+	}
+
+	VECTOR3 hit;
+	if (Collision::CheckLineHitObject(cameraPosition_, player_.position_, &hit))
+	{
+		cameraPosition_ = hit;
+	}
+
+	targetPosition_ = player_.position_ + ADD_HEIGHT;
+
+	prevPlayerPosition_ = player_.position_;
 }
 
 void Camera::FixUpdate()
