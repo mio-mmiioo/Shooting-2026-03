@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <assert.h>
+#include "PlayerHp.h"
 #include "../Camera/Camera.h"
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
@@ -46,6 +47,8 @@ Player::Player(const VECTOR3& position, int hp)
 
 	camera_ = FindGameObject<Camera>();
 	gun_ = new Gun();
+	playerHp_ = new PlayerHp(hp);
+
 	currentGunType_ = GUN::TYPE::HAND;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 
@@ -124,6 +127,7 @@ void Player::Update()
 
 	camera_->SetPlayerPosition(transform_);
 	Light::SetPosition(transform_.position_);
+	playerHp_->Update();
 
 	// 位置情報の更新
 	transform_.MakeLocalMatrix();
@@ -140,6 +144,7 @@ void Player::Draw()
 	DrawLine3D(transform_.position_ + addPlayerHeight, transform_.position_ + addPlayerHeight + VECTOR3(0, 0, 1) * PLAYER::DIRECTION_LENGTH * transform_.GetRotationMatrix(), Color::WHITE);
 
 	// 2Dの描画
+	playerHp_->Draw();
 
 	// 照準の描画
 	int x = (int)Input::GetMousePosition().x;
@@ -152,6 +157,11 @@ void Player::Draw()
 	{
 		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
 	}
+}
+
+void Player::AddHp(int add)
+{
+	playerHp_->AddHp(add, &hp_);
 }
 
 void Player::DevelopmentInput()
@@ -167,6 +177,15 @@ void Player::DevelopmentInput()
 		ImGui::Text("rotation");
 		float r[3] = { t.rotation_.x, t.rotation_.y, t.rotation_.z };
 		ImGui::SliderFloat3("rotation", r, -DX_PI_F, DX_PI_F);
+
+		// hp関連
+		int damage = 2;
+		ImGui::InputInt("Damage Power", &damage);
+		ImGui::Text("hp:%d", hp_);
+		if (ImGui::Button("DamagedPlayer"))
+		{
+			playerHp_->AddHp(-damage, &hp_);
+		}
 
 		ImGui::End();
 		transform_.position_ = VECTOR3(p[0], p[1], p[2]);

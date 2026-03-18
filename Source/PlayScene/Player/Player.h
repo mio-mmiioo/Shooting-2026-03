@@ -4,6 +4,7 @@
 #include "Gun.h"
 
 class Camera;
+class PlayerHp;
 
 class Player : public Object3D
 {
@@ -12,6 +13,7 @@ public:
 	~Player() override;
 	void Update() override;
 	void Draw() override;
+	void AddHp(int add) override;
 
 private:
 	void DevelopmentInput();
@@ -19,6 +21,7 @@ private:
 
 	Camera* camera_;
 	Gun* gun_;
+	PlayerHp* playerHp_;
 
 	VECTOR3 wPointerPosition_; // スクリーン座標の照準をワールド座標に変換した物を代入する変数
 	VECTOR3 startPosition_; // 銃弾の軌道の始点
