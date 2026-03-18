@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "../Player/Player.h"
+#include "../../../MyLibrary/Observer.h"
 
 // Še“G‚Ìƒwƒbƒ_[
 #include "Stone.h"
@@ -42,4 +43,15 @@ VECTOR3 Enemy::GetPlayerPosition()
 void Enemy::AttackPlayer(int attackPower)
 {
 	player->AddHp(-attackPower);
+}
+
+void Enemy::SetObserver(std::string name, bool isEnemy)
+{
+	int score = Data::enemyDataList[name].score;
+	Observer::AddScore(score);
+
+	if (isEnemy == true)
+	{
+		Observer::EnemyKilled();
+	}
 }

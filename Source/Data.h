@@ -23,8 +23,10 @@ namespace Data
 		float moveSpeed;	// 移動速度
 		float rotateSpeed;	// 回転速度
 		float distanceR;	// 当たり判定の半径
-		float distanceCurrentAndGo;		// 
-		float distanceThisAndPlayer;	// 
+		float distanceCurrentAndGo;		// 現在地と目的地の距離
+		float distanceThisAndPlayer;	// 自身とプレイヤーの距離
+		int hp;		// 体力
+		int score;	// 得点
 	};
 
 	struct image

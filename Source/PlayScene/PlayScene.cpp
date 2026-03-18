@@ -15,7 +15,10 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update()
 {
-	GameMaster::Update();
+	if (GameMaster::Update() == 0)
+	{
+		SceneManager::ChangeScene("RESULT");
+	}
 	if (Input::IsKeyDown("next")) {
 		SceneManager::ChangeScene("RESULT");
 	}

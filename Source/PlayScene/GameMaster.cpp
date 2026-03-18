@@ -7,12 +7,14 @@
 #include "Stage/StageSearch.h"
 #include "Camera/Camera.h"
 #include "Enemy/Enemy.h"
+#include "Player/Player.h"
 
 namespace GameMaster
 {
 	void DevelopmentInput();
 
 	Stage* stage = nullptr;
+	Player* player = nullptr;
 
 	bool isCreateEnemy;
 }
@@ -32,6 +34,7 @@ int GameMaster::Init()
 
 int GameMaster::Update()
 {
+	player = FindGameObject<Player>();
 	Light::Update();
 	Enemy::Update();
 
@@ -46,6 +49,10 @@ int GameMaster::Update()
 		}
 	}
 
+	if (player->GetHp() <= 0)
+	{
+		return 0;
+	}
 
 	return 1;
 }

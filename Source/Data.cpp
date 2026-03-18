@@ -13,6 +13,8 @@ namespace Data
 		DISTANCE_R,		// 当たり判定の半径
 		DISTANCE1,		// 現在地と目的地の距離
 		DISTANCE2,		// 自身とプレイヤーの距離
+		HP,				// 体力
+		SCORE,			// 得点
 		MAX_E_DATA_NUM
 	};
 
@@ -85,6 +87,8 @@ void Data::InitEnemyDataList()
 		data.distanceR = csv->GetFloat(line, E_DATA_NUM::DISTANCE_R);
 		data.distanceCurrentAndGo = csv->GetFloat(line, E_DATA_NUM::DISTANCE1);
 		data.distanceThisAndPlayer = csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
+		data.hp = csv->GetInt(line, E_DATA_NUM::HP);
+		data.score = csv->GetInt(line, E_DATA_NUM::SCORE);
 		enemyDataList[name] = data;
 	}
 

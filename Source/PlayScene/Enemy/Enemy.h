@@ -12,7 +12,8 @@ namespace Enemy
 	void Update(); // 更新処理
 	void Release(); // 解放処理
 
-	void CreateEnemy(Data::ObjectData objectData);
-	VECTOR3 GetPlayerPosition();
-	void AttackPlayer(int attackPower);
+	void CreateEnemy(Data::ObjectData objectData); // 敵を生成する
+	VECTOR3 GetPlayerPosition(); // プレイヤーの位置を返す
+	void AttackPlayer(int attackPower); // プレイヤーに攻撃する
+	void SetObserver(std::string name, bool isEnemy);
 }

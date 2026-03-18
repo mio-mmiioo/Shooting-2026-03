@@ -160,6 +160,7 @@
     <ClInclude Include="MyLibrary\Light.h" />
     <ClInclude Include="MyLibrary\Object2D.h" />
     <ClInclude Include="MyLibrary\Object3D.h" />
+    <ClInclude Include="MyLibrary\Observer.h" />
     <ClInclude Include="Source\BootScene.h" />
     <ClInclude Include="Source\Data.h" />
     <ClInclude Include="Source\PlayScene\Camera\Camera.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="MyLibrary\Light.cpp" />
     <ClCompile Include="MyLibrary\Object2D.cpp" />
     <ClCompile Include="MyLibrary\Object3D.cpp" />
+    <ClCompile Include="MyLibrary\Observer.cpp" />
     <ClCompile Include="Source\BootScene.cpp" />
     <ClCompile Include="Source\Data.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />

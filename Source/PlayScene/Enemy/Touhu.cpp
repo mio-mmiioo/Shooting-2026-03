@@ -27,8 +27,8 @@ Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
 		assert(hModel_ > 0);
 
 		transform_ = objectData.t;
-		hp_ = objectData.hp;
-		score_ = objectData.score;
+		hp_ = enemyData.hp;
+		score_ = enemyData.score;
 
 		transform_.MakeLocalMatrix();
 		MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
@@ -67,8 +67,9 @@ void Touhu::Update()
 	// 体力が0の場合
 	if (hp_ <= 0)
 	{
-		DestroyMe();
+		Enemy::SetObserver("touhu", true);
 		Collision::DeleteObject(this);
+		DestroyMe();
 		return;
 	}
 
@@ -122,8 +123,6 @@ void Touhu::DevelopmentInput()
 
 void Touhu::WalkUpdate()
 {
-	// 
-
 	VECTOR3 e = transform_.position_; // 自身の場所
 	VECTOR3 p = Enemy::GetPlayerPosition();	// プレイヤーの場所
 	float distance;
@@ -171,7 +170,7 @@ void Touhu::StayUpdate()
 	stateTimer_ += Time::DeltaTime();
 	if (stateTimer_ > TOUHU::STAY_TIME)
 	{
-		stateTimer_ = TOUHU::STAY_TIME;
+		stateTimer_ -= TOUHU::STAY_TIME;
 		state_ = TOUHU_STATE::ATTACK;
 	}
 }
@@ -180,5 +179,5 @@ void Touhu::AttackUpdate()
 {
 	// 一回攻撃をしたらSTAYに戻る
 	Enemy::AttackPlayer(TOUHU::ATTACK_POWER);
-	state_ = TOUHU_STATE::STAY;
+	state_ = TOUHU_STATE::STAY; 
 }

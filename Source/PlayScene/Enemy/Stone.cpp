@@ -16,8 +16,8 @@ Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
 	assert(hModel_ > 0);
 
 	transform_ = objectData.t;
-	hp_ = objectData.hp;
-	score_ = objectData.score;
+	hp_ = enemyData.hp;
+	score_ = enemyData.score;
 
 	transform_.MakeLocalMatrix();
 	MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
@@ -50,6 +50,7 @@ void Stone::Update()
 	// ‘Ì—Í‚ª0‚Ìê‡‚Ìˆ—
 	if (hp_ <= 0)
 	{
+		Enemy::SetObserver("stone", false);
 		Collision::DeleteObject(this);
 		DestroyMe();
 		return;

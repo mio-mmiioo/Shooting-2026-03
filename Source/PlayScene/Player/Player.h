@@ -13,18 +13,19 @@ public:
 	~Player() override;
 	void Update() override;
 	void Draw() override;
-	void AddHp(int add) override;
+	void AddHp(int add) override; // 体力を増減させる
+	int GetHp() { return hp_; } // 体力を返す
 
 private:
 	void DevelopmentInput();
 	void AutoMove();
 
-	Camera* camera_;
-	Gun* gun_;
-	PlayerHp* playerHp_;
+	Camera* camera_;		// カメラ関連
+	Gun* gun_;				// 銃弾関連
+	PlayerHp* playerHp_;	// hpバーの表示関連
 
-	VECTOR3 wPointerPosition_; // スクリーン座標の照準をワールド座標に変換した物を代入する変数
-	VECTOR3 startPosition_; // 銃弾の軌道の始点
+	VECTOR3 wPointerPosition_;	// スクリーン座標の照準をワールド座標に変換した物を代入する変数
+	VECTOR3 startPosition_;		// 銃弾の軌道の始点
 	
 	GUN::TYPE currentGunType_; // 現在の銃の種類
 	bool isHit_; // true→銃弾が当たる　照準の画像を切り替えるときに使用
