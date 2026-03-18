@@ -34,7 +34,7 @@ void ClickArea::DrawArea(area a, int color)
 	int y1 = a.leftTop.y;
 	int x2 = a.rightDown.x;
 	int y2 = a.rightDown.y;
-	if (a.hImage = -1)
+	if (a.hImage == -1)
 	{
 		DrawBox(x1, y1, x2, y2, color, TRUE);
 	}
