@@ -23,21 +23,23 @@ namespace Data
 		X,		// x座標
 		Y,		// y座標
 		Z,		// z座標
+		TURN_START,		// 曲がり始める距離
+		CHANGE_NEXT,	// 次の場所に切り替える距離
 		MAX_P_POSITION_DATA_NUM
 	};
 
-	std::vector<VECTOR3> playerPhasePosition;
+	std::vector<PlayerPhase> playerPhase;
 	std::map<std::string, EnemyData> enemyDataList;
 	std::map<std::string, int> images;
 
-	void InitPlayerPhasePosition();
+	void InitPlayerPhase();
 	void InitEnemyDataList();
 	void InitImage();
 }
 
 void Data::Init()
 {
-	InitPlayerPhasePosition();
+	InitPlayerPhase();
 	InitEnemyDataList();
 	InitImage();
 }
@@ -51,26 +53,34 @@ void Data::SetImage(std::string name, image* i)
 	(*i).halfHeight = (*i).halfHeight / 2;
 }
 
-VECTOR3 Data::GetPlayerNextPosition(int phaseCount)
+int Data::GetPlayerPhase(int phaseCount, PlayerPhase* phase)
 {
-	int max = playerPhasePosition.size() - 1;
+	int max = (int)playerPhase.size() - 1;
 	if (phaseCount > max)
 	{
-		return playerPhasePosition[max];
+		phase->position = playerPhase[max].position;
+		phase->distance1 = playerPhase[max].distance1;
+		phase->distance2 = playerPhase[max].distance2;
+		return 0;
 	}
-	return playerPhasePosition[phaseCount];
+	phase->position = playerPhase[phaseCount].position;
+	phase->distance1 = playerPhase[phaseCount].distance1;
+	phase->distance2 = playerPhase[phaseCount].distance2;
+	return 1;
 }
 
-void Data::InitPlayerPhasePosition()
+void Data::InitPlayerPhase()
 {
 	CsvReader* csv = new CsvReader("data/playerPhasePosition.csv");
-	VECTOR3 current;
+	PlayerPhase current;
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
-		current.x = csv->GetInt(line, P_POSITION_DATA_NUM::X);
-		current.y = csv->GetInt(line, P_POSITION_DATA_NUM::Y);
-		current.z = csv->GetInt(line, P_POSITION_DATA_NUM::Z);
-		playerPhasePosition.push_back(current);
+		current.position.x = csv->GetFloat(line, P_POSITION_DATA_NUM::X);
+		current.position.y = csv->GetFloat(line, P_POSITION_DATA_NUM::Y);
+		current.position.z = csv->GetFloat(line, P_POSITION_DATA_NUM::Z);
+		current.distance1 = csv->GetFloat(line, P_POSITION_DATA_NUM::TURN_START);
+		current.distance2 = csv->GetFloat(line, P_POSITION_DATA_NUM::CHANGE_NEXT);
+		playerPhase.push_back(current);
 	}
 }
 

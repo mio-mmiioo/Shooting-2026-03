@@ -2,6 +2,8 @@
 #include "../../../MyLibrary/Input.h"
 #include "../../../ImGui/imgui.h"
 #include "../../../MyLibrary/Collision.h"
+#include "../GameMaster.h"
+#include "../../Data.h"
 
 namespace
 {
@@ -59,8 +61,8 @@ void Camera::Update()
 		ModifiedFirstUpdate();
 		break;
 	case CAM_STATE::THIRD:
-		//ThirdUpdate();
-		ModifiedThirdUpdate();
+		ThirdUpdate();
+		//ModifiedThirdUpdate();
 		break;
 	case CAM_STATE::FIX:
 		FixUpdate();

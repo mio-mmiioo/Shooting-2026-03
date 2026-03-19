@@ -29,6 +29,13 @@ namespace Data
 		int score;	// 得点
 	};
 
+	struct PlayerPhase
+	{
+		VECTOR3 position;	// このフェーズでプレイヤーが移動する位置
+		float distance1;	// 曲がり始める距離
+		float distance2;	// 次のフェーズに切り替える距離
+	};
+
 	struct image
 	{
 		int hImage;		// 画像のハンドル
@@ -38,8 +45,7 @@ namespace Data
 
 	void Init(); // 初期化
 	void SetImage(std::string name, image* i); // iにnameの画像をセットする
-	VECTOR3 GetPlayerNextPosition(int phaseCount);
-
+	int GetPlayerPhase(int phaseCount, PlayerPhase* phase);
 	extern std::map<std::string, EnemyData> enemyDataList; // 各敵のデータのリスト
 	extern std::map<std::string, int> images; // ゲームで使用する画像
 }

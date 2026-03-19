@@ -36,6 +36,6 @@ private:
 	Data::image reload_;		// リロードの画像
 
 
-	VECTOR3 phasePosition_; // 次に向かう場所を管理する配列
-	int phaseCount_;
+	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
+	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
 };

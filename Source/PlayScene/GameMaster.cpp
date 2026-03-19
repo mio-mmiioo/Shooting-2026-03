@@ -16,7 +16,8 @@ namespace GameMaster
 	Stage* stage = nullptr;
 	Player* player = nullptr;
 
-	bool isCreateEnemy;
+	bool isCreateEnemy; // 敵を生成するフラグ　開発時のみ使用予定
+	int playerPhaseCount; // プレイヤーの移動フェーズのカウント数;
 }
 
 int GameMaster::Init()
@@ -28,6 +29,7 @@ int GameMaster::Init()
 	Light::Init();
 
 	isCreateEnemy = false;
+	playerPhaseCount = 1;
 
 	return 1;
 }
@@ -70,6 +72,20 @@ int GameMaster::Release()
 	return 0;
 }
 
+int GameMaster::GetPlayerPhaseCount()
+{
+	return playerPhaseCount;
+}
+
+int GameMaster::AddPhaseCount()
+{
+	playerPhaseCount += 1;
+	
+	// データの範囲外に行った場合は元の値に戻す処理を追加したほうが安全
+
+	return playerPhaseCount;
+}
+
 void GameMaster::DevelopmentInput()
 {
 	ImGui::Begin("GameMaster");
@@ -77,6 +93,8 @@ void GameMaster::DevelopmentInput()
 	{
 		isCreateEnemy = true;
 	}
+
+	ImGui::InputInt("phaseCount", &playerPhaseCount);
 
 	ImGui::End();
 }

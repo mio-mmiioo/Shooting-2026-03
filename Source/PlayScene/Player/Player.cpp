@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "PlayerHp.h"
 #include "../Camera/Camera.h"
+#include "../GameMaster.h"
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
 #include "../../../MyLibrary/Light.h"
@@ -10,8 +11,8 @@
 
 namespace PLAYER
 {
-	const float ROTATE_SPEED = 3.0f;	// 回転速度
-	const float MOVE_SPEED = 5.0f;		// 移動速度
+	const float ROTATE_SPEED = 0.005f;	// 回転速度
+	const float MOVE_SPEED = 1.0f;		// 移動速度
 
 	const float DISTANCE_R = 100.0f; // 当たり判定の半径
 	const float GRAVITY = 0.05f;
@@ -52,8 +53,8 @@ Player::Player(const VECTOR3& position, int hp)
 	currentGunType_ = GUN::TYPE::HAND;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 
-	phaseCount_ = 0;
-	phasePosition_ = Data::GetPlayerNextPosition(phaseCount_);
+	int count = GameMaster::GetPlayerPhaseCount();
+	Data::GetPlayerPhase(count, &phaseData_);
 
 	Collision::AddObject(this);
 
@@ -221,32 +222,32 @@ void Player::DevelopmentInput()
 
 void Player::AutoMove()
 {
-	if (VSize(phasePosition_ - transform_.position_) > 100.0f)
+	int phaseCount = GameMaster::GetPlayerPhaseCount();
+	Data::GetPlayerPhase(phaseCount, &phaseData_);
+	float distance = VSize(phaseData_.position - transform_.position_);
+	
+	if (distance > phaseData_.distance1)
 	{
-		Object3D::SetMove(phasePosition_);
+		Object3D::SetMove(phaseData_.position);
+	}
+	// プレイヤーが向かっている場所との距離が一定以内の場合
+	else if (distance > phaseData_.distance2)
+	{
+		// 次の場所と向かっている場所の距離を補間する
+		float min = phaseData_.distance1;
+		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
+		float t = distance / min;
+		VECTOR3 position = phaseData_.position * t + nextPhaseData_.position * (1.0f - t);
+		Object3D::SetMove(position);
+		if (t > 0.9f)
+		{
+			int count = GameMaster::AddPhaseCount();
+			Data::GetPlayerPhase(count, &phaseData_);
+		}
 	}
 	if (ImGui::Button("nextPosition"))
 	{
-		phaseCount_ += 1;
-		phasePosition_ = Data::GetPlayerNextPosition(phaseCount_);
-
-		VECTOR3 toGo = Data::GetPlayerNextPosition(phaseCount_ + 1) - transform_.position_;
-		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // 正面
-		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform_.rotation_.y); // 右　回転の確認に使用
-
-		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
-		{
-			transform_.rotation_.y = atan2f(toGo.x, toGo.z);
-		}
-		else if (VDot(right, toGo) > 0)
-		{
-			transform_.rotation_.y += rotateSpeed_;
-		}
-		else
-		{
-			transform_.rotation_.y -= rotateSpeed_;
-		}
-		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
+		int count = GameMaster::AddPhaseCount();
+		Data::GetPlayerPhase(count, &phaseData_);
 	}
-	ImGui::InputInt("phase count", &phaseCount_);
 }
