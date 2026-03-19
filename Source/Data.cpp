@@ -78,8 +78,8 @@ void Data::InitPlayerPhase()
 		current.position.x = csv->GetFloat(line, P_POSITION_DATA_NUM::X);
 		current.position.y = csv->GetFloat(line, P_POSITION_DATA_NUM::Y);
 		current.position.z = csv->GetFloat(line, P_POSITION_DATA_NUM::Z);
-		current.distance1 = csv->GetFloat(line, P_POSITION_DATA_NUM::TURN_START);
-		current.distance2 = csv->GetFloat(line, P_POSITION_DATA_NUM::CHANGE_NEXT);
+		current.distance1  = csv->GetFloat(line, P_POSITION_DATA_NUM::TURN_START);
+		current.distance2  = csv->GetFloat(line, P_POSITION_DATA_NUM::CHANGE_NEXT);
 		playerPhase.push_back(current);
 	}
 }
@@ -90,15 +90,15 @@ void Data::InitEnemyDataList()
 	EnemyData data;
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
-		std::string name = csv->GetString(line, E_DATA_NUM::NAME);
-		data.gravity = csv->GetFloat(line, E_DATA_NUM::GRAVITY);
-		data.moveSpeed = csv->GetFloat(line, E_DATA_NUM::MOVE_SPEED);
-		data.rotateSpeed = csv->GetFloat(line, E_DATA_NUM::ROTATE_SPEED);
-		data.distanceR = csv->GetFloat(line, E_DATA_NUM::DISTANCE_R);
-		data.distanceCurrentAndGo = csv->GetFloat(line, E_DATA_NUM::DISTANCE1);
-		data.distanceThisAndPlayer = csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
-		data.hp = csv->GetInt(line, E_DATA_NUM::HP);
-		data.score = csv->GetInt(line, E_DATA_NUM::SCORE);
+		std::string name			= csv->GetString(line, E_DATA_NUM::NAME);
+		data.gravity				= csv->GetFloat(line, E_DATA_NUM::GRAVITY);
+		data.moveSpeed				= csv->GetFloat(line, E_DATA_NUM::MOVE_SPEED);
+		data.rotateSpeed			= csv->GetFloat(line, E_DATA_NUM::ROTATE_SPEED);
+		data.distanceR				= csv->GetFloat(line, E_DATA_NUM::DISTANCE_R);
+		data.distanceCurrentAndGo	= csv->GetFloat(line, E_DATA_NUM::DISTANCE1);
+		data.distanceThisAndPlayer	= csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
+		data.hp						= csv->GetInt(line, E_DATA_NUM::HP);
+		data.score					= csv->GetInt(line, E_DATA_NUM::SCORE);
 		enemyDataList[name] = data;
 	}
 
@@ -107,7 +107,7 @@ void Data::InitEnemyDataList()
 
 void Data::InitImage()
 {
-	images["aiming"] = LoadGraph("data/image/pointer1.png");
+	images["aiming"]	= LoadGraph("data/image/pointer1.png");
 	images["hitAiming"] = LoadGraph("data/image/pointer2.png");
-	images["reload"] = LoadGraph("data/image/reload.png");
+	images["reload"]	= LoadGraph("data/image/reload.png");
 }

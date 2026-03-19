@@ -45,16 +45,18 @@ Player::Player(const VECTOR3& position, int hp)
 	gravity_ = PLAYER::GRAVITY;
 	velocityY_ = 0.0f;
 	
-
 	camera_ = FindGameObject<Camera>();
 	gun_ = new Gun();
 	playerHp_ = new PlayerHp(hp);
 
 	currentGunType_ = GUN::TYPE::HAND;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
+	isHit_ = false;
 
+	// プレイヤーの移動フェーズ関連
 	int count = GameMaster::GetPlayerPhaseCount();
 	Data::GetPlayerPhase(count, &phaseData_);
+	Data::GetPlayerPhase(count + 1, &nextPhaseData_);
 
 	Collision::AddObject(this);
 
