@@ -29,7 +29,7 @@ void Stage::ReadMappingData(std::string fileName)
 {
 	CsvReader* csv = new CsvReader(STAGE::FOLDER + fileName + ".csv");
 	Data::ObjectData o;
-	char file[STAGE::DATA_SIZE];
+	char name[STAGE::DATA_SIZE];
 
 	for (int line = 0; line < csv->GetLines(); line++)
 	{
@@ -43,8 +43,8 @@ void Stage::ReadMappingData(std::string fileName)
 
 		if (o.objectSortNumber == OBJECT_SORT::OBJ_PLAYER)
 		{
-			// プレイヤーを作成
-			new Player(o.t.position_, o.hp);
+			o.name = "player";
+			new Player(o); // プレイヤーを作成
 		}
 		else
 		{
@@ -58,17 +58,14 @@ void Stage::ReadMappingData(std::string fileName)
 
 			if (o.objectSortNumber == OBJECT_SORT::OBJ_CHARA)
 			{
-				sprintf_s<STAGE::DATA_SIZE>(file, "enemy%03d", csv->GetInt(line, DATA_NUM::NUMBER));
-				o.path = file;
-				o.name = file;
-				// 敵の生成
-				Enemy::CreateEnemy(o);
+				sprintf_s<STAGE::DATA_SIZE>(name, "enemy%03d", csv->GetInt(line, DATA_NUM::NUMBER));
+				o.name = name;
+				Enemy::CreateEnemy(o); // 敵の生成
 			}
 			else if (o.objectSortNumber == OBJECT_SORT::OBJ_OBJECT)
 			{
-				sprintf_s<STAGE::DATA_SIZE>(file, "Stage_Obj%03d", csv->GetInt(line, DATA_NUM::NUMBER));
-				o.path = file;
-				o.name = file;
+				sprintf_s<STAGE::DATA_SIZE>(name, "Stage_Obj%03d", csv->GetInt(line, DATA_NUM::NUMBER));
+				o.name = name;
 				StageObject* obj = new StageObject(o);
 			}
 		}

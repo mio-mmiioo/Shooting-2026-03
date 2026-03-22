@@ -9,11 +9,8 @@ namespace STONE
 
 Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
 {
-	const std::string folder = "data/model/";
-	hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
-	assert(hModel_ > 0);
-	hitModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
-	assert(hModel_ > 0);
+	hModel_ = MV1DuplicateModel(Data::models[objectData.name]);
+	hitModel_ = MV1DuplicateModel(Data::models[objectData.name + "_c"]);
 
 	transform_ = objectData.t;
 	hp_ = enemyData.hp;
@@ -37,10 +34,12 @@ Stone::~Stone()
 {
 	if (hModel_ > 0)
 	{
+		MV1DeleteModel(hModel_);
 		hModel_ = -1;
 	}
 	if (hitModel_ > 0)
 	{
+		MV1DeleteModel(hitModel_);
 		hModel_ = -1;
 	}
 }

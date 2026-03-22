@@ -21,15 +21,14 @@ namespace PLAYER
 	const float DIRECTION_LENGTH = 100.0f;
 }
 
-Player::Player(const VECTOR3& position, int hp)
+Player::Player(Data::ObjectData objectData)
 {
 	objectNumber_ = OBJECT_SORT::OBJ_PLAYER;
-	transform_.position_ = position;
-	hp_ = hp;
-	hModel_ = MV1LoadModel("data/model/player.mv1");
-	assert(hModel_ > 0);
-	hitModel_ = MV1LoadModel("data/model/player_c.mv1");
-	assert(hitModel_ > 0);
+	transform_.position_ = objectData.t.position_;
+	hp_ = objectData.hp;
+
+	hModel_ = MV1DuplicateModel(Data::models[objectData.name]);
+	hitModel_ = MV1DuplicateModel(Data::models[objectData.name + "_c"]);
 
 	transform_.MakeLocalMatrix();
 	MV1SetupCollInfo(hModel_);
@@ -47,7 +46,7 @@ Player::Player(const VECTOR3& position, int hp)
 	
 	camera_ = FindGameObject<Camera>();
 	gun_ = new Gun();
-	playerHp_ = new PlayerHp(hp);
+	playerHp_ = new PlayerHp(objectData.hp);
 
 	currentGunType_ = GUN::TYPE::HAND;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
@@ -66,7 +65,16 @@ Player::Player(const VECTOR3& position, int hp)
 Player::~Player()
 {
 	Collision::DeleteObject(this);
-
+	if (hModel_ > 0)
+	{
+		MV1DeleteModel(hModel_);
+		hModel_ = -1;
+	}
+	if (hitModel_ > 0)
+	{
+		MV1DeleteModel(hitModel_);
+		hitModel_ = -1;
+	}
 }
 
 void Player::Update()

@@ -9,7 +9,7 @@ class PlayerHp;
 class Player : public Object3D
 {
 public:
-	Player(const VECTOR3& position, int hp);
+	Player(Data::ObjectData o);
 	~Player() override;
 	void Update() override;
 	void Draw() override;

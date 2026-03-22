@@ -118,7 +118,11 @@ void Data::InitImage()
 void Data::InitModel()
 {
 	// キャラクター
-	models["enemy001"] = MV1LoadModel("data/model/enemy001.mv1"); // 豆腐
+	models["player"]	 = MV1LoadModel("data/model/player.mv1"); // プレイヤー
+	models["player_c"]	 = MV1LoadModel("data/model/player_c.mv1");
+	models["enemy000"]	 = MV1LoadModel("data/model/enemy000.mv1"); // 石
+	models["enemy000_c"] = MV1LoadModel("data/model/enemy000_c.mv1");
+	models["enemy001"]	 = MV1LoadModel("data/model/enemy001.mv1"); // 豆腐
 	models["enemy001_c"] = MV1LoadModel("data/model/enemy001_c.mv1");
 
 	// 建物
