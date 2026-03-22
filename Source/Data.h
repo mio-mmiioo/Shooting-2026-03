@@ -48,4 +48,5 @@ namespace Data
 	int GetPlayerPhase(int phaseCount, PlayerPhase* phase);
 	extern std::map<std::string, EnemyData> enemyDataList; // 各敵のデータのリスト
 	extern std::map<std::string, int> images; // ゲームで使用する画像
+	extern std::map<std::string, int> models; // 使用するモデル
 }

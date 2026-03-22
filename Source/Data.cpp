@@ -31,10 +31,12 @@ namespace Data
 	std::vector<PlayerPhase> playerPhase;
 	std::map<std::string, EnemyData> enemyDataList;
 	std::map<std::string, int> images;
+	std::map<std::string, int> models;
 
 	void InitPlayerPhase();
 	void InitEnemyDataList();
 	void InitImage();
+	void InitModel();
 }
 
 void Data::Init()
@@ -42,6 +44,7 @@ void Data::Init()
 	InitPlayerPhase();
 	InitEnemyDataList();
 	InitImage();
+	InitModel();
 }
 
 void Data::SetImage(std::string name, image* i)
@@ -110,4 +113,33 @@ void Data::InitImage()
 	images["aiming"]	= LoadGraph("data/image/pointer1.png");
 	images["hitAiming"] = LoadGraph("data/image/pointer2.png");
 	images["reload"]	= LoadGraph("data/image/reload.png");
+}
+
+void Data::InitModel()
+{
+	// キャラクター
+	models["enemy001"] = MV1LoadModel("data/model/enemy001.mv1"); // 豆腐
+	models["enemy001_c"] = MV1LoadModel("data/model/enemy001_c.mv1");
+
+	// 建物
+	models["Stage_Obj002"]	 = MV1LoadModel("data/model/Stage_Obj002.mv1");
+	models["Stage_Obj002_c"] = MV1LoadModel("data/model/Stage_Obj002_c.mv1");
+	models["Stage_Obj003"]	 = MV1LoadModel("data/model/Stage_Obj003.mv1");
+	models["Stage_Obj003_c"] = MV1LoadModel("data/model/Stage_Obj003_c.mv1");
+	models["Stage_Obj004"]	 = MV1LoadModel("data/model/Stage_Obj004.mv1");
+	models["Stage_Obj004_c"] = MV1LoadModel("data/model/Stage_Obj004_c.mv1");
+	models["Stage_Obj005"]	 = MV1LoadModel("data/model/Stage_Obj005.mv1");
+	models["Stage_Obj005_c"] = MV1LoadModel("data/model/Stage_Obj005_c.mv1");
+	models["Stage_Obj006"]	 = MV1LoadModel("data/model/Stage_Obj006.mv1");
+	models["Stage_Obj006_c"] = MV1LoadModel("data/model/Stage_Obj006_c.mv1");
+	models["Stage_Obj007"]	 = MV1LoadModel("data/model/Stage_Obj007.mv1");
+	models["Stage_Obj007_c"] = MV1LoadModel("data/model/Stage_Obj007_c.mv1");
+	models["Stage_Obj008"]	 = MV1LoadModel("data/model/Stage_Obj008.mv1");
+	models["Stage_Obj008_c"] = MV1LoadModel("data/model/Stage_Obj008_c.mv1");
+	models["Stage_Obj009"]	 = MV1LoadModel("data/model/Stage_Obj009.mv1");
+	models["Stage_Obj009_c"] = MV1LoadModel("data/model/Stage_Obj009_c.mv1");
+	models["Stage_Obj010"]	 = MV1LoadModel("data/model/Stage_Obj010.mv1");
+	models["Stage_Obj010_c"] = MV1LoadModel("data/model/Stage_Obj010_c.mv1");
+	models["Stage_Obj011"]	 = MV1LoadModel("data/model/Stage_Obj011.mv1");
+	models["Stage_Obj011_c"] = MV1LoadModel("data/model/Stage_Obj011_c.mv1");
 }

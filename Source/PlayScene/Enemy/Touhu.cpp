@@ -20,11 +20,13 @@ Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
 {
 	// Stone‚Æ‘S‚­“¯‚¶A‘¼‚É‚¢‚¢‘‚«•û‚ª‚ ‚é‚©‚à‚µ‚ê‚È‚¢
 	{
-		const std::string folder = "data/model/";
-		hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
-		assert(hModel_ > 0);
-		hitModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
-		assert(hModel_ > 0);
+		//const std::string folder = "data/model/";
+		//hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
+		//assert(hModel_ > 0);
+		//hitModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
+		//assert(hModel_ > 0);
+		hModel_ = Data::models[objectData.name];
+		hitModel_ = Data::models[objectData.name + "_c"];
 
 		transform_ = objectData.t;
 		hp_ = enemyData.hp;

@@ -60,6 +60,7 @@ void Stage::ReadMappingData(std::string fileName)
 			{
 				sprintf_s<STAGE::DATA_SIZE>(file, "enemy%03d", csv->GetInt(line, DATA_NUM::NUMBER));
 				o.path = file;
+				o.name = file;
 				// ìGÇÃê∂ê¨
 				Enemy::CreateEnemy(o);
 			}
@@ -67,6 +68,7 @@ void Stage::ReadMappingData(std::string fileName)
 			{
 				sprintf_s<STAGE::DATA_SIZE>(file, "Stage_Obj%03d", csv->GetInt(line, DATA_NUM::NUMBER));
 				o.path = file;
+				o.name = file;
 				StageObject* obj = new StageObject(o);
 			}
 		}

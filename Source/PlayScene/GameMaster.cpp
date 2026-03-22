@@ -62,7 +62,7 @@ int GameMaster::Update()
 int GameMaster::Draw()
 {
 	//WayInfo::WayDraw();
-	StageSearch::Draw();
+	//StageSearch::Draw();
 	return 0;
 }
 

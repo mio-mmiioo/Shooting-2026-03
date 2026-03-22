@@ -4,11 +4,16 @@
 
 StageObject::StageObject(Data::ObjectData objectData)
 {
-	const std::string folder = "data/model/";
-	hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
-	assert(hModel_ > 0);
-	hitModel_ = MV1LoadModel((folder + objectData.path + "_c.mv1").c_str());
-	assert(hitModel_ > 0);
+	// これだと何回もモデルをロードしてしまう
+	//const std::string folder = "data/model/";
+	//hModel_ = MV1LoadModel((folder + objectData.path + ".mv1").c_str());
+	//assert(hModel_ > 0);
+	//hitModel_ = MV1LoadModel((folder + objectData.path + "_c.mv1").c_str());
+	//assert(hitModel_ > 0);
+
+	// 1回ロードしたモデルを使いまわす
+	hModel_ = MV1DuplicateModel(Data::models[objectData.name]);
+	hitModel_ = MV1DuplicateModel(Data::models[objectData.name + "_c"]);
 
 	transform_ = objectData.t;
 	transform_.MakeLocalMatrix();
