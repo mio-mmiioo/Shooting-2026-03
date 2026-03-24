@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../MyLibrary/Object3D.h"
+#include "../../Data.h"
 
 enum CAM_STATE
 {
@@ -39,6 +40,8 @@ private:
 	VECTOR3 fixAddPosition_; // 固定カメラの時に使用する、加算された位置
 
 	VECTOR3 prevPlayerPosition_; // 前回のプレイヤーの位置
+	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
+	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
 
 	int wheelRot_; // マウスホイール
 	bool isMoveFixCamera_; // 固定カメラの移動フラグ

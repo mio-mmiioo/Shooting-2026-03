@@ -38,4 +38,5 @@ private:
 
 	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
 	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
+	float currentRotationY_;
 };

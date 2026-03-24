@@ -57,8 +57,8 @@ void Camera::Update()
 	switch (state_)
 	{
 	case CAM_STATE::FIRST:
-		//FirstUpdate();
-		ModifiedFirstUpdate();
+		FirstUpdate();
+		//ModifiedFirstUpdate();
 		break;
 	case CAM_STATE::THIRD:
 		ThirdUpdate();
@@ -86,6 +86,24 @@ void Camera::FirstUpdate()
 
 void Camera::ModifiedFirstUpdate()
 {
+	int phaseCount = GameMaster::GetPlayerPhaseCount();
+	Data::GetPlayerPhase(phaseCount, &phaseData_);
+	float distance = VSize(phaseData_.position - transform_.position_);
+
+	// ƒvƒŒƒCƒ„[‚ªŒü‚©‚Á‚Ä‚¢‚éêŠ‚Æ‚Ì‹——£‚ªˆê’èˆÈ“à‚Ìê‡
+	if (distance < phaseData_.distance1)
+	{
+		// Ÿ‚ÌêŠ‚ÆŒü‚©‚Á‚Ä‚¢‚éêŠ‚Ì‹——£‚ğ•âŠÔ‚·‚é
+		float min = phaseData_.distance1;
+		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
+		float t = distance / min;
+		//VECTOR3 rotation = phaseData_.position * t + nextPhaseData_.position * (1.0f - t) + ;
+		if (t > 0.9f)
+		{
+			Data::GetPlayerPhase(phaseCount, &phaseData_);
+		}
+	}
+
 	// ˆÚ“®ˆ—
 	{
 		VECTOR3 toGo = player_.position_ + LOOK_HEIGHT - cameraPosition_;
