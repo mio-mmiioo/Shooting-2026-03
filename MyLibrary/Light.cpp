@@ -45,6 +45,11 @@ void Light::Update()
 	SetLightRangeAttenHandle(hPlayerLight, range, atten0, atten1, atten2);
 }
 
+void Light::Release()
+{
+	DeleteLightHandleAll();
+}
+
 VECTOR Light::GetLightDirection()
 {
 	return lightDirection;

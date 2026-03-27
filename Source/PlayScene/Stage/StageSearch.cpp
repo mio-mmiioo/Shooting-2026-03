@@ -31,6 +31,7 @@ namespace StageSearch {
 		MAX_MAP_NUM
 	};
 
+	// 方向
 	enum DIR {
 		RIGHT,
 		DOWN,
@@ -38,6 +39,7 @@ namespace StageSearch {
 		UP,
 		MAX_DIR
 	};
+
 
 	const int FILE_DATA_SIZE = 64; // ファイル名に使用するデータのサイズ
 	const std::string wayDataName = "data/stage/wayInfo/wayInfo03.csv";
@@ -47,17 +49,21 @@ namespace StageSearch {
 	const float ADD_DRAW_WAY_HEIGHT = 5.0f; // 道情報の描画のy座標
 	const VECTOR3 ADD_HALF_BOX_POS = { (float)(BOX_SIZE / 2), 0.0f, (float)(BOX_SIZE / 2) };
 
-	void ReadWay(std::string fileName); // マップの読み込み
-	void DrawSearchWay(); // 探索した道の距離などの描画
+	void ReadMap(std::string fileName);			// マップの読み込み
+	void DrawSearchWay();						// 探索した道の距離などの描画
 	int SearchData(VECTOR3 start, VECTOR3 end); // 経路探索のプログラム
-	point Vector3ToPoint(VECTOR3 v); // VECTOR3の座標をpointに変換する
+	point Vector3ToPoint(VECTOR3 v);			// VECTOR3の座標をpointに変換する
 
 	std::priority_queue<NodeAStar, std::vector<NodeAStar>, std::greater<NodeAStar>> aStarList;
-	std::vector<std::vector<int>> map; // 読み込む通れる場所のデータ
-	std::vector<std::vector<int>> way; // 経路
+	std::vector<std::vector<int>> map;	// 読み込む通れる場所のデータ
+	std::vector<std::vector<int>> way;	// 経路
+	std::vector<point> shortestWay;		// 最短経路
+
 	int height;
 	int width;
 	int distance;
+
+	int mapOffset; // map.size() / 2;
 }
 
 void StageSearch::Init()
@@ -65,7 +71,7 @@ void StageSearch::Init()
 	height = 0;
 	width = 0;
 	distance = 0;
-	ReadWay(wayDataName);
+	ReadMap(wayDataName);
 }
 
 void StageSearch::Draw()
@@ -111,53 +117,57 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 	point current = Vector3ToPoint(currentPos);
 	point end = Vector3ToPoint(goalPos);
 	
-	if (way[end.z][end.x] == -1 || way[end.z][end.x] == INIT_DISTANCE)
+	shortestWay.clear(); // 前回の情報をクリア
+	point check = end;
+	point next;
+	int moveCost;
+	// ゴールから現在地にたどり着くまでループ
+	while (!(check.x == current.x && check.z == current.z))
+	{
+		shortestWay.push_back(check);
+		bool foundNext = false; // true → 次の場所が見つかった
+
+		for (int d = 0; d < DIR::MAX_DIR; d++)
+		{
+			next = { check.x + direction[d].x, check.z + direction[d].z };
+			if (next.x < 0 || next.x >= width)
+			{
+				continue;
+			}
+			if (next.z < 0 || next.z >= height)
+			{
+				continue;
+			}
+
+			moveCost = map[check.z][check.x] + 1;
+			if (way[next.z][next.x] == way[check.z][check.x] - moveCost)
+			{
+				check = next;
+				foundNext = true;
+				break;
+			}
+		}
+		if (foundNext == false)
+		{
+			break;
+		}
+	}
+
+	// 次に向かう場所を変えす
+	if (shortestWay.empty())
 	{
 		return currentPos;
 	}
 
-	point next;
-	point min;
-	int minSize = INIT_DISTANCE; // 大きい値で初期化
+	point nextPoint = shortestWay.back();
 
-	for (int d = 0; d < DIR::MAX_DIR; d++)
-	{
-		next = { end.x + direction[d].x, end.z + direction[d].z };
+	float x = (float)(nextPoint.x - mapOffset) * BOX_SIZE;
+	float z = (float)(nextPoint.z - mapOffset) * BOX_SIZE;
 
-		if (next.x < 0 || next.x >= way[0].size())
-		{
-			continue;
-		}
-		if (next.z < 0 || next.z >= way.size())
-		{
-			continue;
-		}
-
-		// 一番小さい値を更新していく処理
-		if (way[next.z][next.x] <= way[end.z][end.x] - 1)
-		{
-			if (minSize > way[next.z][next.x])
-			{
-				minSize = way[next.z][next.x];
-				min = next;
-			}
-		}
-	}
-
-	// 一番小さい値が初期化の値じゃない場合、サイズを作って返す
-	if (minSize != INIT_DISTANCE)
-	{
-		// 座標変換をしてminの値を返す
-		float x = (min.x - (int)map.size() / 2) * BOX_SIZE;
-		float z = (min.z - (int)map.size() / 2) * BOX_SIZE;
-		VECTOR3 ret = { x, 0.0f, z };
-		return ret;
-	}
-
-	return currentPos;
+	return VECTOR3{ x, currentPos.y, z };
 }
 
-void StageSearch::ReadWay(std::string fileName)
+void StageSearch::ReadMap(std::string fileName)
 {
 	char name[FILE_DATA_SIZE];
 	sprintf_s<FILE_DATA_SIZE>(name, fileName.c_str());
@@ -176,10 +186,12 @@ void StageSearch::ReadWay(std::string fileName)
 		map.push_back(mapLine);
 	}
 	delete csv;
+	mapOffset = map.size() / 2;
 }
 
 void StageSearch::DrawSearchWay()
 {
+	// 開発時の確認のために経路を表示する関数
 	int startX = 100;
 	int startY = 100;
 	int boxWidth = 20;
@@ -219,7 +231,12 @@ void StageSearch::DrawSearchWay()
 
 int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 {
-	height = (int)map.size();
+	while (!aStarList.empty()) // 探索開始前に空にする　万が一に備える
+	{
+		aStarList.pop();
+	}
+
+	height = mapOffset;
 	width = (int)map[0].size();
 
 	point s = Vector3ToPoint(start);
@@ -279,7 +296,7 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 point StageSearch::Vector3ToPoint(VECTOR3 v)
 {
 	point ret;
-	ret.x = (int)(v.x / BOX_SIZE + map.size() / 2);
-	ret.z = (int)(v.z / BOX_SIZE + map.size() / 2);
+	ret.x = (int)(v.x / BOX_SIZE + mapOffset);
+	ret.z = (int)(v.z / BOX_SIZE + mapOffset);
 	return ret;
 }

@@ -69,6 +69,7 @@ int GameMaster::Draw()
 int GameMaster::Release()
 {
 	Collision::Release();
+	Light::Release(); // ‚±‚ê‚ğŒÄ‚Î‚È‚¢‚ÆAŒõŒ¹‚ª‘B‚·‚é
 	return 0;
 }
 
