@@ -11,9 +11,10 @@ namespace Color
 	// テキスト
 	const int TEXT = WHITE;
 
-	// WayInfoで使用
+	// WayInfo/StageSearchで使用
 	const int EMPTY = GetColor(100, 255, 100);
 	const int WALL = BLACK;
 	const int BRANCH = BLUE;
 	const int OTHER = GetColor(100, 100, 100);
+	const int SHORTEST_WAY = RED;
 }

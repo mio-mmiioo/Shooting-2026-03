@@ -122,7 +122,7 @@ void Player::Update()
 	velocityY_ += gravity_;
 
 	// 移動処理
-	AutoMove();
+	//AutoMove();
 	DevelopmentInput();
 
 	// 各オブジェクトとの距離を確認し、めり込みをなくす

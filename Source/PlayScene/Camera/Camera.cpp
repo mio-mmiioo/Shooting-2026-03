@@ -29,7 +29,7 @@ namespace
 Camera::Camera()
 {
 	GetMousePoint(&prevMouseX_, &prevMouseY_);
-	fixAddPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
+	fixAddPosition_ = VECTOR3(-5000.0f, 0.0f, 0.0f);
 	prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
 	FixUpdate();
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);

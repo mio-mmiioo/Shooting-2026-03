@@ -71,6 +71,7 @@ void StageSearch::Init()
 	height = 0;
 	width = 0;
 	distance = 0;
+	mapOffset = 0;
 	ReadMap(wayDataName);
 }
 
@@ -119,14 +120,14 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 	
 	shortestWay.clear(); // 前回の情報をクリア
 	point check = end;
+	point shortestNext = check;
 	point next;
-	int moveCost;
-	// ゴールから現在地にたどり着くまでループ
+	int minCost = INIT_DISTANCE;
+	// 現在地からゴールにたどり着くまでループ
+
 	while (!(check.x == current.x && check.z == current.z))
 	{
-		shortestWay.push_back(check);
-		bool foundNext = false; // true → 次の場所が見つかった
-
+		shortestWay.push_back(shortestNext);
 		for (int d = 0; d < DIR::MAX_DIR; d++)
 		{
 			next = { check.x + direction[d].x, check.z + direction[d].z };
@@ -138,20 +139,16 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 			{
 				continue;
 			}
-
-			moveCost = map[check.z][check.x] + 1;
-			if (way[next.z][next.x] == way[check.z][check.x] - moveCost)
+			
+			if (way[next.z][next.x] < way[check.z][check.x] && way[next.z][next.x] < minCost)
 			{
-				check = next;
-				foundNext = true;
-				break;
+				minCost = way[next.z][next.x];
+				shortestNext = next;
 			}
 		}
-		if (foundNext == false)
-		{
-			break;
-		}
+		check = shortestNext;
 	}
+		
 
 	// 次に向かう場所を変えす
 	if (shortestWay.empty())
@@ -194,7 +191,7 @@ void StageSearch::DrawSearchWay()
 	// 開発時の確認のために経路を表示する関数
 	int startX = 100;
 	int startY = 100;
-	int boxWidth = 20;
+	int boxWidth = 10;
 	point leftTop;
 	point rightDown;
 	int color = 0;
@@ -224,8 +221,15 @@ void StageSearch::DrawSearchWay()
 			}
 
 			DrawBox(leftTop.x, leftTop.z, rightDown.x, rightDown.z, color, TRUE);
-			DrawFormatString(leftTop.x, leftTop.z, Color::BLACK, "%d", d);
+			//DrawFormatString(leftTop.x, leftTop.z, Color::BLACK, "%d", d);
 		}
+	}
+	color = Color::SHORTEST_WAY;
+	for (int i = 0; i < (int)shortestWay.size(); i++)
+	{
+		leftTop = { shortestWay[i].x * boxWidth + startX, shortestWay[i].z * boxWidth + startY };
+		rightDown = { leftTop.x + boxWidth, leftTop.z + boxWidth };
+		DrawBox(leftTop.x, leftTop.z, rightDown.x, rightDown.z, color, TRUE);
 	}
 }
 
@@ -236,7 +240,7 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 		aStarList.pop();
 	}
 
-	height = mapOffset;
+	height = (int)map.size();
 	width = (int)map[0].size();
 
 	point s = Vector3ToPoint(start);
@@ -281,7 +285,7 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 				continue;
 			}
 
-			int nextDistance = way[current.position.z][current.position.x] + map[current.position.z][current.position.x] + 1;
+			int nextDistance = current.distance + map[current.position.z][current.position.x] + 1;
 			if (nextDistance < way[z][x])
 			{
 				way[z][x] = nextDistance;
