@@ -36,8 +36,6 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	DrawString(0, 0, "TITLE SCENE", Color::TEXT);
-
 	ClickArea::DrawArea(start_.buttonArea, -1);
 
 	// •`‰æ‚³‚ê‚é‚©Šm”F

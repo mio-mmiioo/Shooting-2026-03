@@ -20,8 +20,6 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	DrawString(0, 0, "RESULT SCENE", Color::TEXT);
-
 	DrawFormatString(0, 300, Color::TEXT, "score : %d", Observer::GetScore());
 	DrawFormatString(0, 330, Color::TEXT, "ì|ÇµÇΩìGÇÃêî : %d", Observer::GetEnemyKilled());
 }

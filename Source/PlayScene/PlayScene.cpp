@@ -27,5 +27,4 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	GameMaster::Draw();
-	DrawString(0, 0, "PLAY SCENE", Color::TEXT);
 }

@@ -285,6 +285,7 @@ int StageSearch::SearchData(VECTOR3 start, VECTOR3 end)
 				continue;
 			}
 
+			// 次の場所の距離 = 現在の距離 + マップの重み + 1 ←プラス1して重みが0でも問題ないようにするため
 			int nextDistance = current.distance + map[current.position.z][current.position.x] + 1;
 			if (nextDistance < way[z][x])
 			{
