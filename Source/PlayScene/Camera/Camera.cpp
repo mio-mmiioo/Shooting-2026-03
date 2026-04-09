@@ -150,8 +150,8 @@ void Camera::ThirdUpdate()
 	cameraPosition_ = player_.position_ + camPos + LOOK_HEIGHT;
 	targetPosition_ = player_.position_ + ADD_HEIGHT;
 
-	prevMouseX_ = Input::GetMousePosition().x;
-	prevMouseY_ = Input::GetMousePosition().y;
+	prevMouseX_ = (int)Input::GetMousePosition().x;
+	prevMouseY_ = (int)Input::GetMousePosition().y;
 }
 
 void Camera::ModifiedThirdUpdate()

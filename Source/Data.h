@@ -6,6 +6,12 @@
 
 namespace Data
 {
+	enum P_STATE { // プレイヤーの状態
+		MOVE, // 移動
+		STAY, // 待機
+		P_STATE_MAX
+	};
+
 	struct ObjectData
 	{
 		int objectSortNumber;	// オブジェクトの種類
@@ -34,6 +40,8 @@ namespace Data
 		VECTOR3 position;	// このフェーズでプレイヤーが移動する位置
 		float distance1;	// 曲がり始める距離
 		float distance2;	// 次のフェーズに切り替える距離
+		P_STATE state;	// プレイヤーの状態
+		int enemyNum;	// 次のフェーズに行くために必要な倒す敵の数
 	};
 
 	struct image
@@ -42,6 +50,8 @@ namespace Data
 		int halfWidth;	// 画像の半分の横幅
 		int halfHeight; // 画像の半分の縦幅
 	};
+
+
 
 	void Init(); // 初期化
 	void SetImage(std::string name, image* i); // iにnameの画像をセットする

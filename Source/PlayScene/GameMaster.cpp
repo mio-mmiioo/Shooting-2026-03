@@ -22,6 +22,8 @@ namespace GameMaster
 
 int GameMaster::Init()
 {
+	playerPhaseCount = 1; // Stageのインスタンスを作成するより先に代入すること
+
 	//WayInfo::Init();
 	StageSearch::Init();
 	new Camera();
@@ -29,7 +31,7 @@ int GameMaster::Init()
 	Light::Init();
 
 	isCreateEnemy = false;
-	playerPhaseCount = 1;
+
 
 	return 1;
 }

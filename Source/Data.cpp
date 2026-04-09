@@ -25,6 +25,8 @@ namespace Data
 		Z,		// z座標
 		TURN_START,		// 曲がり始める距離
 		CHANGE_NEXT,	// 次の場所に切り替える距離
+		STATE,			// プレイヤーの状態
+		ENEMY_NUM,		// 倒さなきゃいけない敵の数
 		MAX_P_POSITION_DATA_NUM
 	};
 
@@ -33,10 +35,10 @@ namespace Data
 	std::map<std::string, int> images;
 	std::map<std::string, int> models;
 
-	void InitPlayerPhase();
-	void InitEnemyDataList();
-	void InitImage();
-	void InitModel();
+	void InitPlayerPhase(); // プレイヤーの行動を管理するためのデータの読み込み
+	void InitEnemyDataList(); // 敵のデータの読み込み
+	void InitImage(); // 画像データの読み込み
+	void InitModel(); // モデルデータの読み込み
 }
 
 void Data::Init()
@@ -64,11 +66,15 @@ int Data::GetPlayerPhase(int phaseCount, PlayerPhase* phase)
 		phase->position = playerPhase[max].position;
 		phase->distance1 = playerPhase[max].distance1;
 		phase->distance2 = playerPhase[max].distance2;
+		phase->state = playerPhase[max].state;
+		phase->enemyNum = playerPhase[max].enemyNum;
 		return 0;
 	}
 	phase->position = playerPhase[phaseCount].position;
 	phase->distance1 = playerPhase[phaseCount].distance1;
 	phase->distance2 = playerPhase[phaseCount].distance2;
+	phase->state = playerPhase[phaseCount].state;
+	phase->enemyNum = playerPhase[phaseCount].enemyNum;
 	return 1;
 }
 
@@ -76,13 +82,29 @@ void Data::InitPlayerPhase()
 {
 	CsvReader* csv = new CsvReader("data/playerPhasePosition.csv");
 	PlayerPhase current;
+	int stateNumber = -1;
+	P_STATE s;
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
+		stateNumber = csv->GetInt(line, P_POSITION_DATA_NUM::STATE); // 文字をまず読み込む
+		switch (stateNumber)
+		{
+		case P_STATE::MOVE:
+			s = P_STATE::MOVE;
+			break;
+		case P_STATE::STAY:
+			s = P_STATE::STAY;
+			break;
+		default:
+			s = P_STATE_MAX;
+		}
 		current.position.x = csv->GetFloat(line, P_POSITION_DATA_NUM::X);
 		current.position.y = csv->GetFloat(line, P_POSITION_DATA_NUM::Y);
 		current.position.z = csv->GetFloat(line, P_POSITION_DATA_NUM::Z);
 		current.distance1  = csv->GetFloat(line, P_POSITION_DATA_NUM::TURN_START);
 		current.distance2  = csv->GetFloat(line, P_POSITION_DATA_NUM::CHANGE_NEXT);
+		current.state	   = s;
+		current.enemyNum   = csv->GetInt(line, P_POSITION_DATA_NUM::ENEMY_NUM);
 		playerPhase.push_back(current);
 	}
 }
@@ -117,6 +139,8 @@ void Data::InitImage()
 
 void Data::InitModel()
 {
+	// 「○○_c」のデータは当たり判定用のポリゴン数が少ないモデル
+
 	// キャラクター
 	models["player"]	 = MV1LoadModel("data/model/player.mv1"); // プレイヤー
 	models["player_c"]	 = MV1LoadModel("data/model/player_c.mv1");

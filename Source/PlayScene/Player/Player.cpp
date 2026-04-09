@@ -56,6 +56,7 @@ Player::Player(Data::ObjectData objectData)
 	int count = GameMaster::GetPlayerPhaseCount();
 	Data::GetPlayerPhase(count, &phaseData_);
 	Data::GetPlayerPhase(count + 1, &nextPhaseData_);
+	state_ = phaseData_.state;
 	currentRotationY_ = 0.0f;
 
 	Collision::AddObject(this);
@@ -117,13 +118,22 @@ void Player::Update()
 		}
 	}
 
+	switch (state_)
+	{
+	case Data::P_STATE::MOVE: // 移動処理
+		AutoMove();
+		break;
+	case Data::P_STATE::STAY:
+		// 指定した条件をクリアした場合、状態をMOVEに変える
+		break;
+
+	}
+
+	DevelopmentInput();
+
 	// 重力を加える
 	transform_.position_.y -= velocityY_;
 	velocityY_ += gravity_;
-
-	// 移動処理
-	AutoMove();
-	DevelopmentInput();
 
 	// 各オブジェクトとの距離を確認し、めり込みをなくす
 	{
@@ -199,6 +209,24 @@ void Player::DevelopmentInput()
 			playerHp_->AddHp(-damage, &hp_);
 		}
 
+		// PhaseData関連
+		{
+			// 次に向かう場所(Position)
+			ImGui::Text("PhasePosition.x : %04f", phaseData_.position.x);
+			ImGui::Text("PhasePosition.y : %04f", phaseData_.position.y);
+			ImGui::Text("PhasePosition.z : %04f", phaseData_.position.z);
+
+			// 状態
+			if (phaseData_.state == Data::P_STATE::MOVE)
+			{
+				ImGui::Text("State : MOVE");
+			}
+			else if (phaseData_.state == Data::P_STATE::STAY)
+			{
+				ImGui::Text("State : STAY");
+			}
+		}
+
 		ImGui::End();
 		transform_.position_ = VECTOR3(p[0], p[1], p[2]);
 		transform_.rotation_ = VECTOR3(r[0], r[1], r[2]);
@@ -245,7 +273,7 @@ void Player::AutoMove()
 	{
 		float min = phaseData_.distance1;
 		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
-		float t = distance / min;
+		//float t = distance / min;
 		//VECTOR3 position = phaseData_.position * t + nextPhaseData_.position * (1.0f - t);
 
 		VECTOR3 toGo = nextPhaseData_.position - transform_.position_;
@@ -270,42 +298,10 @@ void Player::AutoMove()
 		{
 			phaseCount = GameMaster::AddPhaseCount();
 			Data::GetPlayerPhase(phaseCount, &phaseData_);
+			state_ = phaseData_.state;
 			currentRotationY_ = transform_.rotation_.y;
 		}
 	}
-	//// プレイヤーが向かっている場所との距離が一定以内の場合
-	//else if (distance < phaseData_.distance2)
-	//{
-	//	// 次の場所と向かっている場所の距離を補間する
-	//	float min = phaseData_.distance1;
-	//	Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
-	//	float t = distance / min;
-	//	VECTOR3 position = phaseData_.position * t + nextPhaseData_.position * (1.0f - t);
-	//	
-	//	VECTOR3 toGo = nextPhaseData_.position - transform_.position_;
-	//	VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // 正面
-	//	VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(transform_.rotation_.y); // 右　回転の確認に使用
-
-	//	if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
-	//	{
-	//		transform_.rotation_.y = atan2f(toGo.x, toGo.z);
-	//	}
-	//	else if (VDot(right, toGo) > 0)
-	//	{
-	//		transform_.rotation_.y += rotateSpeed_;
-	//	}
-	//	else
-	//	{
-	//		transform_.rotation_.y -= rotateSpeed_;
-	//	}
-
-	//	if (t > 0.9f)
-	//	{
-	//		int count = GameMaster::AddPhaseCount();
-	//		Data::GetPlayerPhase(count, &phaseData_);
-	//		currentRotationY_ = transform_.rotation_.y;
-	//	}
-	//}
 	if (ImGui::Button("nextPosition"))
 	{
 		int count = GameMaster::AddPhaseCount();

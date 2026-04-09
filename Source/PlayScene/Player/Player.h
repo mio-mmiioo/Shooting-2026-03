@@ -9,7 +9,7 @@ class PlayerHp;
 class Player : public Object3D
 {
 public:
-	Player(Data::ObjectData o);
+	Player(Data::ObjectData objectData);
 	~Player() override;
 	void Update() override;
 	void Draw() override;
@@ -17,8 +17,8 @@ public:
 	int GetHp() { return hp_; } // 体力を返す
 
 private:
-	void DevelopmentInput();
-	void AutoMove();
+	void DevelopmentInput(); // 開発時のみに使用する入力処理
+	void AutoMove(); // 自動移動の処理
 
 	Camera* camera_;		// カメラ関連
 	Gun* gun_;				// 銃弾関連
@@ -39,4 +39,6 @@ private:
 	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
 	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
 	float currentRotationY_;
+
+	Data::P_STATE state_; // プレイヤーの状態
 };
