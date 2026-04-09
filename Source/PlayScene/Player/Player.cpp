@@ -129,14 +129,12 @@ void Player::Update()
 		{
 			phaseTimer_ -= Time::DeltaTime();
 		}
-		// 指定した条件をクリアした場合、状態をMOVEに変える
-		int num = Observer::GetEnemyKilled(); // これまでに倒した敵の数を取得する
-		if (num >= phaseData_.enemyNum) // 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
+		int num = Observer::GetEnemyKilled();
+		// 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
+		// もしくは時間が経過していたら
+		if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
 		{
-			if (phaseTimer_ <= 0) // 次のフェーズに遷移するために必要な時間が経っている
-			{
-				state_ = Data::P_STATE::MOVE;
-			}
+			state_ = Data::P_STATE::MOVE;
 		}
 		break;
 
