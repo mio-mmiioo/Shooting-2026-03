@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Collision.h"
+#include "../../../MyLibrary/Observer.h"
 #include "../../Data.h"
 //#include "../Stage/WayInfo.h"
 #include "../Stage/StageSearch.h"
@@ -59,6 +60,7 @@ Touhu::~Touhu()
 		MV1DeleteModel(hitModel_);
 		hitModel_ = -1;
 	}
+	Observer::EnemyKilled(); // Observer‚É©g‚ª“|‚³‚ê‚½‚±‚Æ‚ğ•ñ‚·‚é
 }
 
 void Touhu::Update()

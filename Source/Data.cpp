@@ -27,6 +27,7 @@ namespace Data
 		CHANGE_NEXT,	// 次の場所に切り替える距離
 		STATE,			// プレイヤーの状態
 		ENEMY_NUM,		// 倒さなきゃいけない敵の数
+		TIME,			// 次のフェーズに移るまでの時間
 		MAX_P_POSITION_DATA_NUM
 	};
 
@@ -61,21 +62,24 @@ void Data::SetImage(std::string name, image* i)
 int Data::GetPlayerPhase(int phaseCount, PlayerPhase* phase)
 {
 	int max = (int)playerPhase.size() - 1;
-	if (phaseCount > max)
+	int count = max;
+	if (phaseCount <= max)
 	{
-		phase->position = playerPhase[max].position;
-		phase->distance1 = playerPhase[max].distance1;
-		phase->distance2 = playerPhase[max].distance2;
-		phase->state = playerPhase[max].state;
-		phase->enemyNum = playerPhase[max].enemyNum;
+		count = phaseCount;
+	}
+	phase->position = playerPhase[count].position;
+	phase->distance1 = playerPhase[count].distance1;
+	phase->distance2 = playerPhase[count].distance2;
+	phase->state = playerPhase[count].state;
+	phase->enemyNum = playerPhase[count].enemyNum;
+	phase->time = playerPhase[count].time;
+
+	if (phaseCount <= max)
+	{
 		return 0;
 	}
-	phase->position = playerPhase[phaseCount].position;
-	phase->distance1 = playerPhase[phaseCount].distance1;
-	phase->distance2 = playerPhase[phaseCount].distance2;
-	phase->state = playerPhase[phaseCount].state;
-	phase->enemyNum = playerPhase[phaseCount].enemyNum;
-	return 1;
+
+	return -1;
 }
 
 void Data::InitPlayerPhase()
@@ -105,6 +109,7 @@ void Data::InitPlayerPhase()
 		current.distance2  = csv->GetFloat(line, P_POSITION_DATA_NUM::CHANGE_NEXT);
 		current.state	   = s;
 		current.enemyNum   = csv->GetInt(line, P_POSITION_DATA_NUM::ENEMY_NUM);
+		current.time = csv->GetFloat(line, P_POSITION_DATA_NUM::TIME);
 		playerPhase.push_back(current);
 	}
 }

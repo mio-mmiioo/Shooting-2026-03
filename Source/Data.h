@@ -42,6 +42,7 @@ namespace Data
 		float distance2;	// 次のフェーズに切り替える距離
 		P_STATE state;	// プレイヤーの状態
 		int enemyNum;	// 次のフェーズに行くために必要な倒す敵の数
+		float time;		// 次のフェーズに遷移するまでにかかる時間
 	};
 
 	struct image

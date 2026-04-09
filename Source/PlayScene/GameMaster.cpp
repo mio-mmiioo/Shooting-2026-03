@@ -15,6 +15,7 @@ namespace GameMaster
 
 	Stage* stage = nullptr;
 	Player* player = nullptr;
+	Camera* camera = nullptr;
 
 	bool isCreateEnemy; // 敵を生成するフラグ　開発時のみ使用予定
 	int playerPhaseCount; // プレイヤーの移動フェーズのカウント数;
@@ -26,7 +27,7 @@ int GameMaster::Init()
 
 	//WayInfo::Init();
 	StageSearch::Init();
-	new Camera();
+	camera = new Camera();
 	stage = new Stage(12);
 	Light::Init();
 
@@ -39,6 +40,10 @@ int GameMaster::Init()
 int GameMaster::Update()
 {
 	player = FindGameObject<Player>();
+
+	Light::SetPosition(player->GetTransform().position_);
+	camera->SetPlayerPosition(player->GetTransform());
+
 	Light::Update();
 	Enemy::Update();
 

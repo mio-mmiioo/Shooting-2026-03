@@ -1,6 +1,7 @@
 #include "Stone.h"
 #include <assert.h>
 #include "../../../MyLibrary/Collision.h"
+#include "../../../MyLibrary/Observer.h"
 
 namespace STONE
 {
@@ -42,6 +43,7 @@ Stone::~Stone()
 		MV1DeleteModel(hitModel_);
 		hModel_ = -1;
 	}
+	Observer::EnemyKilled();
 }
 
 void Stone::Update()

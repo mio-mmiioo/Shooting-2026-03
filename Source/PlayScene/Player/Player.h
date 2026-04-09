@@ -3,7 +3,6 @@
 #include "../../Data.h"
 #include "Gun.h"
 
-class Camera;
 class PlayerHp;
 
 class Player : public Object3D
@@ -20,7 +19,6 @@ private:
 	void DevelopmentInput(); // 開発時のみに使用する入力処理
 	void AutoMove(); // 自動移動の処理
 
-	Camera* camera_;		// カメラ関連
 	Gun* gun_;				// 銃弾関連
 	PlayerHp* playerHp_;	// hpバーの表示関連
 
@@ -35,10 +33,11 @@ private:
 	Data::image hitAiming_;		// 照準が何かにあたるときの画像
 	Data::image reload_;		// リロードの画像
 
-
 	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
 	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
 	float currentRotationY_;
 
 	Data::P_STATE state_; // プレイヤーの状態
+
+	float phaseTimer_; // 次のフェーズに遷移するまでの時間を管理するために使用
 };

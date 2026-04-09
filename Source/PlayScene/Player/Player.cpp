@@ -1,12 +1,13 @@
 #include "Player.h"
 #include <assert.h>
 #include "PlayerHp.h"
-#include "../Camera/Camera.h"
+//#include "../Camera/Camera.h"
 #include "../GameMaster.h"
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
-#include "../../../MyLibrary/Light.h"
+//#include "../../../MyLibrary/Light.h"
 #include "../../../MyLibrary/Collision.h"
+#include "../../../MyLibrary/Observer.h"
 #include "../../../ImGui/imgui.h"
 
 namespace PLAYER
@@ -44,7 +45,6 @@ Player::Player(Data::ObjectData objectData)
 	gravity_ = PLAYER::GRAVITY;
 	velocityY_ = 0.0f;
 	
-	camera_ = FindGameObject<Camera>();
 	gun_ = new Gun();
 	playerHp_ = new PlayerHp(objectData.hp);
 
@@ -58,6 +58,7 @@ Player::Player(Data::ObjectData objectData)
 	Data::GetPlayerPhase(count + 1, &nextPhaseData_);
 	state_ = phaseData_.state;
 	currentRotationY_ = 0.0f;
+	phaseTimer_ = phaseData_.time;
 
 	Collision::AddObject(this);
 
@@ -124,7 +125,19 @@ void Player::Update()
 		AutoMove();
 		break;
 	case Data::P_STATE::STAY:
+		if (phaseTimer_ > 0)
+		{
+			phaseTimer_ -= Time::DeltaTime();
+		}
 		// 指定した条件をクリアした場合、状態をMOVEに変える
+		int num = Observer::GetEnemyKilled(); // これまでに倒した敵の数を取得する
+		if (num >= phaseData_.enemyNum) // 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
+		{
+			if (phaseTimer_ <= 0) // 次のフェーズに遷移するために必要な時間が経っている
+			{
+				state_ = Data::P_STATE::MOVE;
+			}
+		}
 		break;
 
 	}
@@ -147,8 +160,6 @@ void Player::Update()
 
 	}
 
-	camera_->SetPlayerPosition(transform_);
-	Light::SetPosition(transform_.position_);
 	playerHp_->Update();
 
 	// 位置情報の更新
@@ -225,6 +236,9 @@ void Player::DevelopmentInput()
 			{
 				ImGui::Text("State : STAY");
 			}
+
+			// 時間 Timer
+			ImGui::Text("phaseTimer_ : %04f", phaseTimer_);
 		}
 
 		ImGui::End();
@@ -300,6 +314,7 @@ void Player::AutoMove()
 			Data::GetPlayerPhase(phaseCount, &phaseData_);
 			state_ = phaseData_.state;
 			currentRotationY_ = transform_.rotation_.y;
+			phaseTimer_ = phaseData_.time;
 		}
 	}
 	if (ImGui::Button("nextPosition"))
