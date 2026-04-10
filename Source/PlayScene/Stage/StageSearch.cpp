@@ -183,7 +183,7 @@ void StageSearch::ReadMap(std::string fileName)
 		map.push_back(mapLine);
 	}
 	delete csv;
-	mapOffset = map.size() / 2;
+	mapOffset = (int)map.size() / 2;
 }
 
 void StageSearch::DrawSearchWay()

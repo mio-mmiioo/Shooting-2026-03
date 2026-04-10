@@ -22,7 +22,7 @@ Gun::Gun()
 
 	hand_ = {
 		GUN::TYPE::HAND,
-		5,
+		1,
 		5,
 		16,
 		16,

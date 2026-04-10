@@ -17,4 +17,5 @@ namespace Color
 	const int BRANCH = BLUE;
 	const int OTHER = GetColor(100, 100, 100);
 	const int SHORTEST_WAY = RED;
+
 }
