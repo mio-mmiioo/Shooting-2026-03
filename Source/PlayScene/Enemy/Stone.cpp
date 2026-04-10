@@ -93,15 +93,13 @@ void Stone::Draw()
 			}
 			else if (raitio == 0.5)
 			{
-				green_ = STONE::GREEN + STONE::ADD_RGB;
-				red_ = STONE::GREEN + STONE::ADD_RGB;
+				green_ = STONE::GREEN + (int)(raitio * STONE::ADD_RGB);
+				red_ = STONE::RED + (int)(raitio * STONE::ADD_RGB);
 			}
 			else
 			{
 				green_ = STONE::GREEN + (int)(raitio * STONE::ADD_RGB);
 				red_ = STONE::RED + (int)((1.0f - raitio) * STONE::ADD_RGB);
-				//green_ = STONE::GREEN + (int)((1.0f - raitio) * STONE::ADD_RGB);
-				//red_ = STONE::RED + (int)(raitio * STONE::ADD_RGB);
 			}
 			weakPointColor_ = GetColor(red_, green_, blue_);
 
