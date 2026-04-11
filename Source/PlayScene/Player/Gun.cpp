@@ -22,7 +22,7 @@ Gun::Gun()
 
 	hand_ = {
 		GUN::TYPE::HAND,
-		1,
+		5,
 		5,
 		16,
 		16,
@@ -120,7 +120,7 @@ void Gun::OutBulletEffect()
 	DrawGraph(-10, -10, hImageEffectOutBullet_, TRUE); // 画像の端が黒いため、位置を少しずらしている
 }
 
-void Gun::ReloadBullet()
+bool Gun::ReloadBullet()
 {
 	if (current_.reloadTimer <= 0) // リロード中じゃない
 	{
@@ -139,7 +139,9 @@ void Gun::ReloadBullet()
 			}
 			current_.reloadTimer = current_.reloadTimer; // リロードの時間をセット
 		}
+		return true; // リロード処理ができたため、true
 	}
+	return false; // リロード処理中なため、不可
 }
 
 void Gun::AddBurrelt(int addNumber)

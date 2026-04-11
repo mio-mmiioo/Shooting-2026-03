@@ -35,11 +35,13 @@ namespace Data
 	std::map<std::string, EnemyData> enemyDataList;
 	std::map<std::string, int> images;
 	std::map<std::string, int> models;
+	std::map<std::string, int> se;
 
 	void InitPlayerPhase(); // プレイヤーの行動を管理するためのデータの読み込み
 	void InitEnemyDataList(); // 敵のデータの読み込み
 	void InitImage(); // 画像データの読み込み
 	void InitModel(); // モデルデータの読み込み
+	void InitSound(); // 音源データの読み込み
 }
 
 void Data::Init()
@@ -48,6 +50,7 @@ void Data::Init()
 	InitEnemyDataList();
 	InitImage();
 	InitModel();
+	InitSound();
 }
 
 void Data::SetImage(std::string name, image* i)
@@ -175,4 +178,12 @@ void Data::InitModel()
 	models["Stage_Obj010_c"] = MV1LoadModel("data/model/Stage_Obj010_c.mv1");
 	models["Stage_Obj011"]	 = MV1LoadModel("data/model/Stage_Obj011.mv1");
 	models["Stage_Obj011_c"] = MV1LoadModel("data/model/Stage_Obj011_c.mv1");
+}
+
+void Data::InitSound()
+{
+	se["outBullet"] = LoadSoundMem("data/sound/outBullet1.mp3");
+	se["reload"] = LoadSoundMem("data/sound/reload.mp3");
+	se["attackEnemy"] = LoadSoundMem("data/sound/attackEnemy.mp3");
+	se["breakEnemy"] = LoadSoundMem("data/sound/breakEnemy.mp3");
 }

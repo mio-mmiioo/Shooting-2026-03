@@ -24,6 +24,7 @@ Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
 	transform_ = objectData.t;
 	maxHp_ = enemyData.hp;
 	hp_ = enemyData.hp;
+	prevHp_ = hp_;
 	score_ = enemyData.score;
 
 	transform_.MakeLocalMatrix();
@@ -40,6 +41,7 @@ Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
 	green_ = STONE::GREEN + STONE::ADD_RGB;
 	blue_ = STONE::BLUE;
 	weakPointColor_ = GetColor(red_, green_, blue_);
+
 
 
 	Collision::AddObject(this);
@@ -65,11 +67,18 @@ void Stone::Update()
 	// 体力が0の場合の処理
 	if (hp_ <= 0)
 	{
+		PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
 		Enemy::SetObserver("stone", false);
 		Collision::DeleteObject(this);
 		DestroyMe();
 		return;
 	}
+	// 前回のHPより減っている場合ダメージの音を鳴らす
+	if (prevHp_ > hp_)
+	{
+		PlaySoundMem(Data::se["attackEnemy"], DX_PLAYTYPE_BACK, TRUE);
+	}
+	prevHp_ = hp_;
 }
 
 void Stone::Draw()
@@ -77,6 +86,7 @@ void Stone::Draw()
 	Object3D::Draw();
 
 	VECTOR3 hit;
+
 	// 敵自身とプレイヤーの直線距離に障害物がないことを確認する
 	if (Collision::CheckLineHitObject(transform_.position_, Enemy::GetPlayerPosition() + LOOK_HEIGHT, &hit) == false)
 	{
@@ -102,7 +112,7 @@ void Stone::Draw()
 				red_ = STONE::RED + (int)((1.0f - raitio) * STONE::ADD_RGB);
 			}
 			weakPointColor_ = GetColor(red_, green_, blue_);
-
+			DrawCircle((int)weakPoint.x, (int)weakPoint.y, STONE::WEAK_POINT_CIRCLE_R, Color::BLACK, FALSE);
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 			DrawCircle((int)weakPoint.x, (int)weakPoint.y, STONE::WEAK_POINT_CIRCLE_R, weakPointColor_, TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

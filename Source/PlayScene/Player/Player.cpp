@@ -1,11 +1,9 @@
 #include "Player.h"
 #include <assert.h>
 #include "PlayerHp.h"
-//#include "../Camera/Camera.h"
 #include "../GameMaster.h"
 #include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
-//#include "../../../MyLibrary/Light.h"
 #include "../../../MyLibrary/Collision.h"
 #include "../../../MyLibrary/Observer.h"
 #include "../../../ImGui/imgui.h"
@@ -48,7 +46,7 @@ Player::Player(Data::ObjectData objectData)
 	gun_ = new Gun();
 	playerHp_ = new PlayerHp(objectData.hp);
 
-	currentGunType_ = GUN::TYPE::HAND;
+	currentGunType_ = GUN::TYPE::MACHINE;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 	isHit_ = false;
 
@@ -85,7 +83,10 @@ void Player::Update()
 	// リロード
 	if (Input::IsKeyDown("reload"))
 	{
-		gun_->ReloadBullet();
+		if (gun_->ReloadBullet() == true)
+		{
+			PlaySoundMem(Data::se["reload"], DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 	// 照準の当たり判定
@@ -106,9 +107,10 @@ void Player::Update()
 	}
 
 	// 発砲
-	if (Input::IsKeyDown("outBullet") && isHit_ == true)
+	if ((Input::IsKeyDown("outBullet") || Input::IsKeyKeepDown("outBullet")) && gun_->OutBullet() == true)
 	{
-		if (gun_->OutBullet() == true)
+		PlaySoundMem(Data::se["outBullet"], DX_PLAYTYPE_BACK, TRUE);
+		if (isHit_ == true)
 		{
 			// 銃弾がヒットするオブジェクトを攻撃する(HPを減らす)
 			Object3D* attackObject = Collision::GetHitObject();
@@ -187,6 +189,11 @@ void Player::Draw()
 	else
 	{
 		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
+	}
+
+	if (gun_->ReloadBullet() == true)
+	{
+		// ここにタイマーに合わせたリロードの描画処理を行う
 	}
 }
 

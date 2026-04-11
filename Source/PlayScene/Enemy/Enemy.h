@@ -15,5 +15,5 @@ namespace Enemy
 	void CreateEnemy(Data::ObjectData objectData); // 敵を生成する
 	VECTOR3 GetPlayerPosition(); // プレイヤーの位置を返す
 	void AttackPlayer(int attackPower); // プレイヤーに攻撃する
-	void SetObserver(std::string name, bool isEnemy);
+	void SetObserver(std::string name, bool isEnemy); // 自身が死ぬときにオブザーバーに得点を報告する
 }

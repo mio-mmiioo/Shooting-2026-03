@@ -19,4 +19,6 @@ private:
 	int green_; // 弱点の色の緑
 	int blue_; // 弱点の色の青
 
+	int prevHp_; // 前回の体力
+
 };

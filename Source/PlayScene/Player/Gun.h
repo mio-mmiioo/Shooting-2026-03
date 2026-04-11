@@ -35,7 +35,7 @@ public:
 	void DrawRemainingSetting();
 	bool OutBullet();
 	void OutBulletEffect();
-	void ReloadBullet();
+	bool ReloadBullet(); // true ¨ ƒŠƒ[ƒhˆ—‚ª‚Å‚«‚½
 	void AddBurrelt(int addNumber);
 	void SetGunType(GUN::TYPE type);
 
