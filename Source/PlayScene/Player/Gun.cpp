@@ -137,7 +137,7 @@ bool Gun::ReloadBullet()
 				current_.remainingSetting += canSetNum;
 				current_.remainingAll -= canSetNum;
 			}
-			current_.reloadTimer = current_.reloadTimer; // リロードの時間をセット
+			current_.reloadTimer = current_.reloadTime; // リロードの時間をセット
 		}
 		return true; // リロード処理ができたため、true
 	}

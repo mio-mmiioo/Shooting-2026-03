@@ -27,4 +27,6 @@ private:
 	VECTOR3 goPosition_;	// 次に向かう場所
 	bool isArrive_;			// true→目的地に到着した
 	float stateTimer_;		// 状態を管理するタイマー
+
+	int prevHp_; // 前回の体力
 };

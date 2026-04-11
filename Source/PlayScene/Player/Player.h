@@ -27,6 +27,7 @@ private:
 	
 	GUN::TYPE currentGunType_; // 現在の銃の種類
 	bool isHit_; // true→銃弾が当たる　照準の画像を切り替えるときに使用
+	bool isReloading_; // true→リロード中
 
 	// 照準の画像関連
 	Data::image aiming_;		// 照準の画像

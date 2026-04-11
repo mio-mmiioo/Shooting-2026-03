@@ -18,6 +18,7 @@ namespace GameMaster
 	Camera* camera = nullptr;
 
 	bool isCreateEnemy; // 敵を生成するフラグ　開発時のみ使用予定
+	int createEnemyNumber; // 生成する敵の番号
 	int playerPhaseCount; // プレイヤーの移動フェーズのカウント数;
 }
 
@@ -28,11 +29,11 @@ int GameMaster::Init()
 	//WayInfo::Init();
 	StageSearch::Init();
 	camera = new Camera();
-	stage = new Stage(12);
+	stage = new Stage(14);
 	Light::Init();
 
 	isCreateEnemy = false;
-
+	createEnemyNumber = 0;
 
 	return 1;
 }
@@ -53,7 +54,15 @@ int GameMaster::Update()
 
 		if (isCreateEnemy == true)
 		{
-			new Stage(13);
+			switch (createEnemyNumber)
+			{
+			case 0:
+				new Stage(15);
+				break;
+			case 1:
+				new Stage(13);
+				break;
+			}
 			isCreateEnemy = false;
 		}
 	}
@@ -97,6 +106,7 @@ int GameMaster::AddPhaseCount()
 void GameMaster::DevelopmentInput()
 {
 	ImGui::Begin("GameMaster");
+	ImGui::InputInt("enemyNumber", &createEnemyNumber);
 	if (ImGui::Button("Create Enemy"))
 	{
 		isCreateEnemy = true;

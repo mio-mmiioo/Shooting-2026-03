@@ -49,6 +49,7 @@ Player::Player(Data::ObjectData objectData)
 	currentGunType_ = GUN::TYPE::MACHINE;
 	gun_->SetGunType(currentGunType_); // 使用する銃の種類をセット
 	isHit_ = false;
+	isReloading_ = false;
 
 	// プレイヤーの移動フェーズ関連
 	int count = GameMaster::GetPlayerPhaseCount();
@@ -85,6 +86,7 @@ void Player::Update()
 	{
 		if (gun_->ReloadBullet() == true)
 		{
+			isReloading_ = true;
 			PlaySoundMem(Data::se["reload"], DX_PLAYTYPE_BACK, TRUE);
 		}
 	}
@@ -191,9 +193,10 @@ void Player::Draw()
 		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
 	}
 
-	if (gun_->ReloadBullet() == true)
+	if (gun_->GetReloadTimer() > 0)
 	{
-		// ここにタイマーに合わせたリロードの描画処理を行う
+		float rate = (gun_->GetReloadTime() - gun_->GetReloadTimer()) / gun_->GetReloadTime() * 100; // (maxの時間 - 残り時間) / maxの時間 * 100 = 〇〇%
+		DrawCircleGauge(x, y, 100.0, reload_.hImage, rate);
 	}
 }
 

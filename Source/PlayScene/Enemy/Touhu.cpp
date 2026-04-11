@@ -26,6 +26,7 @@ Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
 
 		transform_ = objectData.t;
 		hp_ = enemyData.hp;
+		prevHp_ = hp_;
 		score_ = enemyData.score;
 
 		transform_.MakeLocalMatrix();
@@ -68,10 +69,16 @@ void Touhu::Update()
 	// 体力が0の場合
 	if (hp_ <= 0)
 	{
+		PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
 		Enemy::SetObserver("touhu", true);
 		Collision::DeleteObject(this);
 		DestroyMe();
 		return;
+	}
+	// 前回のHPより減っている場合ダメージの音を鳴らす
+	if (prevHp_ > hp_)
+	{
+		PlaySoundMem(Data::se["attackEnemy"], DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	// 状態によって更新処理を行う
@@ -107,6 +114,8 @@ void Touhu::Update()
 	transform_.MakeLocalMatrix();
 	MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
 	MV1RefreshCollInfo(hitModel_);
+
+	prevHp_ = hp_;
 }
 
 void Touhu::Draw()
