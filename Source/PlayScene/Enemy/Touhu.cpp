@@ -9,6 +9,8 @@
 
 namespace TOUHU
 {
+	const VECTOR3 ADD_WEAK_POSITION = { 0.0f, 150.0f, 0.0f }; // 加算する弱点の場所
+
 	// 攻撃関連
 	const float STAY_TIME = 6.0f;
 	const int ATTACK_POWER = 2;
@@ -125,6 +127,17 @@ void Touhu::Draw()
 	// 向いている方向
 	DrawLine3D(transform_.position_ + LOOK_HEIGHT,
 		transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), Color::BLACK);
+
+	// 撃ってほしい部分を半透明の〇で表示する if文の条件で不具合発生中
+	{
+		VECTOR3 hit;
+		// 敵自身とプレイヤーの直線距離に障害物がないことを確認する
+		if (Collision::CheckLineHitObject(transform_.position_, Enemy::GetPlayerPosition() + LOOK_HEIGHT, &hit) == false)
+		{
+			VECTOR3 weakPoint = ConvWorldPosToScreenPos(transform_.position_ + TOUHU::ADD_WEAK_POSITION); // ワールドスクリーン座標変換をする
+			Enemy::DrawWeakPoint("touhu", hp_, weakPoint);
+		}
+	}
 }
 
 void Touhu::DevelopmentInput()

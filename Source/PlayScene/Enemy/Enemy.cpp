@@ -8,6 +8,13 @@
 
 namespace Enemy
 {
+	// 弱点の色の初期設定
+	const int RED = 150;
+	const int GREEN = 150;
+	const int BLUE = 150;
+	const int ADD_RGB = 100; // 加算される色 変数名が気に食わない
+	const float WEAK_POINT_CIRCLE_R = 20.0f;
+
 	Player* player;
 }
 
@@ -54,4 +61,33 @@ void Enemy::SetObserver(std::string name, bool isEnemy)
 	{
 		Observer::EnemyKilled();
 	}
+}
+
+void Enemy::DrawWeakPoint(std::string name, int hp, VECTOR3 weakPoint)
+{
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	float raitio = (float)hp / (float)Data::enemyDataList[name].hp;
+
+	if (raitio > 0.5)
+	{
+		green = GREEN + (int)(raitio * ADD_RGB);
+		red = RED + ((int)(1.0f - raitio) * ADD_RGB);
+	}
+	else if (raitio == 0.5)
+	{
+		green = GREEN + (int)(raitio * ADD_RGB);
+		red = RED + (int)(raitio * ADD_RGB);
+	}
+	else
+	{
+		green = GREEN + (int)(raitio * ADD_RGB);
+		red = RED + ((int)(1.0f - raitio) * ADD_RGB);
+	}
+	int color = GetColor(red, green, blue);
+	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, Color::BLACK, FALSE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, color, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

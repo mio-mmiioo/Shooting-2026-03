@@ -244,6 +244,7 @@ void Player::DevelopmentInput()
 			{
 				ImGui::Text("State : STAY");
 			}
+			ImGui::Text("state_ : %d", state_);
 
 			// ŽžŠÔ Timer
 			ImGui::Text("phaseTimer_ : %04f", phaseTimer_);
