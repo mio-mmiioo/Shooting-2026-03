@@ -1,6 +1,7 @@
 #include "GameMaster.h"
 #include "../../MyLibrary/Light.h"
 #include "../../MyLibrary/Collision.h"
+#include "../../MyLibrary/Observer.h"
 #include "../../ImGui/imgui.h"
 #include "Stage/Stage.h"
 //#include "Stage/WayInfo.h"
@@ -17,14 +18,18 @@ namespace GameMaster
 	Player* player = nullptr;
 	Camera* camera = nullptr;
 
-	bool isCreateEnemy; // 敵を生成するフラグ　開発時のみ使用予定
-	int createEnemyNumber; // 生成する敵の番号
-	int playerPhaseCount; // プレイヤーの移動フェーズのカウント数;
+	bool isCreateEnemy;			// 敵を生成するフラグ　開発時のみ使用予定
+	int createEnemyNumber;		// 生成する敵の番号
+	int playerPhaseCount;		// プレイヤーの移動フェーズのカウント数
+	int prevPlayerPhaseCount;	// 前回のプレイヤーの移動フェーズのカウント数
 }
 
 int GameMaster::Init()
 {
+	Observer::Init(); // 前回のプレイデータも消してスタート
+
 	playerPhaseCount = 1; // Stageのインスタンスを作成するより先に代入すること
+	prevPlayerPhaseCount = 0;
 
 	//WayInfo::Init();
 	StageSearch::Init();
@@ -47,6 +52,29 @@ int GameMaster::Update()
 
 	Light::Update();
 	Enemy::Update();
+
+	// 前回とフェーズが異なっていた場合、新しいステージを生成して敵などを発生させる
+	if (playerPhaseCount != prevPlayerPhaseCount)
+	{
+		// 各フェーズで発生させる敵をここにかく
+		switch (playerPhaseCount)
+		{
+		case 0:
+		case 2:
+		case 3:
+			break;
+		case 1:
+			new Stage(15); // 最初に撃ってもらう石が生成される
+			break;
+		case 4:
+			new Stage(16); // 豆腐が2体生成される
+			break;
+		case 5:
+		case 6:
+			return 0;
+			break;
+		}
+	}
 
 	// 開発時関連
 	{
@@ -72,13 +100,15 @@ int GameMaster::Update()
 		return 0;
 	}
 
+	prevPlayerPhaseCount = playerPhaseCount;
+
 	return 1;
 }
 
 int GameMaster::Draw()
 {
 	//WayInfo::WayDraw();
-	StageSearch::Draw();
+	//StageSearch::Draw();
 	return 0;
 }
 

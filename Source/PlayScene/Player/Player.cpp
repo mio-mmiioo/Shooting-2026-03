@@ -175,8 +175,8 @@ void Player::Draw()
 	Object3D::Draw();
 
 	// Œü‚¢‚Ä‚¢‚é•ûŒü‚ðŽ¦‚·
-	VECTOR3 addPlayerHeight = LOOK_HEIGHT * transform_.GetRotationMatrix();
-	DrawLine3D(transform_.position_ + addPlayerHeight, transform_.position_ + addPlayerHeight + VECTOR3(0, 0, 1) * PLAYER::DIRECTION_LENGTH * transform_.GetRotationMatrix(), Color::WHITE);
+	//VECTOR3 addPlayerHeight = LOOK_HEIGHT * transform_.GetRotationMatrix();
+	//DrawLine3D(transform_.position_ + addPlayerHeight, transform_.position_ + addPlayerHeight + VECTOR3(0, 0, 1) * PLAYER::DIRECTION_LENGTH * transform_.GetRotationMatrix(), Color::WHITE);
 
 	// 2D‚Ì•`‰æ
 	playerHp_->Draw();

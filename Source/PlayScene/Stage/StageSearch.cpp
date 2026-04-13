@@ -150,7 +150,7 @@ VECTOR3 StageSearch::GetShortestWayPosition(VECTOR3 currentPos, VECTOR3 goalPos)
 	}
 		
 
-	// Ÿ‚ÉŒü‚©‚¤êŠ‚ğ•Ï‚¦‚·
+	// Ÿ‚ÉŒü‚©‚¤êŠ‚ğ•Ô‚·
 	if (shortestWay.empty())
 	{
 		return currentPos;

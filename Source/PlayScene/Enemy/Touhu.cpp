@@ -63,7 +63,6 @@ Touhu::~Touhu()
 		MV1DeleteModel(hitModel_);
 		hitModel_ = -1;
 	}
-	Observer::EnemyKilled(); // Observer‚É©g‚ª“|‚³‚ê‚½‚±‚Æ‚ğ•ñ‚·‚é
 }
 
 void Touhu::Update()
@@ -125,8 +124,8 @@ void Touhu::Draw()
 	Object3D::Draw();
 
 	// Œü‚¢‚Ä‚¢‚é•ûŒü
-	DrawLine3D(transform_.position_ + LOOK_HEIGHT,
-		transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), Color::BLACK);
+	//DrawLine3D(transform_.position_ + LOOK_HEIGHT,
+		//transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), Color::BLACK);
 
 	// Œ‚‚Á‚Ä‚Ù‚µ‚¢•”•ª‚ğ”¼“§–¾‚ÌZ‚Å•\¦‚·‚é if•¶‚ÌğŒ‚Å•s‹ï‡”­¶’†
 	{
