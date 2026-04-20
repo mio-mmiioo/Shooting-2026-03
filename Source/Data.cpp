@@ -93,7 +93,7 @@ void Data::InitPlayerPhase()
 	P_STATE s;
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
-		stateNumber = csv->GetInt(line, P_POSITION_DATA_NUM::STATE); // •¶Žš‚ð‚Ü‚¸“Ç‚Ýž‚Þ
+		stateNumber = csv->GetInt(line, P_POSITION_DATA_NUM::STATE); 
 		switch (stateNumber)
 		{
 		case P_STATE::MOVE:

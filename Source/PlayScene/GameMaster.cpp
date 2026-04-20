@@ -12,6 +12,7 @@
 
 namespace GameMaster
 {
+	void CreateNewStage();
 	void DevelopmentInput();
 
 	Stage* stage = nullptr;
@@ -22,19 +23,22 @@ namespace GameMaster
 	int createEnemyNumber;		// 生成する敵の番号
 	int playerPhaseCount;		// プレイヤーの移動フェーズのカウント数
 	int prevPlayerPhaseCount;	// 前回のプレイヤーの移動フェーズのカウント数
+	int stageNumber; // 生成するステージの番号
 }
 
 int GameMaster::Init()
 {
-	Observer::Init(); // 前回のプレイデータも消してスタート
+	Observer::Init(); // 前回のプレイデータを消してスタート
 
 	playerPhaseCount = 1; // Stageのインスタンスを作成するより先に代入すること
 	prevPlayerPhaseCount = 0;
 
+	stageNumber = 0;
+
 	//WayInfo::Init();
 	StageSearch::Init();
 	camera = new Camera();
-	stage = new Stage(14);
+	CreateNewStage();
 	Light::Init();
 
 	isCreateEnemy = false;
@@ -64,10 +68,8 @@ int GameMaster::Update()
 		case 3:
 			break;
 		case 1:
-			new Stage(15); // 最初に撃ってもらう石が生成される
-			break;
 		case 4:
-			new Stage(16); // 豆腐が2体生成される
+			CreateNewStage();
 			break;
 		case 5:
 		case 6:
@@ -85,10 +87,10 @@ int GameMaster::Update()
 			switch (createEnemyNumber)
 			{
 			case 0:
-				new Stage(15);
+				new Stage(1); // 石が生成される
 				break;
 			case 1:
-				new Stage(13);
+				new Stage(2); // 豆腐が生成される 
 				break;
 			}
 			isCreateEnemy = false;
@@ -131,6 +133,12 @@ int GameMaster::AddPhaseCount()
 	// データの範囲外に行った場合は元の値に戻す処理を追加したほうが安全
 
 	return playerPhaseCount;
+}
+
+void GameMaster::CreateNewStage()
+{
+	new Stage(stageNumber);
+	stageNumber += 1;
 }
 
 void GameMaster::DevelopmentInput()

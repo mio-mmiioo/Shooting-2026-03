@@ -8,4 +8,6 @@ public:
 	~ResultScene();
 	void Update() override;
 	void Draw() override;
+private:
+	float timer_;
 };

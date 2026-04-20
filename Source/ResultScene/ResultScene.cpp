@@ -3,8 +3,14 @@
 #include "../../MyLibrary/Color.h"
 #include "../../MyLibrary/Observer.h"
 
+namespace RESULTSCENE
+{
+	const float TIME = 10.0f;
+}
+
 ResultScene::ResultScene()
 {
+	timer_ = RESULTSCENE::TIME;
 }
 
 ResultScene::~ResultScene()
@@ -13,8 +19,12 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	if (Input::IsKeyDown("next")) {
+	timer_ -= Time::DeltaTime();
+
+	if (timer_ <= 0.0f)
+	{
 		SceneManager::ChangeScene("TITLE");
+		timer_ = 0.0f;
 	}
 }
 
