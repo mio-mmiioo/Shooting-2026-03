@@ -11,7 +11,7 @@
 namespace PLAYER
 {
 	const float ROTATE_SPEED = 0.005f;	// ‰ñ“]‘¬“x
-	const float MOVE_SPEED = 1.0f;		// ˆÚ“®‘¬“x
+	const float MOVE_SPEED = 100.0f;		// ˆÚ“®‘¬“x
 
 	const float DISTANCE_R = 100.0f; // “–‚½‚è”»’è‚Ì”¼Œa
 	const float GRAVITY = 0.05f;
@@ -293,7 +293,7 @@ void Player::AutoMove()
 
 	if (distance >= phaseData_.distance1)
 	{
-		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
+		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y) * Time::DeltaTime();
 	}
 	else if (distance < phaseData_.distance1)
 	{
@@ -319,7 +319,7 @@ void Player::AutoMove()
 			transform_.rotation_.y -= rotateSpeed_;
 		}
 
-		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(currentRotationY_);
+		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(currentRotationY_) * Time::DeltaTime();
 		if (distance < phaseData_.distance2)
 		{
 			phaseCount = GameMaster::AddPhaseCount();

@@ -6,6 +6,11 @@
 namespace RESULTSCENE
 {
 	const float TIME = 30.0f;
+	const int SCORE_X = 0;
+	const int SCORE_Y = 300;
+	const int KILLED_ENEMY_NUMBER_X = 0;
+	const int KILLED_ENEMY_NUMBER_Y = 330;
+
 }
 
 ResultScene::ResultScene()
@@ -50,8 +55,8 @@ void ResultScene::Draw()
 {
 	ClickArea::DrawArea(titleButton_.buttonArea, -1);
 
-	DrawFormatString(0, 300, Color::TEXT, "score : %d", Observer::GetScore());
-	DrawFormatString(0, 330, Color::TEXT, "ì|ÇµÇΩìGÇÃêî : %d", Observer::GetEnemyKilled());
+	DrawFormatString(RESULTSCENE::SCORE_X, RESULTSCENE::SCORE_Y, Color::TEXT, "score : %d", Observer::GetScore());
+	DrawFormatString(RESULTSCENE::KILLED_ENEMY_NUMBER_X, RESULTSCENE::KILLED_ENEMY_NUMBER_Y, Color::TEXT, "ì|ÇµÇΩìGÇÃêî : %d", Observer::GetEnemyKilled());
 
 	// É}ÉEÉXÇÃç¿ïWÇéÊìæ
 	int x = (int)Input::GetMousePosition().x;

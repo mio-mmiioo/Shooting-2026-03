@@ -84,5 +84,5 @@ void Object3D::SetMove(VECTOR3 toPosition)
     {
         transform_.rotation_.y -= rotateSpeed_;
     }
-    transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
+    transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y) * Time::DeltaTime();
 }

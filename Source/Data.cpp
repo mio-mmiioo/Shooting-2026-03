@@ -115,6 +115,8 @@ void Data::InitPlayerPhase()
 		current.time = csv->GetFloat(line, P_POSITION_DATA_NUM::TIME);
 		playerPhase.push_back(current);
 	}
+
+	delete csv;
 }
 
 void Data::InitEnemyDataList()
