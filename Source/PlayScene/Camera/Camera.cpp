@@ -33,7 +33,7 @@ Camera::Camera()
 	prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
 	FixUpdate();
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
-	state_ = CAM_STATE::FIX;
+	state_ = CAM_STATE::FIRST;
 	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
 	wheelRot_ = 0;
 	isMoveFixCamera_ = true;
@@ -51,7 +51,11 @@ void Camera::Update()
 	{
 		ChangeCamera();
 	}
-	ImGuiInput();
+
+	if (GameMaster::GetIsDebug())
+	{
+		ImGuiInput();
+	}
 
 	// カメラの状態によって、セットする位置を調整
 	switch (state_)

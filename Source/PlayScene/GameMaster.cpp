@@ -24,6 +24,8 @@ namespace GameMaster
 	int playerPhaseCount;		// プレイヤーの移動フェーズのカウント数
 	int prevPlayerPhaseCount;	// 前回のプレイヤーの移動フェーズのカウント数
 	int stageNumber; // 生成するステージの番号
+
+	bool isDebug_ = true; // true → debug処理をする
 }
 
 int GameMaster::Init()
@@ -79,6 +81,7 @@ int GameMaster::Update()
 	}
 
 	// 開発時関連
+	if (GetIsDebug() == true)
 	{
 		DevelopmentInput();
 
@@ -133,6 +136,11 @@ int GameMaster::AddPhaseCount()
 	// データの範囲外に行った場合は元の値に戻す処理を追加したほうが安全
 
 	return playerPhaseCount;
+}
+
+bool GameMaster::GetIsDebug()
+{
+	return isDebug_;
 }
 
 void GameMaster::CreateNewStage()

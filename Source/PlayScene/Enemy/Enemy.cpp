@@ -14,7 +14,7 @@ namespace Enemy
 	const int BLUE = 150;
 	const int ADD_RGB = 100; // 加算される色 変数名が気に食わない
 	const float WEAK_POINT_CIRCLE_R = 20.0f;
-
+	const int BLEND_PARAM = 128;
 	Player* player;
 }
 
@@ -68,26 +68,29 @@ void Enemy::DrawWeakPoint(std::string name, int hp, VECTOR3 weakPoint)
 	int red = 0;
 	int green = 0;
 	int blue = 0;
-	float raitio = (float)hp / (float)Data::enemyDataList[name].hp;
+	float raitio = (float)hp / (float)Data::enemyDataList[name].hp; // HPの割合
 
+	// 割合が半分以上なら、緑が強め
 	if (raitio > 0.5)
 	{
 		green = GREEN + (int)(raitio * ADD_RGB);
 		red = RED + ((int)(1.0f - raitio) * ADD_RGB);
 	}
+	// 半分なら、黄色
 	else if (raitio == 0.5)
 	{
 		green = GREEN + (int)(raitio * ADD_RGB);
 		red = RED + (int)(raitio * ADD_RGB);
 	}
+	// 半分以下なら、赤が強め
 	else
 	{
 		green = GREEN + (int)(raitio * ADD_RGB);
 		red = RED + ((int)(1.0f - raitio) * ADD_RGB);
 	}
 	int color = GetColor(red, green, blue);
-	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, Color::BLACK, FALSE);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, color, TRUE);
+	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, Color::BLACK, FALSE); // 枠線
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, BLEND_PARAM);
+	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, color, TRUE); // HPの割合の色
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

@@ -10,4 +10,6 @@ namespace GameMaster
 
 	int GetPlayerPhaseCount(); // プレイヤーの移動フェーズのカウントを取得する
 	int AddPhaseCount(); // 移動フェーズのカウントを増やす　player.cppで呼び出す
+
+	bool GetIsDebug(); // true → debugの処理が描画される
 }

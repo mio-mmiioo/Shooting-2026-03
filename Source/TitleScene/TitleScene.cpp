@@ -7,12 +7,13 @@ TitleScene::TitleScene()
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 	int startImage = LoadGraph("data/image/start.png");
-	area startA = { {100, 100}, {300, 300}, startImage, -1 };
-	start_ = { startA, false };
+	area startArea = { {100, 100}, {300, 300}, startImage, -1 };
+	start_ = { startArea, false };
 }
 
 TitleScene::~TitleScene()
 {
+	DeleteGraph(start_.buttonArea.hImage);
 }
 
 void TitleScene::Update()
@@ -38,10 +39,11 @@ void TitleScene::Draw()
 {
 	ClickArea::DrawArea(start_.buttonArea, -1);
 
-	// 描画されるか確認
+	// マウスの座標を取得
 	int x = (int)Input::GetMousePosition().x;
 	int y = (int)Input::GetMousePosition().y;
 
+	// 照準を描画
 	if (ClickArea::IsMosueInArea(start_.buttonArea) == true)
 	{
 		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);

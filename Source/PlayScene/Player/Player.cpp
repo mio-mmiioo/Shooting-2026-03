@@ -144,7 +144,10 @@ void Player::Update()
 
 	}
 
-	DevelopmentInput();
+	if (GameMaster::GetIsDebug())
+	{
+		DevelopmentInput();
+	}
 
 	// èdóÕÇâ¡Ç¶ÇÈ
 	transform_.position_.y -= velocityY_;
@@ -325,10 +328,5 @@ void Player::AutoMove()
 			currentRotationY_ = transform_.rotation_.y;
 			phaseTimer_ = phaseData_.time;
 		}
-	}
-	if (ImGui::Button("nextPosition"))
-	{
-		int count = GameMaster::AddPhaseCount();
-		Data::GetPlayerPhase(count, &phaseData_);
 	}
 }

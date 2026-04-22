@@ -29,20 +29,8 @@ void Light::Init()
 
 void Light::Update()
 {
-	ImGui::Begin("Light");
-	VECTOR3 p = lightPosition;
-	ImGui::Text("position");
-	float f[3] = { p.x, p.y, p.z };
-	ImGui::SliderFloat3("position", f, 0.0f, 10000.0f);
-	ImGui::InputFloat("Range", &range);
-	ImGui::InputFloat("Atten0", &atten0);
-	ImGui::InputFloat("Atten1", &atten1);
-	ImGui::InputFloat("Atten2", &atten2);
-	ImGui::End();
-
-	lightPosition = VECTOR3(f[0], f[1], f[2]);
 	SetLightPositionHandle(hPlayerLight, lightPosition);
-	SetLightRangeAttenHandle(hPlayerLight, range, atten0, atten1, atten2);
+	//SetLightRangeAttenHandle(hPlayerLight, range, atten0, atten1, atten2);
 }
 
 void Light::Release()
