@@ -1,5 +1,4 @@
 #include "Stone.h"
-#include <assert.h>
 #include "../../../MyLibrary/Collision.h"
 #include "../../../MyLibrary/Observer.h"
 

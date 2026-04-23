@@ -10,6 +10,7 @@ namespace Color
 
 	// テキスト
 	const int TEXT = WHITE;
+	const int BULLET_REMAINING = GetColor(200, 200, 200);
 
 	// WayInfo/StageSearchで使用
 	const int EMPTY = GetColor(100, 255, 100);

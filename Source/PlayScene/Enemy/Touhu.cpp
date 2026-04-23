@@ -1,8 +1,5 @@
 #include "Touhu.h"
-#include <assert.h>
-#include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Collision.h"
-#include "../../../MyLibrary/Observer.h"
 #include "../../Data.h"
 //#include "../Stage/WayInfo.h"
 #include "../Stage/StageSearch.h"

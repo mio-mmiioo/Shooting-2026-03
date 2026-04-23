@@ -1,8 +1,6 @@
 #include "Player.h"
-#include <assert.h>
 #include "PlayerHp.h"
 #include "../GameMaster.h"
-#include "../../../MyLibrary/Color.h"
 #include "../../../MyLibrary/Input.h"
 #include "../../../MyLibrary/Collision.h"
 #include "../../../MyLibrary/Observer.h"

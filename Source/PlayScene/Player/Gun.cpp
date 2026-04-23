@@ -93,7 +93,7 @@ void Gun::DrawRemainingSetting()
 	}
 	else
 	{
-		DrawFormatString(GUN::gaugePosX, GUN::gaugePosY, Color::BLACK, "%04d", current_.remainingAll);
+		DrawFormatString(GUN::gaugePosX, GUN::gaugePosY, Color::BULLET_REMAINING, "%04d", current_.remainingAll);
 	}
 }
 
@@ -124,7 +124,7 @@ bool Gun::ReloadBullet()
 {
 	if (current_.reloadTimer <= 0) // リロード中じゃない
 	{
-		if (!((current_.remainingAll == current_.remainingSetting) || (current_.remainingAll <= 0))) // リロードできない銃弾数条件じゃない
+		if ((current_.maxSetting > current_.remainingSetting) && (current_.remainingAll > 0)) // リロードできない銃弾数条件じゃない
 		{
 			int canSetNum = current_.maxSetting - current_.remainingSetting; // 装填可能数 0になってからリロードとは限らない
 			if (canSetNum >= current_.remainingAll) // 装填可能数 >= 残弾数
@@ -138,8 +138,8 @@ bool Gun::ReloadBullet()
 				current_.remainingAll -= canSetNum;
 			}
 			current_.reloadTimer = current_.reloadTime; // リロードの時間をセット
+			return true; // リロード処理ができたため、true
 		}
-		return true; // リロード処理ができたため、true
 	}
 	return false; // リロード処理中なため、不可
 }

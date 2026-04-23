@@ -42,7 +42,7 @@ namespace StageSearch {
 
 
 	const int FILE_DATA_SIZE = 64; // ファイル名に使用するデータのサイズ
-	const std::string wayDataName = "data/stage/wayInfo/wayInfo04.csv";
+	const std::string wayDataName = "data/stage/wayInfo/wayInfo00.csv";
 	const point direction[DIR::MAX_DIR] = { { 1, 0 }, { 0, 1 }, {-1, 0}, {0, -1} }; // 方向
 	const int INIT_DISTANCE = 5000;
 	const VECTOR3 ADD_WAY_INFO_POS = { 5000.0f, 0.0f, 5000.0f }; // 中心を0にするために加える数
@@ -202,9 +202,9 @@ void StageSearch::DrawSearchWay()
 		return;
 	}
 
-	for (int y = 0; y < map.size() - 70; y++)
+	for (int y = 0; y < map.size(); y++)
 	{
-		for (int x = 0; x < map.size() - 70; x++)
+		for (int x = 0; x < map.size(); x++)
 		{
 			leftTop = { x * boxWidth + startX, y * boxWidth + startY };
 			rightDown = {leftTop.x + boxWidth, leftTop.z + boxWidth };

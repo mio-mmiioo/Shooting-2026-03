@@ -13,7 +13,5 @@ public:
 
 private:
 	Data::image aiming_;
-	Data::image hitAiming_;
-
-	button start_;
+	Data::image startText_;
 };
