@@ -18,7 +18,7 @@ ResultScene::ResultScene()
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 
-	int titleButtonImage = LoadGraph("data/image/start.png");
+	int titleButtonImage = LoadGraph("data/image/ok.png");
 	area titleArea = { {900, 600}, {1100, 700}, titleButtonImage, -1 };
 	titleButton_ = { titleArea, false };
 

@@ -11,7 +11,6 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-	DeleteGraph(startText_.hImage);
 }
 
 void TitleScene::Update()

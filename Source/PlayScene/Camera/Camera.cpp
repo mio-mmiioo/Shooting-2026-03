@@ -134,8 +134,8 @@ void Camera::ModifiedFirstUpdate()
 
 void Camera::ThirdUpdate()
 {
-	int moveX = Input::GetMousePosition().x - prevMouseX_;
-	int moveY = Input::GetMousePosition().y - prevMouseY_;
+	int moveX = (int)Input::GetMousePosition().x - prevMouseX_;
+	int moveY = (int)Input::GetMousePosition().y - prevMouseY_;
 
 	VECTOR3& rot = transform_.rotation_;
 	rot.y += CAMERA_ROTATE_SPEED * moveX;

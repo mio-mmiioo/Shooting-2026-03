@@ -9,11 +9,14 @@
 namespace PLAYER
 {
 	const float ROTATE_SPEED = 0.005f;	// 回転速度
-	const float MOVE_SPEED = 100.0f;		// 移動速度
+	const float MOVE_SPEED = 100.0f;	// 移動速度
 
 	const float DISTANCE_R = 100.0f; // 当たり判定の半径
-	const float GRAVITY = 0.05f;
-	
+	const float GRAVITY = 0.05f; // 重力
+	const float capsuleR = 40.0f;
+	const VECTOR3 capsule1 = {0, capsuleR, 0};
+	const VECTOR3 capsule2 = {0, LOOK_HEIGHT.y - capsuleR, 0};
+
 	// 開発時のみ
 	const float DIRECTION_LENGTH = 100.0f;
 }
@@ -121,26 +124,25 @@ void Player::Update()
 		}
 	}
 
-	switch (state_)
-	{
-	case Data::P_STATE::MOVE: // 移動処理
-		AutoMove();
-		break;
-	case Data::P_STATE::STAY:
-		if (phaseTimer_ > 0)
-		{
-			phaseTimer_ -= Time::DeltaTime();
-		}
-		int num = Observer::GetEnemyKilled();
-		// 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
-		// もしくは時間が経過していたら
-		if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
-		{
-			state_ = Data::P_STATE::MOVE;
-		}
-		break;
-
-	}
+	//switch (state_)
+	//{
+	//case Data::P_STATE::MOVE: // 移動処理
+	//	AutoMove();
+	//	break;
+	//case Data::P_STATE::STAY:
+	//	if (phaseTimer_ > 0)
+	//	{
+	//		phaseTimer_ -= Time::DeltaTime();
+	//	}
+	//	int num = Observer::GetEnemyKilled();
+	//	// 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
+	//	// もしくは時間が経過していたら
+	//	if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
+	//	{
+	//		state_ = Data::P_STATE::MOVE;
+	//	}
+	//	break;
+	//}
 
 	if (GameMaster::GetIsDebug())
 	{
@@ -159,8 +161,12 @@ void Player::Update()
 		{
 			velocityY_ = 0.0f;
 		}
-		transform_.position_ = Collision::CheckPushObject(this);
+		//transform_.position_ = Collision::CheckPushObject(this);
 
+		// 壁とのめり込みをなくす
+		VECTOR3 pos1 = transform_.position_ + PLAYER::capsule1;
+		VECTOR3 pos2 = transform_.position_ + PLAYER::capsule2;
+		transform_.position_ = Collision::CheckPushObjectB(this, pos1, pos2, PLAYER::capsuleR);
 	}
 
 	playerHp_->Update();
@@ -271,7 +277,7 @@ void Player::DevelopmentInput()
 	// 入力移動
 	{
 		VECTOR3 velocity; // 移動ベクトル velocity→進行方向
-		velocity = VECTOR3(0, 0, 1) * moveSpeed_ * MGetRotY(transform_.rotation_.y); // 移動方向を書いた後、移動距離、回転行列
+		velocity = VECTOR3(0, 0, 1) * moveSpeed_ * MGetRotY(transform_.rotation_.y) * Time::DeltaTime(); // 移動方向を書いた後、移動距離、回転行列
 		if (Input::IsKeyKeepDown("moveFront"))
 		{
 			transform_.position_ += velocity;

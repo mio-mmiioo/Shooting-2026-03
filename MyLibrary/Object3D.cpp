@@ -1,8 +1,8 @@
 #include "Object3D.h"
 
 Object3D::Object3D()
-    :hModel_(-1), hitModel_(-1), parent_(nullptr), isDraw_(true), hp_(-1), objectNumber_(-1),
-    time_(0.0f), gravity_(0), velocityY_(0.0f)
+    :hModel_(-1), hitModel_(-1), parent_(nullptr), isDraw_(true), rotateSpeed_(-1), moveSpeed_(-1), hp_(-1), score_(0), 
+    objectNumber_(-1), time_(0.0f), gravity_(0), velocityY_(0.0f), distanceR_(-1), isOnGround_(false)
 {
 }
 
@@ -62,6 +62,26 @@ bool Object3D::CollideSphere(VECTOR3 pos1, float r, VECTOR3* hit) const
         {
             *hit = ret.Dim->HitPosition;
         }
+    }
+    return true;
+}
+
+bool Object3D::CollideCapsule(VECTOR3 capsulePos1, VECTOR3 capsulePos2, float capsuleR, VECTOR3* normal, VECTOR3* hit) const
+{
+    // DistanceR_を使用するのも考えたが、引数で半径を渡すほうが汎用できる
+    MV1_COLL_RESULT_POLY_DIM ret = MV1CollCheck_Capsule(hitModel_, -1, capsulePos1, capsulePos2, capsuleR, -1);
+    if (ret.Dim == nullptr)
+    {
+        return false;
+    }
+    if (ret.Dim->HitFlag == false)
+    {
+        return false;
+    }
+    *hit = ret.Dim->Position[0];
+    if (normal != nullptr)
+    {
+        *normal = ret.Dim->Normal;
     }
     return true;
 }

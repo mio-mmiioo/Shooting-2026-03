@@ -106,9 +106,37 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 	return found;
 }
 
+bool Collision::CheckLineHitObjectA(VECTOR3 pos1, VECTOR3 pos2)
+{
+	bool found = false;
+	int count = 0;
+	for (Object3D* obj : allObjectList)
+	{
+		if (obj == nullptr)
+		{
+			continue;
+		}
+		if (obj->GetObjectNumber() != OBJECT_SORT::OBJ_PLAYER)
+		{
+			VECTOR3 ret;
+			if (obj->Object3D::CollideLine(pos1, pos2, &ret))
+			{
+				count += 1;
+			}
+		}
+	}
+
+	// ぶつかったオブジェクトが二つより多い
+	if (count > 2)
+	{
+		found = true;
+	}
+
+	return found;
+}
+
 bool Collision::CheckDistanceVertexAndVertex(VECTOR3 pos1, VECTOR3 pos2, float distance)
 {
-	float e = VSize(pos1 - pos2);
 	if (VSize(pos1 - pos2) < distance)
 	{
 		return true;
@@ -116,6 +144,7 @@ bool Collision::CheckDistanceVertexAndVertex(VECTOR3 pos1, VECTOR3 pos2, float d
 	return false;
 }
 
+// うまくいっていない、敵が壁にめり込んだ
 VECTOR3 Collision::CheckPushObject(Object3D* obj)
 {
 	VECTOR3 direction; // 押し返す方向のベクトル
@@ -145,6 +174,30 @@ VECTOR3 Collision::CheckPushObject(Object3D* obj)
 		}
 	}
 	return pos1 + pushBack;
+}
+
+// プレイヤーを使って検証中
+VECTOR3 Collision::CheckPushObjectB(Object3D* obj, VECTOR3 capsule1, VECTOR3 capsule2, float capsuleR)
+{
+	VECTOR3 normal;
+	VECTOR3 hit;
+	VECTOR3 pushBack = { 0.0f, 0.0f, 0.0f };
+	for (Object3D* o : allObjectList)
+	{
+		if (o == obj)
+		{
+			continue;
+		}
+		if (o->CollideCapsule(capsule1, capsule2, capsuleR, &normal, &hit) == true)
+		{
+			normal.y = 0; // y方向はCheckOnGroundで確認しているので無視する
+			capsule1.y = 0;
+			hit.y = 0;
+			pushBack += normal * (obj->GetDistanceR() - VSize(capsule1 - hit)); // ( 押し返す方向 ) * ( 押し返したい距離 )
+		}
+	}
+
+	return obj->GetTransform().position_ + pushBack;
 }
 
 VECTOR3 Collision::CheckOnGround(Object3D* obj, bool* isOnGround)
