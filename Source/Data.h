@@ -23,7 +23,7 @@ namespace Data
 		int score;				// 得点
 	};
 
-	struct EnemyData
+	struct CharacterData
 	{
 		float gravity;		// 重力
 		float moveSpeed;	// 移動速度
@@ -52,12 +52,10 @@ namespace Data
 		int halfHeight; // 画像の半分の縦幅
 	};
 
-
-
 	void Init(); // 初期化
 	void SetImage(std::string name, image* i); // iにnameの画像をセットする
 	int GetPlayerPhase(int phaseCount, PlayerPhase* phase);
-	extern std::map<std::string, EnemyData> enemyDataList; // 各敵のデータのリスト
+	extern std::map<std::string, CharacterData> characterDataList; // 各キャラクターのデータのリスト
 	extern std::map<std::string, int> images; // ゲームで使用する画像
 	extern std::map<std::string, int> models; // 使用するモデル
 	extern std::map<std::string, int> se; // 使用する音源

@@ -4,7 +4,7 @@
 
 namespace Data
 {
-	enum E_DATA_NUM {
+	enum CHARACTER_DATA_NUM {
 		NAME,			// 名前
 		SORT,			// 種類
 		GRAVITY,		// 重力
@@ -32,13 +32,13 @@ namespace Data
 	};
 
 	std::vector<PlayerPhase> playerPhase;
-	std::map<std::string, EnemyData> enemyDataList;
+	std::map<std::string, CharacterData> characterDataList; // 各キャラクターのデータのリスト
 	std::map<std::string, int> images;
 	std::map<std::string, int> models;
 	std::map<std::string, int> se;
 
 	void InitPlayerPhase(); // プレイヤーの行動を管理するためのデータの読み込み
-	void InitEnemyDataList(); // 敵のデータの読み込み
+	void InitCharacterDataList(); // キャラクターのデータの読み込み
 	void InitImage(); // 画像データの読み込み
 	void InitModel(); // モデルデータの読み込み
 	void InitSound(); // 音源データの読み込み
@@ -47,7 +47,7 @@ namespace Data
 void Data::Init()
 {
 	InitPlayerPhase();
-	InitEnemyDataList();
+	InitCharacterDataList();
 	InitImage();
 	InitModel();
 	InitSound();
@@ -119,22 +119,22 @@ void Data::InitPlayerPhase()
 	delete csv;
 }
 
-void Data::InitEnemyDataList()
+void Data::InitCharacterDataList()
 {
-	CsvReader* csv = new CsvReader("data/enemy.csv");
-	EnemyData data;
+	CsvReader* csv = new CsvReader("data/character.csv");
+	CharacterData data;
 	for (int line = 1; line < csv->GetLines(); line++)
 	{
-		std::string name			= csv->GetString(line, E_DATA_NUM::NAME);
-		data.gravity				= csv->GetFloat(line, E_DATA_NUM::GRAVITY);
-		data.moveSpeed				= csv->GetFloat(line, E_DATA_NUM::MOVE_SPEED);
-		data.rotateSpeed			= csv->GetFloat(line, E_DATA_NUM::ROTATE_SPEED);
-		data.distanceR				= csv->GetFloat(line, E_DATA_NUM::DISTANCE_R);
-		data.distanceCurrentAndGo	= csv->GetFloat(line, E_DATA_NUM::DISTANCE1);
-		data.distanceThisAndPlayer	= csv->GetFloat(line, E_DATA_NUM::DISTANCE2);
-		data.hp						= csv->GetInt(line, E_DATA_NUM::HP);
-		data.score					= csv->GetInt(line, E_DATA_NUM::SCORE);
-		enemyDataList[name] = data;
+		std::string name			= csv->GetString(line, CHARACTER_DATA_NUM::NAME);
+		data.gravity				= csv->GetFloat(line, CHARACTER_DATA_NUM::GRAVITY);
+		data.moveSpeed				= csv->GetFloat(line, CHARACTER_DATA_NUM::MOVE_SPEED);
+		data.rotateSpeed			= csv->GetFloat(line, CHARACTER_DATA_NUM::ROTATE_SPEED);
+		data.distanceR				= csv->GetFloat(line, CHARACTER_DATA_NUM::DISTANCE_R);
+		data.distanceCurrentAndGo	= csv->GetFloat(line, CHARACTER_DATA_NUM::DISTANCE1);
+		data.distanceThisAndPlayer	= csv->GetFloat(line, CHARACTER_DATA_NUM::DISTANCE2);
+		data.hp						= csv->GetInt(line, CHARACTER_DATA_NUM::HP);
+		data.score					= csv->GetInt(line, CHARACTER_DATA_NUM::SCORE);
+		characterDataList[name]		= data;
 	}
 
 	delete csv;
@@ -185,8 +185,8 @@ void Data::InitModel()
 
 void Data::InitSound()
 {
-	se["outBullet"] = LoadSoundMem("data/sound/outBullet1.mp3");
-	se["reload"] = LoadSoundMem("data/sound/reload.mp3");
-	se["attackEnemy"] = LoadSoundMem("data/sound/attackEnemy.mp3");
-	se["breakEnemy"] = LoadSoundMem("data/sound/breakEnemy.mp3");
+	se["outBullet"]		= LoadSoundMem("data/sound/outBullet1.mp3");
+	se["reload"]		= LoadSoundMem("data/sound/reload.mp3");
+	se["attackEnemy"]	= LoadSoundMem("data/sound/attackEnemy.mp3");
+	se["breakEnemy"]	= LoadSoundMem("data/sound/breakEnemy.mp3");
 }

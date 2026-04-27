@@ -5,7 +5,7 @@
 class Touhu : public Object3D
 {
 public:
-	Touhu(Data::ObjectData objectData, Data::EnemyData enemyData);
+	Touhu(Data::ObjectData objectData, Data::CharacterData characterData);
 	~Touhu() override;
 	void Update() override;
 	void Draw() override;

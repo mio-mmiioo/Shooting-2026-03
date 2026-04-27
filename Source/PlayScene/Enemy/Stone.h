@@ -6,7 +6,7 @@
 class Stone : public Object3D
 {
 public:
-	Stone(Data::ObjectData objectData, Data::EnemyData enemyData);
+	Stone(Data::ObjectData objectData, Data::CharacterData characterData);
 	~Stone() override;
 	void Update() override;
 	void Draw() override;

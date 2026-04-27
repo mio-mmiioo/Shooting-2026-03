@@ -44,7 +44,7 @@ void Stage::ReadMappingData(std::string fileName)
 		if (o.objectSortNumber == OBJECT_SORT::OBJ_PLAYER)
 		{
 			o.name = "player";
-			new Player(o); // プレイヤーを作成
+			new Player(o, Data::characterDataList[o.name]); // プレイヤーを作成
 		}
 		else
 		{

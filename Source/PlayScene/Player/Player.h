@@ -8,7 +8,7 @@ class PlayerHp;
 class Player : public Object3D
 {
 public:
-	Player(Data::ObjectData objectData);
+	Player(Data::ObjectData objectData, Data::CharacterData characterData);
 	~Player() override;
 	void Update() override;
 	void Draw() override;

@@ -16,7 +16,7 @@ namespace TOUHU
 	const float DIRECTION_LENGTH = 100.0f;
 }
 
-Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
+Touhu::Touhu(Data::ObjectData objectData, Data::CharacterData characterData)
 {
 	// Stoneと全く同じ、他にいい書き方があるかもしれない
 	{
@@ -24,18 +24,18 @@ Touhu::Touhu(Data::ObjectData objectData, Data::EnemyData enemyData)
 		hitModel_ = MV1DuplicateModel(Data::models[objectData.name + "_c"]);
 
 		transform_ = objectData.t;
-		hp_ = enemyData.hp;
+		hp_ = characterData.hp;
 		prevHp_ = hp_;
-		score_ = enemyData.score;
+		score_ = characterData.score;
 
 		transform_.MakeLocalMatrix();
 		MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
 		MV1SetupCollInfo(hitModel_);
 
-		gravity_ = enemyData.gravity;
-		moveSpeed_ = enemyData.moveSpeed;
-		rotateSpeed_ = enemyData.rotateSpeed;
-		distanceR_ = enemyData.distanceR;
+		gravity_ = characterData.gravity;
+		moveSpeed_ = characterData.moveSpeed;
+		rotateSpeed_ = characterData.rotateSpeed;
+		distanceR_ = characterData.distanceR;
 		velocityY_ = 0.0f;
 
 		objectNumber_ = OBJECT_SORT::OBJ_CHARA;
@@ -126,13 +126,13 @@ void Touhu::Draw()
 
 	// 撃ってほしい部分を半透明の〇で表示する if文の条件と〇のサイズで不具合発生中
 	{
-		VECTOR3 hit;
-		// 敵自身とプレイヤーの直線距離に障害物がないことを確認する
-		if (Collision::CheckLineHitObjectA(transform_.position_, Enemy::GetPlayerPosition() + LOOK_HEIGHT) == false)
-		{
-			VECTOR3 weakPoint = ConvWorldPosToScreenPos(transform_.position_ + TOUHU::ADD_WEAK_POSITION); // ワールドスクリーン座標変換をする
-			Enemy::DrawWeakPoint("touhu", hp_, weakPoint);
-		}
+		//VECTOR3 hit;
+		//// 敵自身とプレイヤーの直線距離に障害物がないことを確認する
+		//if (Collision::CheckLineHitObjectA(transform_.position_, Enemy::GetPlayerPosition() + LOOK_HEIGHT) == false)
+		//{
+		//	VECTOR3 weakPoint = ConvWorldPosToScreenPos(transform_.position_ + TOUHU::ADD_WEAK_POSITION); // ワールドスクリーン座標変換をする
+		//	Enemy::DrawWeakPoint("touhu", hp_, weakPoint);
+		//}
 	}
 }
 
@@ -153,14 +153,14 @@ void Touhu::WalkUpdate()
 	}
 	else
 	{
-		distance = Data::enemyDataList["touhu"].distanceCurrentAndGo;
+		distance = Data::characterDataList["touhu"].distanceCurrentAndGo;
 		if (Collision::CheckDistanceVertexAndVertex(e, goPosition_, distance) == true)
 		{
 			isArrive_ = true;
 		}
 	}
 
-	distance = Data::enemyDataList["touhu"].distanceThisAndPlayer;
+	distance = Data::characterDataList["touhu"].distanceThisAndPlayer;
 	// プレイヤーとの距離が攻撃できる距離の場合、状態を攻撃に遷移させる
 	if (Collision::CheckDistanceVertexAndVertex(e, p, distance) == true)
 	{
@@ -188,7 +188,7 @@ void Touhu::StayUpdate()
 	{
 		VECTOR3 p = Enemy::GetPlayerPosition();
 		VECTOR3 e = transform_.position_;
-		float distance = Data::enemyDataList["touhu"].distanceThisAndPlayer;
+		float distance = Data::characterDataList["touhu"].distanceThisAndPlayer;
 		if (Collision::CheckDistanceVertexAndVertex(e, p, distance) == false)
 		{
 			state_ = TOUHU_STATE::WALK;

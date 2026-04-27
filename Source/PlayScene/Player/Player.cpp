@@ -8,11 +8,6 @@
 
 namespace PLAYER
 {
-	const float ROTATE_SPEED = 0.005f;	// 回転速度
-	const float MOVE_SPEED = 100.0f;	// 移動速度
-
-	const float DISTANCE_R = 100.0f; // 当たり判定の半径
-	const float GRAVITY = 0.05f; // 重力
 	const float capsuleR = 40.0f;
 	const VECTOR3 capsule1 = {0, capsuleR, 0};
 	const VECTOR3 capsule2 = {0, LOOK_HEIGHT.y - capsuleR, 0};
@@ -21,7 +16,7 @@ namespace PLAYER
 	const float DIRECTION_LENGTH = 100.0f;
 }
 
-Player::Player(Data::ObjectData objectData)
+Player::Player(Data::ObjectData objectData, Data::CharacterData characterData)
 {
 	objectNumber_ = OBJECT_SORT::OBJ_PLAYER;
 	transform_.position_ = objectData.t.position_;
@@ -38,10 +33,10 @@ Player::Player(Data::ObjectData objectData)
 	Data::SetImage("hitAiming", &hitAiming_);
 	Data::SetImage("reload", &reload_);
 
-	rotateSpeed_ = PLAYER::ROTATE_SPEED;
-	moveSpeed_ = PLAYER::MOVE_SPEED;
-	distanceR_ = PLAYER::DISTANCE_R;
-	gravity_ = PLAYER::GRAVITY;
+	rotateSpeed_ = characterData.rotateSpeed;
+	moveSpeed_ = characterData.moveSpeed;
+	distanceR_ = characterData.distanceR;
+	gravity_ = characterData.gravity;
 	velocityY_ = 0.0f;
 	
 	gun_ = new Gun();
@@ -67,6 +62,8 @@ Player::Player(Data::ObjectData objectData)
 
 Player::~Player()
 {
+	gun_->DestroyMe();
+	playerHp_->DestroyMe();
 	Collision::DeleteObject(this);
 	if (hModel_ > 0)
 	{
@@ -124,25 +121,25 @@ void Player::Update()
 		}
 	}
 
-	//switch (state_)
-	//{
-	//case Data::P_STATE::MOVE: // 移動処理
-	//	AutoMove();
-	//	break;
-	//case Data::P_STATE::STAY:
-	//	if (phaseTimer_ > 0)
-	//	{
-	//		phaseTimer_ -= Time::DeltaTime();
-	//	}
-	//	int num = Observer::GetEnemyKilled();
-	//	// 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
-	//	// もしくは時間が経過していたら
-	//	if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
-	//	{
-	//		state_ = Data::P_STATE::MOVE;
-	//	}
-	//	break;
-	//}
+	switch (state_)
+	{
+	case Data::P_STATE::MOVE: // 移動処理
+		AutoMove();
+		break;
+	case Data::P_STATE::STAY:
+		if (phaseTimer_ > 0)
+		{
+			phaseTimer_ -= Time::DeltaTime();
+		}
+		int num = Observer::GetEnemyKilled();
+		// 倒している敵の数 > 次のフェーズに向かうために必要な累計の倒した敵の数
+		// もしくは時間が経過していたら
+		if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
+		{
+			state_ = Data::P_STATE::MOVE;
+		}
+		break;
+	}
 
 	if (GameMaster::GetIsDebug())
 	{
@@ -295,14 +292,16 @@ void Player::AutoMove()
 	Data::GetPlayerPhase(phaseCount, &phaseData_);
 	float distance = VSize(phaseData_.position - transform_.position_);
 
+	// 目的地までの距離が一定以上なら
 	if (distance >= phaseData_.distance1)
 	{
 		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y) * Time::DeltaTime();
 	}
+	// 目的地までの距離が一定より小さい場合　
 	else if (distance < phaseData_.distance1)
 	{
 		float min = phaseData_.distance1;
-		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
+		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_); // 向かう場所の情報を取得
 		//float t = distance / min;
 		//VECTOR3 position = phaseData_.position * t + nextPhaseData_.position * (1.0f - t);
 
@@ -324,12 +323,15 @@ void Player::AutoMove()
 		}
 
 		transform_.position_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(currentRotationY_) * Time::DeltaTime();
+
+		// 目的地の距離が一定より小さくなったら
 		if (distance < phaseData_.distance2)
 		{
-			phaseCount = GameMaster::AddPhaseCount();
-			Data::GetPlayerPhase(phaseCount, &phaseData_);
+			phaseCount = GameMaster::AddPhaseCount(); // Phaseを加算
+			Data::GetPlayerPhase(phaseCount, &phaseData_); // phaseの情報を取得
+			// 取得したデータなどをもとに、次の情報を代入
 			state_ = phaseData_.state;
-			currentRotationY_ = transform_.rotation_.y;
+			currentRotationY_ = transform_.rotation_.y; 
 			phaseTimer_ = phaseData_.time;
 		}
 	}

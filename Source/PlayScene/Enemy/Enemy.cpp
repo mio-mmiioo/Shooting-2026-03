@@ -34,10 +34,10 @@ void Enemy::CreateEnemy(Data::ObjectData objectData)
 	switch (objectData.objectNumber)
 	{
 	case E_SORT::STONE:
-		new Stone(objectData, Data::enemyDataList["stone"]);
+		new Stone(objectData, Data::characterDataList["stone"]);
 		break;
 	case E_SORT::TOUHU:
-		new Touhu(objectData, Data::enemyDataList["touhu"]);
+		new Touhu(objectData, Data::characterDataList["touhu"]);
 		break;
 	}
 }
@@ -54,7 +54,7 @@ void Enemy::AttackPlayer(int attackPower)
 
 void Enemy::SetObserver(std::string name, bool isEnemy)
 {
-	int score = Data::enemyDataList[name].score;
+	int score = Data::characterDataList[name].score;
 	Observer::AddScore(score);
 
 	if (isEnemy == true)
@@ -68,7 +68,7 @@ void Enemy::DrawWeakPoint(std::string name, int hp, VECTOR3 weakPoint)
 	int red = 0;
 	int green = 0;
 	int blue = 0;
-	float raitio = (float)hp / (float)Data::enemyDataList[name].hp; // HP‚ÌŠ„‡
+	float raitio = (float)hp / (float)Data::characterDataList[name].hp; // HP‚ÌŠ„‡
 
 	// Š„‡‚ª”¼•ªˆÈã‚È‚çA—Î‚ª‹­‚ß
 	if (raitio > 0.5)

@@ -7,24 +7,24 @@ namespace STONE
 	const VECTOR3 ADD_WEAK_POSITION = { 0.0f, 50.0f, 0.0f }; // â¡éZÇ∑ÇÈé„ì_ÇÃèÍèä
 }
 
-Stone::Stone(Data::ObjectData objectData, Data::EnemyData enemyData)
+Stone::Stone(Data::ObjectData objectData, Data::CharacterData characterData)
 {
 	hModel_ = MV1DuplicateModel(Data::models[objectData.name]);
 	hitModel_ = MV1DuplicateModel(Data::models[objectData.name + "_c"]);
 
 	transform_ = objectData.t;
-	hp_ = enemyData.hp;
+	hp_ = characterData.hp;
 	prevHp_ = hp_;
-	score_ = enemyData.score;
+	score_ = characterData.score;
 
 	transform_.MakeLocalMatrix();
 	MV1SetMatrix(hitModel_, transform_.GetLocalMatrix());
 	MV1SetupCollInfo(hitModel_);
 
-	gravity_ = enemyData.gravity;
-	moveSpeed_ = enemyData.moveSpeed;
-	rotateSpeed_ = enemyData.rotateSpeed;
-	distanceR_ = enemyData.distanceR;
+	gravity_ = characterData.gravity;
+	moveSpeed_ = characterData.moveSpeed;
+	rotateSpeed_ = characterData.rotateSpeed;
+	distanceR_ = characterData.distanceR;
 
 	objectNumber_ = OBJECT_SORT::OBJ_CHARA;
 	
