@@ -121,25 +121,25 @@ void Player::Update()
 		}
 	}
 
-	switch (state_)
-	{
-	case Data::P_STATE::MOVE: // ˆÚ“®ˆ—
-		AutoMove();
-		break;
-	case Data::P_STATE::STAY:
-		if (phaseTimer_ > 0)
-		{
-			phaseTimer_ -= Time::DeltaTime();
-		}
-		int num = Observer::GetEnemyKilled();
-		// “|‚µ‚Ä‚¢‚é“G‚Ì” > ŽŸ‚ÌƒtƒF[ƒY‚ÉŒü‚©‚¤‚½‚ß‚É•K—v‚È—ÝŒv‚Ì“|‚µ‚½“G‚Ì”
-		// ‚à‚µ‚­‚ÍŽžŠÔ‚ªŒo‰ß‚µ‚Ä‚¢‚½‚ç
-		if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
-		{
-			state_ = Data::P_STATE::MOVE;
-		}
-		break;
-	}
+	//switch (state_)
+	//{
+	//case Data::P_STATE::MOVE: // ˆÚ“®ˆ—
+	//	AutoMove();
+	//	break;
+	//case Data::P_STATE::STAY:
+	//	if (phaseTimer_ > 0)
+	//	{
+	//		phaseTimer_ -= Time::DeltaTime();
+	//	}
+	//	int num = Observer::GetEnemyKilled();
+	//	// “|‚µ‚Ä‚¢‚é“G‚Ì” > ŽŸ‚ÌƒtƒF[ƒY‚ÉŒü‚©‚¤‚½‚ß‚É•K—v‚È—ÝŒv‚Ì“|‚µ‚½“G‚Ì”
+	//	// ‚à‚µ‚­‚ÍŽžŠÔ‚ªŒo‰ß‚µ‚Ä‚¢‚½‚ç
+	//	if (num >= phaseData_.enemyNum || phaseTimer_ <= 0)
+	//	{
+	//		state_ = Data::P_STATE::MOVE;
+	//	}
+	//	break;
+	//}
 
 	if (GameMaster::GetIsDebug())
 	{

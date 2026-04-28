@@ -12,6 +12,9 @@ public:
 	void Draw() override;
 
 private:
-	Data::image aiming_;
-	Data::image startText_;
+	Data::image background_;	// 背景
+	Data::image aiming_;		// 照準
+	Data::image startText_;		// ゲームを開始してもらうための文
+
+	float timer_; // タイマー 時間経過で画面を変化させるために使用
 };

@@ -39,6 +39,7 @@ bool Collision::CheckBulletLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hi
 		{
 			continue;
 		}
+		// プレイヤーの場合を除く
 		if (obj->GetObjectNumber() != OBJECT_SORT::OBJ_PLAYER)
 		{
 			VECTOR3 ret;
@@ -79,7 +80,7 @@ bool Collision::CheckLineHitObject(VECTOR3 pos1, VECTOR3 pos2, VECTOR3* hit)
 	float nowVal = ((VECTOR3)(pos2 - pos1)).Size();
 	for (Object3D* obj : allObjectList)
 	{
-		if (obj == nullptr) // この書き方はよくない
+		if (obj == nullptr)
 		{
 			continue;
 		}
@@ -116,13 +117,10 @@ bool Collision::CheckLineHitObjectA(VECTOR3 pos1, VECTOR3 pos2)
 		{
 			continue;
 		}
-		if (obj->GetObjectNumber() != OBJECT_SORT::OBJ_PLAYER)
+		VECTOR3 ret;
+		if (obj->Object3D::CollideLine(pos1, pos2, &ret))
 		{
-			VECTOR3 ret;
-			if (obj->Object3D::CollideLine(pos1, pos2, &ret))
-			{
-				count += 1;
-			}
+			count += 1;
 		}
 	}
 
@@ -220,10 +218,10 @@ VECTOR3 Collision::CheckOnGround(Object3D* obj, bool* isOnGround)
 
 		if (o->CollideLine(pos1, pos2, &hit))
 		{
+			// めり込んでいる
 			if (highest.y < hit.y)
 			{
-				// めり込んでいる
-				highest = hit;
+				highest = hit; // 情報を更新
 			}
 		}
 	}

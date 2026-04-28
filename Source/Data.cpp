@@ -142,10 +142,11 @@ void Data::InitCharacterDataList()
 
 void Data::InitImage()
 {
-	images["aiming"]	= LoadGraph("data/image/pointer1.png");
-	images["hitAiming"] = LoadGraph("data/image/pointer2.png");
-	images["reload"]	= LoadGraph("data/image/reload.png");
-	images["startText"] = LoadGraph("data/image/startText.png");
+	images["titleBackground"]	= LoadGraph("data/image/titleBackground.png");
+	images["aiming"]		= LoadGraph("data/image/pointer1.png");
+	images["hitAiming"]		= LoadGraph("data/image/pointer2.png");
+	images["reload"]		= LoadGraph("data/image/reload.png");
+	images["startText"]		= LoadGraph("data/image/startText.png");
 }
 
 void Data::InitModel()

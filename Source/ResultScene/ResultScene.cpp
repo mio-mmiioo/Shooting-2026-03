@@ -1,4 +1,5 @@
 #include "ResultScene.h"
+#include "../../MyLibrary/ClickArea.h"
 #include "../../MyLibrary/Input.h"
 #include "../../MyLibrary/Color.h"
 #include "../../MyLibrary/Observer.h"
@@ -18,16 +19,17 @@ ResultScene::ResultScene()
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 
-	int titleButtonImage = LoadGraph("data/image/ok.png");
-	area titleArea = { {900, 600}, {1100, 700}, titleButtonImage, -1 };
-	titleButton_ = { titleArea, false };
-
+	int normalButtonImage = LoadGraph("data/image/ok.png");
+	int selectButtonImage = LoadGraph("data/image/ok-selected.png");
+	area normalArea = { {900, 600}, {1100, 700}, normalButtonImage};
+	area selectArea = { {900, 600}, {1100, 700}, selectButtonImage };
+	titleButton_ = new Button(normalArea, selectArea);
 	timer_ = RESULTSCENE::TIME;
 }
 
 ResultScene::~ResultScene()
 {
-	DeleteGraph(titleButton_.buttonArea.hImage);
+	delete titleButton_;
 }
 
 void ResultScene::Update()
@@ -41,11 +43,9 @@ void ResultScene::Update()
 		timer_ = 0.0f;
 	}
 
-	if (Input::IsKeyDown("outBullet"))
-	{
-		ClickArea::SetClickArea(&titleButton_);
-	}
-	if (titleButton_.isClickArea == true)
+	titleButton_->Update();
+
+	if (titleButton_->GetIsClickArea() == true)
 	{
 		SceneManager::ChangeScene("TITLE");
 	}
@@ -53,7 +53,7 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	ClickArea::DrawArea(titleButton_.buttonArea, -1);
+	titleButton_->Draw();
 
 	DrawFormatString(RESULTSCENE::SCORE_X, RESULTSCENE::SCORE_Y, Color::TEXT, "score : %d", Observer::GetScore());
 	DrawFormatString(RESULTSCENE::KILLED_ENEMY_NUMBER_X, RESULTSCENE::KILLED_ENEMY_NUMBER_Y, Color::TEXT, "“|‚µ‚½“G‚Ì” : %d", Observer::GetEnemyKilled());
@@ -63,7 +63,7 @@ void ResultScene::Draw()
 	int y = (int)Input::GetMousePosition().y;
 
 	// Æ€‚ð•`‰æ
-	if (ClickArea::IsMosueInArea(titleButton_.buttonArea) == true)
+	if (titleButton_->GetIsOnArea() == true)
 	{
 		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 	}

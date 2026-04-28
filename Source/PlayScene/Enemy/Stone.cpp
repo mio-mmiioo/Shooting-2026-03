@@ -44,7 +44,6 @@ Stone::~Stone()
 		MV1DeleteModel(hitModel_);
 		hModel_ = -1;
 	}
-	Observer::EnemyKilled();
 }
 
 void Stone::Update()

@@ -1,7 +1,8 @@
 #pragma once
 #include "../../Library/SceneBase.h"
-#include "../../MyLibrary/ClickArea.h"
 #include "../Data.h"
+
+class Button;
 
 class ResultScene : public SceneBase
 {
@@ -14,6 +15,6 @@ private:
 	Data::image aiming_;
 	Data::image hitAiming_;
 
-	button titleButton_;
+	Button* titleButton_;
 	float timer_;
 };

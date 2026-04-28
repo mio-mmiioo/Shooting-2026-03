@@ -89,6 +89,9 @@ void Enemy::DrawWeakPoint(std::string name, int hp, VECTOR3 weakPoint)
 		red = RED + ((int)(1.0f - raitio) * ADD_RGB);
 	}
 	int color = GetColor(red, green, blue);
+
+	// この書き方では遠近にかかわらず、同じサイズで描画され、違和感がある
+	// プレイヤーと自身との距離を計算 → 半径に割合をかける修正を加えるべき
 	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, Color::BLACK, FALSE); // 枠線
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, BLEND_PARAM);
 	DrawCircle((int)weakPoint.x, (int)weakPoint.y, WEAK_POINT_CIRCLE_R, color, TRUE); // HPの割合の色
