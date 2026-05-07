@@ -121,8 +121,10 @@ void Touhu::Draw()
 	Object3D::Draw();
 
 	// 向いている方向
-	//DrawLine3D(transform_.position_ + LOOK_HEIGHT,
-		//transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), Color::BLACK);
+	DrawLine3D(transform_.position_ + LOOK_HEIGHT,
+		transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), GetColor(255,255,255));
+
+	//MV1DrawModel(hitModel_);
 
 	// 撃ってほしい部分を半透明の〇で表示する if文の条件と〇のサイズで不具合発生中
 	{

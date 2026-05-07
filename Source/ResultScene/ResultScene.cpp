@@ -47,6 +47,7 @@ void ResultScene::Update()
 
 	if (titleButton_->GetIsClickArea() == true)
 	{
+		PlaySoundMem(Data::se["outBullet"], DX_PLAYTYPE_BACK, TRUE);
 		SceneManager::ChangeScene("TITLE");
 	}
 }

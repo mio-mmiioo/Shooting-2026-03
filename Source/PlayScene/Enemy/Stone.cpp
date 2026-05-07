@@ -1,6 +1,5 @@
 #include "Stone.h"
 #include "../../../MyLibrary/Collision.h"
-#include "../../../MyLibrary/Observer.h"
 
 namespace STONE
 {
@@ -52,7 +51,7 @@ void Stone::Update()
 	if (hp_ <= 0)
 	{
 		PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
-		Enemy::SetObserver("stone", false);
+		Enemy::SetObserver("stone", true);
 		Collision::DeleteObject(this);
 		DestroyMe();
 		return;
