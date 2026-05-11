@@ -4,7 +4,6 @@
 #include "../../MyLibrary/Observer.h"
 #include "../../ImGui/imgui.h"
 #include "Stage/Stage.h"
-//#include "Stage/WayInfo.h"
 #include "Stage/StageSearch.h"
 #include "Camera/Camera.h"
 #include "Enemy/Enemy.h"
@@ -128,6 +127,11 @@ int GameMaster::Release()
 int GameMaster::GetPlayerPhaseCount()
 {
 	return playerPhaseCount;
+}
+
+Data::P_STATE GameMaster::GetPlayerState()
+{
+	return player->GetState();
 }
 
 int GameMaster::AddPhaseCount()

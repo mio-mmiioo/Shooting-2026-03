@@ -12,6 +12,10 @@ namespace
 	const float CAMERA_NEAR = 50.0f;
 	const float CAMERA_FAR = 15000.0f;
 
+	// ヘッドボブ関連
+	const float HEAD_BOB_TIME = 1.0f;
+	const float HEAD_BOB_INTENSITY = 10.0f;
+
 	// 一人称視点関連
 	const float FIRST_DISTANCE = 300.0f; // 視点と注視点の距離
 
@@ -30,7 +34,7 @@ Camera::Camera()
 {
 	GetMousePoint(&prevMouseX_, &prevMouseY_);
 	fixAddPosition_ = VECTOR3(-5000.0f, 0.0f, 0.0f);
-	prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
+	//prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
 	FixUpdate();
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
 	state_ = CAM_STATE::FIRST;
@@ -38,6 +42,9 @@ Camera::Camera()
 	wheelRot_ = 0;
 	isMoveFixCamera_ = true;
 	transform_.position_ = cameraPosition_;
+
+	headBobTimer_ = HEAD_BOB_TIME;
+	isPositive_ = false;
 }
 
 Camera::~Camera()
@@ -62,11 +69,9 @@ void Camera::Update()
 	{
 	case CAM_STATE::FIRST:
 		FirstUpdate();
-		//ModifiedFirstUpdate();
 		break;
 	case CAM_STATE::THIRD:
 		ThirdUpdate();
-		//ModifiedThirdUpdate();
 		break;
 	case CAM_STATE::FIX:
 		FixUpdate();
@@ -86,50 +91,8 @@ void Camera::FirstUpdate()
 {
 	cameraPosition_ = player_.position_ + LOOK_HEIGHT; // 目線の高さに合わせている
 	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
-}
 
-void Camera::ModifiedFirstUpdate()
-{
-	int phaseCount = GameMaster::GetPlayerPhaseCount();
-	Data::GetPlayerPhase(phaseCount, &phaseData_);
-	float distance = VSize(phaseData_.position - transform_.position_);
-
-	// プレイヤーが向かっている場所との距離が一定以内の場合
-	if (distance < phaseData_.distance1)
-	{
-		// 次の場所と向かっている場所の距離を補間する
-		float min = phaseData_.distance1;
-		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_);
-		float t = distance / min;
-		//VECTOR3 rotation = phaseData_.position * t + nextPhaseData_.position * (1.0f - t) + ;
-		if (t > 0.9f)
-		{
-			Data::GetPlayerPhase(phaseCount, &phaseData_);
-		}
-	}
-
-	// 移動処理
-	{
-		VECTOR3 toGo = player_.position_ + LOOK_HEIGHT - cameraPosition_;
-		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(player_.rotation_.y); // 正面
-		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(player_.rotation_.y); // 右　回転の確認に使用
-
-		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
-		{
-			transform_.rotation_.y = atan2f(toGo.x, toGo.z);
-		}
-		else if (VDot(right, toGo) > 0)
-		{
-			transform_.rotation_.y += rotateSpeed_;
-		}
-		else
-		{
-			transform_.rotation_.y -= rotateSpeed_;
-		}
-		cameraPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, moveSpeed_) * MGetRotY(transform_.rotation_.y);
-	}
-
-	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
+	HeadBob(); // 歩いている風に見せる処理
 }
 
 void Camera::ThirdUpdate()
@@ -158,57 +121,6 @@ void Camera::ThirdUpdate()
 	prevMouseY_ = (int)Input::GetMousePosition().y;
 }
 
-void Camera::ModifiedThirdUpdate()
-{
-	float moveX = player_.position_.x - prevPlayerPosition_.x;
-	float moveY = player_.position_.y - prevPlayerPosition_.y;
-
-	VECTOR3& rot = player_.rotation_;
-	rot.y += CAMERA_ROTATE_SPEED * moveX;
-	rot.x -= CAMERA_ROTATE_SPEED * moveY;
-
-	if (rot.x >= MAX_ROTATE_X * DegToRad)
-	{
-		rot.x = MAX_ROTATE_X * DegToRad;
-	}
-	if (rot.x < MIN_ROTATE_X * DegToRad)
-	{
-		rot.x = MIN_ROTATE_X * DegToRad;
-	}
-
-	VECTOR camPos = THIRD_BASE_POSITION * MGetRotX(rot.x) * MGetRotY(rot.y);
-	cameraPosition_ = player_.position_ + camPos + LOOK_HEIGHT;
-	{
-		VECTOR3 toGo = cameraPosition_ - prevPlayerPosition_;
-		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(player_.rotation_.y); // 正面
-		VECTOR3 right = VECTOR3(1, 0, 0) * MGetRotY(player_.rotation_.y); // 右　回転の確認に使用
-
-		if (VDot(front, toGo.Normalize()) >= cos(rotateSpeed_))
-		{
-			player_.rotation_.y = atan2f(toGo.x, toGo.z);
-		}
-		else if (VDot(right, toGo) > 0)
-		{
-			player_.rotation_.y += rotateSpeed_;
-		}
-		else
-		{
-			player_.rotation_.y -= rotateSpeed_;
-		}
-		cameraPosition_ += VECTOR3(0, 0, moveSpeed_) * MGetRotY(player_.rotation_.y);
-	}
-
-	VECTOR3 hit;
-	if (Collision::CheckLineHitObject(cameraPosition_, player_.position_, &hit))
-	{
-		cameraPosition_ = hit;
-	}
-
-	targetPosition_ = player_.position_ + ADD_HEIGHT;
-
-	prevPlayerPosition_ = player_.position_;
-}
-
 void Camera::FixUpdate()
 {
 	wheelRot_ += GetMouseWheelRotVol();
@@ -232,6 +144,37 @@ void Camera::ChangeCamera()
 	case CAM_STATE::FIX:
 		state_ = CAM_STATE::FIRST;
 		break;
+	}
+}
+
+void Camera::HeadBob()
+{
+	// プレイヤーが歩いている場合
+	if (GameMaster::GetPlayerState() == Data::P_STATE::MOVE)
+	{
+		// タイマーを増加させる
+		if (isPositive_ == true)
+		{
+			headBobTimer_ += Time::DeltaTime();
+		}
+		// タイマーを減少させる
+		else
+		{
+			headBobTimer_ -= Time::DeltaTime();
+		}
+		float addHeadBob = sin(headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f) * HEAD_BOB_INTENSITY;
+		cameraPosition_.y += addHeadBob;
+		//ImGui::Text("headBobTimer : %f", headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f);
+		targetPosition_.y += addHeadBob;
+	}
+
+	if (headBobTimer_ <= 0.0f)
+	{
+		isPositive_ = true;
+	}
+	else if (headBobTimer_ >= HEAD_BOB_TIME)
+	{
+		isPositive_ = false;
 	}
 }
 

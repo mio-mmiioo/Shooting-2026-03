@@ -20,11 +20,12 @@ public:
 
 private:
 	void FirstUpdate();		// 一人称カメラの更新処理
-	void ModifiedFirstUpdate(); // 書き直しの一人称カメラ
 	void ThirdUpdate();		// 三人称カメラの更新処理
-	void ModifiedThirdUpdate(); // 書き直しの三人称カメラ
 	void FixUpdate();		// 固定カメラの更新処理
 	void ChangeCamera();	// カメラの切り替え処理
+
+	void HeadBob();			// 歩いている風に見せる処理
+
 	void ImGuiInput();		// 開発時のみ使用する
 
 	Transform player_;	// プレイヤーの情報
@@ -39,9 +40,9 @@ private:
 	VECTOR3 targetPosition_; // 注視点の位置
 	VECTOR3 fixAddPosition_; // 固定カメラの時に使用する、加算された位置
 
-	VECTOR3 prevPlayerPosition_; // 前回のプレイヤーの位置
-	Data::PlayerPhase phaseData_; // プレイヤーの各フェーズの情報
-	Data::PlayerPhase nextPhaseData_; // プレイヤーの次のフェーズの情報
+	// カメラを上下左右に動かす
+	float headBobTimer_; // ヘッドボブ
+	bool isPositive_; // 正の数か
 
 	int wheelRot_; // マウスホイール
 	bool isMoveFixCamera_; // 固定カメラの移動フラグ

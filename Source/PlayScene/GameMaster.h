@@ -1,5 +1,6 @@
 #pragma once
 #include "../../MyLibrary/Object3D.h"
+#include "../Data.h"
 
 namespace GameMaster
 {
@@ -9,6 +10,7 @@ namespace GameMaster
 	int Release();	// 解放処理
 
 	int GetPlayerPhaseCount(); // プレイヤーの移動フェーズのカウントを取得する
+	Data::P_STATE GetPlayerState();
 	int AddPhaseCount(); // 移動フェーズのカウントを増やす　player.cppで呼び出す
 
 	bool GetIsDebug(); // true → debugの処理が描画される

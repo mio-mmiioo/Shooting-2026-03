@@ -288,6 +288,7 @@ void Player::DevelopmentInput()
 
 void Player::AutoMove()
 {
+	SetMoveSpeed(100.0f);
 	int phaseCount = GameMaster::GetPlayerPhaseCount();
 	Data::GetPlayerPhase(phaseCount, &phaseData_);
 	float distance = VSize(phaseData_.position - transform_.position_);
@@ -300,6 +301,8 @@ void Player::AutoMove()
 	// –Ú“I’n‚Ü‚Å‚Ì‹——£‚ªˆê’è‚æ‚è¬‚³‚¢ê‡@
 	else if (distance < phaseData_.distance1)
 	{
+		SetMoveSpeed(60.0f);
+
 		float min = phaseData_.distance1;
 		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_); // Œü‚©‚¤êŠ‚Ìî•ñ‚ğæ“¾
 		//float t = distance / min;
@@ -335,4 +338,9 @@ void Player::AutoMove()
 			phaseTimer_ = phaseData_.time;
 		}
 	}
+}
+
+void Player::SetMoveSpeed(float speed)
+{
+	moveSpeed_ = speed;
 }

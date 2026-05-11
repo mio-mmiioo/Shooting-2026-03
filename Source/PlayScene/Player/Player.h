@@ -14,10 +14,12 @@ public:
 	void Draw() override;
 	void AddHp(int add) override; // 体力を増減させる
 	int GetHp() { return hp_; } // 体力を返す
+	Data::P_STATE GetState() { return state_; }
 
 private:
 	void DevelopmentInput(); // 開発時のみに使用する入力処理
 	void AutoMove(); // 自動移動の処理
+	void SetMoveSpeed(float speed); // 指定した速度で移動する
 
 	Gun* gun_;				// 銃弾関連
 	PlayerHp* playerHp_;	// hpバーの表示関連
