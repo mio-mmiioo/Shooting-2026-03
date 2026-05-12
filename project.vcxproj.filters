@@ -114,6 +114,12 @@
     <ClCompile Include="MyLibrary\Observer.cpp">
       <Filter>MyLibrary</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Camera\PerlinNoise.cpp">
+      <Filter>PlayScene\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLibrary\Animator.cpp">
+      <Filter>MyLibrary</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -243,6 +249,12 @@
       <Filter>PlayScene\Player</Filter>
     </ClInclude>
     <ClInclude Include="MyLibrary\Observer.h">
+      <Filter>MyLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Camera\PerlinNoise.h">
+      <Filter>PlayScene\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLibrary\Animator.h">
       <Filter>MyLibrary</Filter>
     </ClInclude>
   </ItemGroup>

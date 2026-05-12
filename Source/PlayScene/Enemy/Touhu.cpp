@@ -1,8 +1,10 @@
 #include "Touhu.h"
 #include "../../../MyLibrary/Collision.h"
+#include "../../../MyLibrary/Animator.h"
 #include "../../Data.h"
-//#include "../Stage/WayInfo.h"
 #include "../Stage/StageSearch.h"
+
+#include <assert.h>
 
 namespace TOUHU
 {
@@ -42,6 +44,21 @@ Touhu::Touhu(Data::ObjectData objectData, Data::CharacterData characterData)
 		
 		Collision::AddObject(this);
 	}
+
+	// Animatorの設定
+	{
+		animator_ = new Animator(hModel_);
+		assert(animator_ != nullptr);
+
+		std::string folder = "data/model/Anim/" + objectData.name;
+		int root = MV1SearchFrame(hModel_, "root");
+		MV1SetFrameUserLocalMatrix(hModel_, root, MGetRotY(DX_PI_F));
+
+		animator_->AddFile(A_NEUTRAL, folder + "/Anim_Neutral.mv1", true);
+		animator_->AddFile(A_WALK,	  folder + "/Anim_Walk.mv1",	true);
+		animator_->AddFile(A_ATTACK1, folder + "/Anim_Attack1.mv1", false);
+		animator_->AddFile(A_DOWN,	  folder + "/Anim_Down.mv1",	false);
+	}
 	goPosition_ = transform_.position_;
 	state_ = TOUHU_STATE::STAY;
 	isArrive_ = true;
@@ -50,6 +67,12 @@ Touhu::Touhu(Data::ObjectData objectData, Data::CharacterData characterData)
 
 Touhu::~Touhu()
 {
+	if (animator_ != nullptr)
+	{
+		delete animator_;
+		animator_ = nullptr;
+	}
+
 	if (hModel_ > 0)
 	{
 		MV1DeleteModel(hModel_);
@@ -64,19 +87,26 @@ Touhu::~Touhu()
 
 void Touhu::Update()
 {
-	// 体力が0の場合
-	if (hp_ <= 0)
-	{
-		PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
-		Enemy::SetObserver("touhu", true);
-		Collision::DeleteObject(this);
-		DestroyMe();
-		return;
-	}
+	animator_->Update();
+
 	// 前回のHPより減っている場合ダメージの音を鳴らす
 	if (prevHp_ > hp_)
 	{
-		PlaySoundMem(Data::se["attackEnemy"], DX_PLAYTYPE_BACK, TRUE);
+		if (hp_ <= 0)
+		{
+			PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
+		}
+		else
+		{
+			PlaySoundMem(Data::se["attackEnemy"], DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+
+	// 体力が0の場合
+	if (hp_ <= 0)
+	{
+		DownUpdate();
+		return;
 	}
 
 	// 状態によって更新処理を行う
@@ -144,6 +174,8 @@ void Touhu::DevelopmentInput()
 
 void Touhu::WalkUpdate()
 {
+	animator_->Play(A_WALK);
+
 	VECTOR3 e = transform_.position_; // 自身の場所
 	VECTOR3 p = Enemy::GetPlayerPosition();	// プレイヤーの場所
 	float distance;
@@ -186,7 +218,9 @@ void Touhu::WalkUpdate()
 
 void Touhu::StayUpdate()
 {
-	// プレイヤーとの距離が開いた場合、状態を移動にする
+	animator_->Play(A_NEUTRAL);
+
+	// プレイヤーとの距離が開いた場合、状態をWALKにする
 	{
 		VECTOR3 p = Enemy::GetPlayerPosition();
 		VECTOR3 e = transform_.position_;
@@ -198,6 +232,7 @@ void Touhu::StayUpdate()
 	}
 
 	stateTimer_ += Time::DeltaTime();
+	// プレイヤーの付近で、一定時間経過した場合、状態をATTACKにする
 	if (stateTimer_ > TOUHU::STAY_TIME)
 	{
 		stateTimer_ -= TOUHU::STAY_TIME;
@@ -207,7 +242,21 @@ void Touhu::StayUpdate()
 
 void Touhu::AttackUpdate()
 {
+	animator_->Play(A_ATTACK1);
+
 	// 一回攻撃をしたらSTAYに戻る
 	Enemy::AttackPlayer(TOUHU::ATTACK_POWER);
 	state_ = TOUHU_STATE::STAY; 
+}
+
+void Touhu::DownUpdate()
+{
+	animator_->Play(A_DOWN);
+
+	if (animator_->IsFinish() == true)
+	{
+		Enemy::SetObserver("touhu", true);
+		Collision::DeleteObject(this);
+		DestroyMe();
+	}
 }
