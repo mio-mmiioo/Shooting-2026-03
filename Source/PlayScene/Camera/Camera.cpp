@@ -18,7 +18,7 @@ namespace
 	const float HEAD_BOB_INTENSITY = 10.0f;
 
 	// パーリンノイズ関連　自然に見えるように揺らす
-	const float PERLIN_NOISE_INTENSITY = 5.0f;
+	const float PERLIN_NOISE_INTENSITY = 2.5f;
 	const float PERLIN_NOISE_TIME = 0.5f;
 
 	// 一人称視点関連
@@ -173,7 +173,6 @@ void Camera::HeadBob()
 		}
 		float addHeadBob = sin(headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f) * HEAD_BOB_INTENSITY;
 		cameraPosition_.y += addHeadBob;
-		//ImGui::Text("headBobTimer : %f", headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f);
 		targetPosition_.y += addHeadBob;
 	}
 
@@ -195,17 +194,11 @@ void Camera::PerlinNoise()
 		noise_ = PerlinNoise::Noise(cameraPosition_);
 		noiseTimer_ = PERLIN_NOISE_TIME;
 	}
-	ImGui::Text("noise : %f", noise_);
 
 	VECTOR3 move = player_.position_ - prevPlayerPosition_;
-	if (move.x > move.z)
-	{
-		cameraPosition_.z += noise_ * PERLIN_NOISE_INTENSITY;
-	}
-	else
-	{
-		cameraPosition_.x += noise_ * PERLIN_NOISE_INTENSITY;
-	}
+	VECTOR3 normal = { -move.z, 0.0f, move.x }; // 法線ベクトル　成分を入れ替えて、片方の符号を反転
+	normal = VNorm(normal);
+	cameraPosition_ += normal * (noise_ - 0.5f) * PERLIN_NOISE_INTENSITY;
 }
 
 void Camera::ImGuiInput()
@@ -220,7 +213,7 @@ void Camera::ImGuiInput()
 
 	VECTOR3 p = cameraPosition_;
 	ImGui::Text("x : %04d, y : %04d, z : %04d", (int)p.x, (int)p.y, (int)p.z);
-
+	ImGui::Text("noise : %f", noise_);
 	switch (state)
 	{
 	case CAM_STATE::FIRST:

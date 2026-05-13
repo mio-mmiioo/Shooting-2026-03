@@ -154,8 +154,6 @@ void Touhu::Draw()
 	DrawLine3D(transform_.position_ + LOOK_HEIGHT,
 		transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), GetColor(255,255,255));
 
-	//MV1DrawModel(hitModel_);
-
 	// 撃ってほしい部分を半透明の〇で表示する if文の条件と〇のサイズで不具合発生中
 	{
 		//VECTOR3 hit;
@@ -181,7 +179,6 @@ void Touhu::WalkUpdate()
 	float distance;
 	if (isArrive_ == true)
 	{
-		//goPosition_ = WayInfo::GetShortestWayPosition(e, p);
 		goPosition_ = StageSearch::GetShortestWayPosition(e, p);
 		isArrive_ = false;
 	}
