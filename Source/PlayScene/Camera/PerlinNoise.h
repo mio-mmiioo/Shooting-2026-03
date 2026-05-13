@@ -3,5 +3,5 @@
 
 namespace PerlinNoise
 {
-	VECTOR3 noise(VECTOR3 p);
+	float Noise(VECTOR3 p);
 }

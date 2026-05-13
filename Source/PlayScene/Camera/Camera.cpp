@@ -2,8 +2,9 @@
 #include "../../../MyLibrary/Input.h"
 #include "../../../ImGui/imgui.h"
 #include "../../../MyLibrary/Collision.h"
-#include "../GameMaster.h"
 #include "../../Data.h"
+#include "../GameMaster.h"
+#include "PerlinNoise.h"
 
 namespace
 {
@@ -15,6 +16,10 @@ namespace
 	// ヘッドボブ関連
 	const float HEAD_BOB_TIME = 1.0f;
 	const float HEAD_BOB_INTENSITY = 10.0f;
+
+	// パーリンノイズ関連　自然に見えるように揺らす
+	const float PERLIN_NOISE_INTENSITY = 5.0f;
+	const float PERLIN_NOISE_TIME = 0.5f;
 
 	// 一人称視点関連
 	const float FIRST_DISTANCE = 300.0f; // 視点と注視点の距離
@@ -34,7 +39,7 @@ Camera::Camera()
 {
 	GetMousePoint(&prevMouseX_, &prevMouseY_);
 	fixAddPosition_ = VECTOR3(-5000.0f, 0.0f, 0.0f);
-	//prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
+	prevPlayerPosition_ = VECTOR3(0.0f, 0.0f, 0.0f);
 	FixUpdate();
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
 	state_ = CAM_STATE::FIRST;
@@ -44,6 +49,8 @@ Camera::Camera()
 	transform_.position_ = cameraPosition_;
 
 	headBobTimer_ = HEAD_BOB_TIME;
+	noiseTimer_ = PERLIN_NOISE_TIME;
+	noise_ = PerlinNoise::Noise(player_.position_);
 	isPositive_ = false;
 }
 
@@ -80,6 +87,7 @@ void Camera::Update()
 
 	// カメラの位置をセット
 	SetCameraPositionAndTarget_UpVecY(cameraPosition_, targetPosition_);
+	prevPlayerPosition_ = player_.position_;
 }
 
 void Camera::SetPlayerPosition(Transform transform)
@@ -93,6 +101,7 @@ void Camera::FirstUpdate()
 	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
 
 	HeadBob(); // 歩いている風に見せる処理
+	PerlinNoise(); // ランダムに揺らして、自然に見せる処理
 }
 
 void Camera::ThirdUpdate()
@@ -175,6 +184,27 @@ void Camera::HeadBob()
 	else if (headBobTimer_ >= HEAD_BOB_TIME)
 	{
 		isPositive_ = false;
+	}
+}
+
+void Camera::PerlinNoise()
+{
+	noiseTimer_ -= Time::DeltaTime();
+	if (noiseTimer_ <= 0.0f)
+	{
+		noise_ = PerlinNoise::Noise(cameraPosition_);
+		noiseTimer_ = PERLIN_NOISE_TIME;
+	}
+	ImGui::Text("noise : %f", noise_);
+
+	VECTOR3 move = player_.position_ - prevPlayerPosition_;
+	if (move.x > move.z)
+	{
+		cameraPosition_.z += noise_ * PERLIN_NOISE_INTENSITY;
+	}
+	else
+	{
+		cameraPosition_.x += noise_ * PERLIN_NOISE_INTENSITY;
 	}
 }
 
