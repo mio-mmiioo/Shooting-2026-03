@@ -160,6 +160,8 @@ void Data::InitModel()
 	models["enemy000_c"] = MV1LoadModel("data/model/enemy000_c.mv1");
 	models["enemy001"]	 = MV1LoadModel("data/model/tamesi/enemy001.mv1"); // “¤•…
 	models["enemy001_c"] = MV1LoadModel("data/model/tamesi/enemy001_c.mv1");
+	models["enemy002"]   = MV1LoadModel("data/model/enemy000.mv1"); // •—‘D model‚Í‚Ü‚¾
+	models["enemy002_c"] = MV1LoadModel("data/model/enemy000_c.mv1");
 
 	// Œš•¨
 	models["Stage_Obj002"]	 = MV1LoadModel("data/model/Stage_Obj002.mv1");

@@ -6,6 +6,7 @@ namespace Enemy
 	enum E_SORT {
 		STONE,
 		TOUHU,
+		BALLOON,
 		MAX_E_SORT
 	};
 

@@ -120,6 +120,9 @@
     <ClCompile Include="MyLibrary\Animator.cpp">
       <Filter>MyLibrary</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Enemy\Balloon.cpp">
+      <Filter>PlayScene\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="MyLibrary\Animator.h">
       <Filter>MyLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Enemy\Balloon.h">
+      <Filter>PlayScene\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

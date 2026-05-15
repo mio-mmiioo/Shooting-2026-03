@@ -14,9 +14,10 @@ class Camera : public Object3D
 {
 public:
 	Camera();
-	~Camera();
+	~Camera() override;
 	void Update() override;
-	void SetPlayerPosition(Transform transform);
+	void SetPlayerPosition(Transform transform);	// プレイヤーの位置をセット
+	void Damage();									// プレイヤーが攻撃された時のカメラの処理
 
 private:
 	void FirstUpdate();		// 一人称カメラの更新処理

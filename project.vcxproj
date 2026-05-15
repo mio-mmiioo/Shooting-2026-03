@@ -166,6 +166,7 @@
     <ClInclude Include="Source\Data.h" />
     <ClInclude Include="Source\PlayScene\Camera\Camera.h" />
     <ClInclude Include="Source\PlayScene\Camera\PerlinNoise.h" />
+    <ClInclude Include="Source\PlayScene\Enemy\Balloon.h" />
     <ClInclude Include="Source\PlayScene\Enemy\Enemy.h" />
     <ClInclude Include="Source\PlayScene\Enemy\Stone.h" />
     <ClInclude Include="Source\PlayScene\Enemy\Touhu.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="Source\Data.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\PerlinNoise.cpp" />
+    <ClCompile Include="Source\PlayScene\Enemy\Balloon.cpp" />
     <ClCompile Include="Source\PlayScene\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\PlayScene\Enemy\Stone.cpp" />
     <ClCompile Include="Source\PlayScene\Enemy\Touhu.cpp" />

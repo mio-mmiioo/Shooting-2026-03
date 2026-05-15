@@ -18,7 +18,7 @@ namespace
 	const float HEAD_BOB_INTENSITY = 10.0f;
 
 	// パーリンノイズ関連　自然に見えるように揺らす
-	const float PERLIN_NOISE_INTENSITY = 2.5f;
+	const float PERLIN_NOISE_INTENSITY = 5.0f;
 	const float PERLIN_NOISE_TIME = 0.5f;
 
 	// 一人称視点関連
@@ -100,8 +100,11 @@ void Camera::FirstUpdate()
 	cameraPosition_ = player_.position_ + LOOK_HEIGHT; // 目線の高さに合わせている
 	targetPosition_ = player_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * FIRST_DISTANCE * MGetRotY(player_.rotation_.y);
 
-	HeadBob(); // 歩いている風に見せる処理
-	PerlinNoise(); // ランダムに揺らして、自然に見せる処理
+	if (GameMaster::GetPlayerState() == Data::P_STATE::MOVE)
+	{
+		HeadBob(); // 歩いている風に見せる処理
+		PerlinNoise(); // ランダムに揺らして、自然に見せる処理
+	}
 }
 
 void Camera::ThirdUpdate()
@@ -158,23 +161,19 @@ void Camera::ChangeCamera()
 
 void Camera::HeadBob()
 {
-	// プレイヤーが歩いている場合
-	if (GameMaster::GetPlayerState() == Data::P_STATE::MOVE)
+	// タイマーを増加させる
+	if (isPositive_ == true)
 	{
-		// タイマーを増加させる
-		if (isPositive_ == true)
-		{
-			headBobTimer_ += Time::DeltaTime();
-		}
-		// タイマーを減少させる
-		else
-		{
-			headBobTimer_ -= Time::DeltaTime();
-		}
-		float addHeadBob = sin(headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f) * HEAD_BOB_INTENSITY;
-		cameraPosition_.y += addHeadBob;
-		targetPosition_.y += addHeadBob;
+		headBobTimer_ += Time::DeltaTime();
 	}
+	// タイマーを減少させる
+	else
+	{
+		headBobTimer_ -= Time::DeltaTime();
+	}
+	float addHeadBob = sin(headBobTimer_ / HEAD_BOB_TIME * 2.0f - 1.0f) * HEAD_BOB_INTENSITY;
+	cameraPosition_.y += addHeadBob;
+	targetPosition_.y += addHeadBob;
 
 	if (headBobTimer_ <= 0.0f)
 	{
@@ -198,7 +197,8 @@ void Camera::PerlinNoise()
 	VECTOR3 move = player_.position_ - prevPlayerPosition_;
 	VECTOR3 normal = { -move.z, 0.0f, move.x }; // 法線ベクトル　成分を入れ替えて、片方の符号を反転
 	normal = VNorm(normal);
-	cameraPosition_ += normal * (noise_ - 0.5f) * PERLIN_NOISE_INTENSITY;
+	// カメラの位置　+= 正規化した方向ベクトル * (-0.5~0.5) * 定数 * ((最大の時間　- 時間) / 最大の時間)
+	cameraPosition_ += normal * (noise_ - 0.5f) * PERLIN_NOISE_INTENSITY * ((PERLIN_NOISE_TIME - noiseTimer_) / PERLIN_NOISE_TIME);
 }
 
 void Camera::ImGuiInput()

@@ -5,6 +5,7 @@
 // 各敵のヘッダー
 #include "Stone.h"
 #include "Touhu.h"
+#include "Balloon.h"
 
 namespace Enemy
 {
@@ -39,6 +40,8 @@ void Enemy::CreateEnemy(Data::ObjectData objectData)
 	case E_SORT::TOUHU:
 		new Touhu(objectData, Data::characterDataList["touhu"]);
 		break;
+	case E_SORT::BALLOON:
+		new Balloon(objectData, Data::characterDataList["balloon"]);
 	}
 }
 
