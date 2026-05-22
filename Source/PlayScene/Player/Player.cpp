@@ -33,6 +33,7 @@ Player::Player(Data::ObjectData objectData, Data::CharacterData characterData)
 	Data::SetImage("hitAiming", &hitAiming_);
 	Data::SetImage("reload", &reload_);
 
+	// characterData‚Ìî•ñ‚Ì‘ã“ü
 	rotateSpeed_ = characterData.rotateSpeed;
 	moveSpeed_ = characterData.moveSpeed;
 	distanceR_ = characterData.distanceR;
@@ -186,21 +187,23 @@ void Player::Draw()
 	playerHp_->Draw();
 
 	// Æ€‚Ì•`‰æ
-	int x = (int)Input::GetMousePosition().x;
-	int y = (int)Input::GetMousePosition().y;
-	if (isHit_ == true)
 	{
-		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
-	}
-	else
-	{
-		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
-	}
+		int x = (int)Input::GetMousePosition().x;
+		int y = (int)Input::GetMousePosition().y;
+		if (isHit_ == true)
+		{
+			DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
+		}
+		else
+		{
+			DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
+		}
 
-	if (gun_->GetReloadTimer() > 0)
-	{
-		float rate = (gun_->GetReloadTime() - gun_->GetReloadTimer()) / gun_->GetReloadTime() * 100; // (max‚ÌŠÔ - c‚èŠÔ) / max‚ÌŠÔ * 100 = ZZ%
-		DrawCircleGauge(x, y, 100.0, reload_.hImage, rate);
+		if (gun_->GetReloadTimer() > 0)
+		{
+			float rate = (gun_->GetReloadTime() - gun_->GetReloadTimer()) / gun_->GetReloadTime() * 100; // (max‚ÌŠÔ - c‚èŠÔ) / max‚ÌŠÔ * 100 = ZZ%
+			DrawCircleGauge(x, y, 100.0, reload_.hImage, rate);
+		}
 	}
 }
 
@@ -217,7 +220,7 @@ void Player::DevelopmentInput()
 		ImGui::Begin("Player");
 		ImGui::Text("position");
 		float p[3] = { t.position_.x, t.position_.y, t.position_.z };
-		ImGui::SliderFloat3("position", p, 0.0f, 10000.0f);
+		ImGui::SliderFloat3("position", p, -5000.0f, 5000.0f);
 
 		ImGui::Text("rotation");
 		float r[3] = { t.rotation_.x, t.rotation_.y, t.rotation_.z };
@@ -288,7 +291,7 @@ void Player::DevelopmentInput()
 
 void Player::AutoMove()
 {
-	SetMoveSpeed(100.0f);
+	//SetMoveSpeed(100.0f);
 	int phaseCount = GameMaster::GetPlayerPhaseCount();
 	Data::GetPlayerPhase(phaseCount, &phaseData_);
 	float distance = VSize(phaseData_.position - transform_.position_);
@@ -301,12 +304,8 @@ void Player::AutoMove()
 	// –Ú“I’n‚Ü‚Å‚Ì‹——£‚ªˆê’è‚æ‚è¬‚³‚¢ê‡@
 	else if (distance < phaseData_.distance1)
 	{
-		SetMoveSpeed(60.0f);
-
-		float min = phaseData_.distance1;
+		//SetMoveSpeed(60.0f);
 		Data::GetPlayerPhase(phaseCount + 1, &nextPhaseData_); // Œü‚©‚¤êŠ‚Ìî•ñ‚ğæ“¾
-		//float t = distance / min;
-		//VECTOR3 position = phaseData_.position * t + nextPhaseData_.position * (1.0f - t);
 
 		VECTOR3 toGo = nextPhaseData_.position - transform_.position_;
 		VECTOR3 front = VECTOR3(0, 0, 1) * MGetRotY(transform_.rotation_.y); // ³–Ê

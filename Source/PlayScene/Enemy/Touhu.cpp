@@ -1,6 +1,7 @@
 #include "Touhu.h"
 #include "../../../MyLibrary/Collision.h"
 #include "../../../MyLibrary/Animator.h"
+#include "../../../ImGui/imgui.h"
 #include "../../Data.h"
 #include "../Stage/StageSearch.h"
 
@@ -90,11 +91,13 @@ void Touhu::Update()
 	animator_->Update();
 
 	// 前回のHPより減っている場合ダメージの音を鳴らす
-	if (prevHp_ > hp_)
+	if (prevHp_ > hp_ && hp_ >= 0)
 	{
 		if (hp_ <= 0)
 		{
 			PlaySoundMem(Data::se["breakEnemy"], DX_PLAYTYPE_BACK, TRUE);
+			Collision::DeleteObject(this); // 倒された後は、他のキャラの行動の妨げにならないようにする
+			prevHp_ = hp_;
 		}
 		else
 		{
@@ -177,11 +180,13 @@ void Touhu::WalkUpdate()
 	VECTOR3 e = transform_.position_; // 自身の場所
 	VECTOR3 p = Enemy::GetPlayerPosition();	// プレイヤーの場所
 	float distance;
+	// 目的地に到着している場合、次に向かうべき場所を取得する
 	if (isArrive_ == true)
 	{
-		goPosition_ = StageSearch::GetShortestWayPosition(e, p);
+		goPosition_ = StageSearch::GetShortestWayPosition(e, p); // プレイヤーに最短経路で向かう座標を取得
 		isArrive_ = false;
 	}
+	// 目的地に到着していない場合、目的地に到着したか確認する
 	else
 	{
 		distance = Data::characterDataList["touhu"].distanceCurrentAndGo;
@@ -198,19 +203,23 @@ void Touhu::WalkUpdate()
 		state_ = TOUHU_STATE::ATTACK;
 	}
 
+	// 移動処理
 	if (isArrive_ == false)
 	{
 		VECTOR3 hit;
+		// プレイヤーと自身の間に障害物がある場合
 		if (Collision::CheckLineHitObjectA(transform_.position_, p + LOOK_HEIGHT) == true)
 		{
-			SetMove(goPosition_);
+			SetMove(goPosition_); // プレイヤーに最短経路で向かう座標へ移動
 		}
 		else
 		{
-			SetMove(p);
+			SetMove(p); // プレイヤーに向かって直進する
 		}
 
 	}
+
+	ImGui::Text("hp:%d", hp_);
 }
 
 void Touhu::StayUpdate()
@@ -253,7 +262,6 @@ void Touhu::DownUpdate()
 	if (animator_->IsFinish() == true)
 	{
 		Enemy::SetObserver("touhu", true);
-		Collision::DeleteObject(this);
 		DestroyMe();
 	}
 }
