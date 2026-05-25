@@ -123,6 +123,9 @@
     <ClCompile Include="Source\PlayScene\Enemy\Balloon.cpp">
       <Filter>PlayScene\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MenuScene\MenuScene.cpp">
+      <Filter>MenuScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Screen.h" />
@@ -263,6 +266,9 @@
     <ClInclude Include="Source\PlayScene\Enemy\Balloon.h">
       <Filter>PlayScene\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MenuScene\MenuScene.h">
+      <Filter>MenuScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Library">
@@ -297,6 +303,9 @@
     </Filter>
     <Filter Include="PlayScene\Camera">
       <UniqueIdentifier>{ae98e7fe-0776-4c2b-90ac-913fdcadf5b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MenuScene">
+      <UniqueIdentifier>{daa63d05-4544-4596-8820-12ff9d5debfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

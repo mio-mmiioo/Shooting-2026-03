@@ -164,6 +164,7 @@
     <ClInclude Include="MyLibrary\Observer.h" />
     <ClInclude Include="Source\BootScene.h" />
     <ClInclude Include="Source\Data.h" />
+    <ClInclude Include="Source\MenuScene\MenuScene.h" />
     <ClInclude Include="Source\PlayScene\Camera\Camera.h" />
     <ClInclude Include="Source\PlayScene\Camera\PerlinNoise.h" />
     <ClInclude Include="Source\PlayScene\Enemy\Balloon.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="MyLibrary\Observer.cpp" />
     <ClCompile Include="Source\BootScene.cpp" />
     <ClCompile Include="Source\Data.cpp" />
+    <ClCompile Include="Source\MenuScene\MenuScene.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\Camera.cpp" />
     <ClCompile Include="Source\PlayScene\Camera\PerlinNoise.cpp" />
     <ClCompile Include="Source\PlayScene\Enemy\Balloon.cpp" />

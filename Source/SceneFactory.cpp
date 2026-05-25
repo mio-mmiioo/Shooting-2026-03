@@ -2,7 +2,10 @@
 #include <windows.h>
 #include <assert.h>
 #include "BootScene.h"
+
+// í«â¡ÇµÇΩÉVÅ[Éì
 #include "TitleScene/TitleScene.h"
+#include "MenuScene/MenuScene.h"
 #include "PlayScene/PlayScene.h"
 #include "ResultScene/ResultScene.h"
 
@@ -16,6 +19,10 @@ SceneBase * SceneFactory::Create(const std::string & name)
 	if (name == "TITLE")
 	{
 		return new TitleScene();
+	}
+	if (name == "MENU")
+	{
+		return new MenuScene();
 	}
 	if (name == "PLAY")
 	{

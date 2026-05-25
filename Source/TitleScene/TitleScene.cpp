@@ -25,7 +25,7 @@ void TitleScene::Update()
 {
 	if (Input::IsKeyDown("outBullet"))
 	{
-		SceneManager::ChangeScene("PLAY");
+		SceneManager::ChangeScene("MENU");
 	}
 	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
 		SceneManager::Exit();
