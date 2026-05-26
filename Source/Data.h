@@ -53,10 +53,11 @@ namespace Data
 	};
 
 	void Init(); // 初期化
-	void SetImage(std::string name, image* i); // iにnameの画像をセットする
+	void SetImage(std::string name, image* i);	// iにnameの画像をセットする
 	int GetPlayerPhase(int phaseCount, PlayerPhase* phase);
 	extern std::map<std::string, CharacterData> characterDataList; // 各キャラクターのデータのリスト
-	extern std::map<std::string, int> images; // ゲームで使用する画像
-	extern std::map<std::string, int> models; // 使用するモデル
-	extern std::map<std::string, int> se; // 使用する音源
+	extern std::map<std::string, int> images;	// ゲームで使用する画像
+	extern std::map<std::string, int> models;	// 使用するモデル
+	extern std::map<std::string, int> se;		// 使用する音源
+	extern std::map<std::string, int> movies;	// 使用する動画
 }

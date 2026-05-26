@@ -24,6 +24,9 @@ public:
 	bool GetIsClickArea() { return isClickArea_; } // true → マウスで指定した範囲をクリック
 	bool GetIsOnArea() { return isOnArea_; } // true → マウスで指定した範囲上にいる
 
+	int GetNormalGraph() { return normal_.hImage; } // 通常時の画像を取得
+	int GetSelectGraph() { return select_.hImage; } // 選択時の画像を取得
+
 private:
 	area normal_;		// 通常時
 	area select_;		// 選択中

@@ -36,12 +36,14 @@ namespace Data
 	std::map<std::string, int> images;
 	std::map<std::string, int> models;
 	std::map<std::string, int> se;
+	std::map<std::string, int> movies;
 
 	void InitPlayerPhase(); // プレイヤーの行動を管理するためのデータの読み込み
 	void InitCharacterDataList(); // キャラクターのデータの読み込み
 	void InitImage(); // 画像データの読み込み
 	void InitModel(); // モデルデータの読み込み
 	void InitSound(); // 音源データの読み込み
+	void InitMovie(); // 動画データの読み込み
 }
 
 void Data::Init()
@@ -192,4 +194,9 @@ void Data::InitSound()
 	se["reload"]		= LoadSoundMem("data/sound/reload.mp3");
 	se["attackEnemy"]	= LoadSoundMem("data/sound/attackEnemy.mp3");
 	se["breakEnemy"]	= LoadSoundMem("data/sound/breakEnemy.mp3");
+}
+
+void Data::InitMovie()
+{
+	movies["tutorial"] = LoadGraph("data/movie/tutorial.mp4");
 }

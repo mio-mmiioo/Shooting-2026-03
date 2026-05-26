@@ -48,7 +48,7 @@ void Button::Update()
 	// マウスがボタン上にある
 	if (normal_.leftTop.x < x && x < normal_.rightDown.x)
 	{
-		if (normal_.leftTop.y < y&& y < normal_.rightDown.y)
+		if (normal_.leftTop.y < y && y < normal_.rightDown.y)
 		{
 			isOnArea_ = true;
 		}
