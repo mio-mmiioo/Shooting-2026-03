@@ -154,19 +154,8 @@ void Touhu::Draw()
 	Object3D::Draw();
 
 	// 向いている方向
-	DrawLine3D(transform_.position_ + LOOK_HEIGHT,
-		transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), GetColor(255,255,255));
-
-	// 撃ってほしい部分を半透明の〇で表示する if文の条件と〇のサイズで不具合発生中
-	{
-		//VECTOR3 hit;
-		//// 敵自身とプレイヤーの直線距離に障害物がないことを確認する
-		//if (Collision::CheckLineHitObjectA(transform_.position_, Enemy::GetPlayerPosition() + LOOK_HEIGHT) == false)
-		//{
-		//	VECTOR3 weakPoint = ConvWorldPosToScreenPos(transform_.position_ + TOUHU::ADD_WEAK_POSITION); // ワールドスクリーン座標変換をする
-		//	Enemy::DrawWeakPoint("touhu", hp_, weakPoint);
-		//}
-	}
+	//DrawLine3D(transform_.position_ + LOOK_HEIGHT,
+	//	transform_.position_ + LOOK_HEIGHT + VECTOR3(0, 0, 1) * TOUHU::DIRECTION_LENGTH * MGetRotY(transform_.rotation_.y), GetColor(255,255,255));
 }
 
 void Touhu::DevelopmentInput()

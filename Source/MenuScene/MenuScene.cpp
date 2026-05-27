@@ -3,34 +3,48 @@
 
 namespace MENU_SCENE
 {
-	const int MOVIE_MAX_TIME = 20000; // 1つの動画を再生する最大の時間( ミリ秒 )
+	const int MOVIE_MAX_TIME = 20000;	// 1つの動画を再生する最大の時間( ミリ秒 )
+	const int SELECT_LINE_WIDTH = 5;	// 選択されているコースを囲む枠の太さ
+	const int SELECT_LINE_COLOR = GetColor(255, 0, 0); // 選択されているコースを囲む枠の色
 }
 
 MenuScene::MenuScene()
 {
-	area normal;
-	normal.hImage = LoadGraph("data/movie/tutorial.mp4");
-	normal.leftTop = { 100.0f, 100.0f };
-	normal.rightDown = { 400.0f, 300.0f };
-	area select;
-	select.hImage = LoadGraph("data/movie/tutorial.mp4");
-	select.leftTop = { 50.0f, 50.0f };
-	select.rightDown = { 450.0f, 350.0f };
+	// courses_に値を代入
+	{
+		area tutorial	= { {100.0f, 100.0f}, {400.0f, 300.0f}, LoadGraph("data/movie/tutorial.mp4") }; // チュートリアル
+		area course1	= { {600.0f, 100.0f}, {900.0f, 300.0f}, Data::images["titleBackground"] };
+		area course2	= { {100.0f, 400.0f}, {400.0f, 600.0f}, Data::images["titleBackground"] };
+		area course3	= { {600.0f, 400.0f}, {900.0f, 600.0f}, Data::images["titleBackground"] };
 
-	// この初期化、見た目が悪い
-	course_[COURSE::TUTORIAL] = new Button(normal, select);
-	course_[COURSE::COURSE1] = nullptr;
-	course_[COURSE::COURSE2] = nullptr;
-	course_[COURSE::COURSE3] = nullptr;
+		courses_[COURSE::TUTORIAL] = tutorial;
+		courses_[COURSE::COURSE1] = course1;
+		courses_[COURSE::COURSE2] = course2;
+		courses_[COURSE::COURSE3] = course3;
+	}
+	
+	isMouseOnArea_ = false;
+
+	// 照準の画像をセット
+	Data::SetImage("aiming", &aiming_);
+	Data::SetImage("hitAiming", &hitAiming_);
+
+	currentSelect_ = courses_[COURSE::TUTORIAL]; // 現在選択しているコースとして、チュートリアルコースをセットする
 }
 
 MenuScene::~MenuScene()
 {
-
+	// この処理を入れないと動画がプレイシーンでも流れ続ける
+	for (int i = 0; i < COURSE::MAX_COURSE; i++)
+	{
+		PauseMovieToGraph(courses_[i].hImage); // 再生を止める
+	}
 }
 
 void MenuScene::Update()
 {
+	isMouseOnArea_ = false;
+
 	if (Input::IsKeyDown("outBullet"))
 	{
 		SceneManager::ChangeScene("PLAY");
@@ -39,40 +53,51 @@ void MenuScene::Update()
 		SceneManager::Exit();
 	}
 
-	for (int i = 0; i < 5; i++)
+	// 照準がコースの画像上にある場合、動画を再生する
 	{
-		if (course_[i] == nullptr)
+		for (int i = 0; i < COURSE::MAX_COURSE; i++)
 		{
-			return;
-		}
-
-		course_[i]->Update();
-
-		// 照準がステージの画像上にある場合、動画を再生する
-		if (course_[i]->GetIsOnArea())
-		{
-			PlayMovieToGraph(course_[i]->GetSelectGraph());
-			// 動画が一定時間再生された場合
-			if (TellMovieToGraph(course_[i]->GetSelectGraph()) > MENU_SCENE::MOVIE_MAX_TIME)
+			if (ClickArea::IsMosueInArea(courses_[i]) == true)
 			{
-				SeekMovieToGraph(course_[i]->GetSelectGraph(), 0); // 開始位置を最初に戻す
+				PlayMovieToGraph(courses_[i].hImage);
+				// 動画が一定時間再生された場合
+				if (TellMovieToGraph(courses_[i].hImage) > MENU_SCENE::MOVIE_MAX_TIME)
+				{
+					SeekMovieToGraph(courses_[i].hImage, 0); // 開始位置を最初に戻す
+				}
+				isMouseOnArea_ = true;
+				currentSelect_ = courses_[i];
 			}
-		}
-		else
-		{
-			SeekMovieToGraph(course_[i]->GetSelectGraph(), 0); // 開始位置を最初に戻す
+			else
+			{
+				PauseMovieToGraph(courses_[i].hImage); // 再生を止める
+				SeekMovieToGraph(courses_[i].hImage, 0); // 開始位置を最初に戻す
+			}
 		}
 	}
 }
 
 void MenuScene::Draw()
 {
+	// コースを描画
 	for (int i = 0; i < (int)COURSE::MAX_COURSE; i++)
 	{
-		if (course_[i] == nullptr)
-		{
-			return;
-		}
-		course_[i]->Draw();
+		ClickArea::DrawArea(courses_[i]);
+	}
+
+	// マウスの座標を取得
+	int x = (int)Input::GetMousePosition().x;
+	int y = (int)Input::GetMousePosition().y;
+
+	// 照準を描画
+	if (isMouseOnArea_ == true)
+	{
+		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
+		DrawBox(currentSelect_.leftTop.x, currentSelect_.leftTop.y,
+			currentSelect_.rightDown.x, currentSelect_.rightDown.y, MENU_SCENE::SELECT_LINE_COLOR, FALSE, MENU_SCENE::SELECT_LINE_WIDTH);
+	}
+	else
+	{
+		DrawGraph(x - aiming_.halfWidth, y - aiming_.halfHeight, aiming_.hImage, TRUE);
 	}
 }

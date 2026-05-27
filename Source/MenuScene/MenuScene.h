@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Library/SceneBase.h"
 #include "../../MyLibrary/ClickArea.h"
+#include "../Data.h"
 
 class MenuScene : public SceneBase
 {
@@ -20,6 +21,13 @@ private:
 		MAX_COURSE	// コースの最大数
 	};
 
-	Button* course_[]; // コースを選択するボタン
+	area courses_[MAX_COURSE];	// コースの描画を管理する配列
+	bool isMouseOnArea_;		// true -> マウスがコースの画像上にある
+
+	// 照準
+	Data::image aiming_;
+	Data::image hitAiming_;
+
+	area currentSelect_; // 選択中のコース
 };
 
