@@ -4,6 +4,10 @@
 
 namespace Data
 {
+	const int OBJ_MIN_NUMBER = 2; // 建物オブジェクトの最小の番号
+	const int OBJ_MAX_NUMBER = 11; // 建物オブジェクトの最大の番号
+	const int MODEL_NUMBER_DATA_SIZE = 8; // 番号を文字として扱うためのサイズ
+
 	enum CHARACTER_DATA_NUM {
 		NAME,			// 名前
 		SORT,			// 種類
@@ -145,62 +149,56 @@ void Data::InitCharacterDataList()
 
 void Data::InitImage()
 {
-	images["titleBackground"]	= LoadGraph("data/image/titleBackground.png");
-	images["aiming"]		= LoadGraph("data/image/pointer1.png");
-	images["hitAiming"]		= LoadGraph("data/image/pointer2.png");
-	images["reload"]		= LoadGraph("data/image/reload.png");
-	images["startText"]		= LoadGraph("data/image/startText.png");
+	std::string path = "data/image/";
+	images["titleBackground"]	= LoadGraph((path + "titleBackground.png").c_str());
+	images["aiming"]			= LoadGraph((path + "pointer1.png").c_str());
+	images["hitAiming"]			= LoadGraph((path + "pointer2.png").c_str());
+	images["reload"]			= LoadGraph((path + "reload.png").c_str());
+	images["startText"]			= LoadGraph((path + "startText.png").c_str());
 }
 
 void Data::InitModel()
 {
+	std::string path = "data/model/";
+
 	// 「○○_c」のデータは当たり判定用のポリゴン数が少ないモデル
 
-	// キャラクター
-	models["player"]	 = MV1LoadModel("data/model/player.mv1"); // プレイヤー
-	models["player_c"]	 = MV1LoadModel("data/model/player_c.mv1");
-	models["enemy000"]	 = MV1LoadModel("data/model/enemy000.mv1"); // 石
-	models["enemy000_c"] = MV1LoadModel("data/model/enemy000_c.mv1");
-	models["enemy001"]	 = MV1LoadModel("data/model/tamesi/enemy001.mv1"); // 豆腐
-	models["enemy001_c"] = MV1LoadModel("data/model/tamesi/enemy001_c.mv1");
-	models["enemy002"]   = MV1LoadModel("data/model/enemy000.mv1"); // 風船 modelはまだ
-	models["enemy002_c"] = MV1LoadModel("data/model/enemy000_c.mv1");
+	// キャラクター 敵が増える場合には、建物と同じように書く
+	models["player"]	 = MV1LoadModel((path + "player.mv1").c_str()); // プレイヤー
+	models["player_c"]	 = MV1LoadModel((path + "player.mv1_c").c_str());
+	models["enemy000"]	 = MV1LoadModel((path + "enemy000.mv1").c_str()); // 石
+	models["enemy000_c"] = MV1LoadModel((path + "enemy000_c.mv1").c_str());
+	models["enemy001"]	 = MV1LoadModel((path + "tamesi/enemy001.mv1").c_str()); // 豆腐
+	models["enemy001_c"] = MV1LoadModel((path + "tamesi/enemy001_c.mv1").c_str());
+	models["enemy002"]   = MV1LoadModel((path + "enemy000.mv1").c_str()); // 風船 modelはまだ
+	models["enemy002_c"] = MV1LoadModel((path + "enemy000_c.mv1").c_str());
 
 	// 建物
-	models["Stage_Obj002"]	 = MV1LoadModel("data/model/Stage_Obj002.mv1");
-	models["Stage_Obj002_c"] = MV1LoadModel("data/model/Stage_Obj002_c.mv1");
-	models["Stage_Obj003"]	 = MV1LoadModel("data/model/Stage_Obj003.mv1");
-	models["Stage_Obj003_c"] = MV1LoadModel("data/model/Stage_Obj003_c.mv1");
-	models["Stage_Obj004"]	 = MV1LoadModel("data/model/Stage_Obj004.mv1");
-	models["Stage_Obj004_c"] = MV1LoadModel("data/model/Stage_Obj004_c.mv1");
-	models["Stage_Obj005"]	 = MV1LoadModel("data/model/Stage_Obj005.mv1");
-	models["Stage_Obj005_c"] = MV1LoadModel("data/model/Stage_Obj005_c.mv1");
-	models["Stage_Obj006"]	 = MV1LoadModel("data/model/Stage_Obj006.mv1");
-	models["Stage_Obj006_c"] = MV1LoadModel("data/model/Stage_Obj006_c.mv1");
-	models["Stage_Obj007"]	 = MV1LoadModel("data/model/Stage_Obj007.mv1");
-	models["Stage_Obj007_c"] = MV1LoadModel("data/model/Stage_Obj007_c.mv1");
-	models["Stage_Obj008"]	 = MV1LoadModel("data/model/Stage_Obj008.mv1");
-	models["Stage_Obj008_c"] = MV1LoadModel("data/model/Stage_Obj008_c.mv1");
-	models["Stage_Obj009"]	 = MV1LoadModel("data/model/Stage_Obj009.mv1");
-	models["Stage_Obj009_c"] = MV1LoadModel("data/model/Stage_Obj009_c.mv1");
-	models["Stage_Obj010"]	 = MV1LoadModel("data/model/Stage_Obj010.mv1");
-	models["Stage_Obj010_c"] = MV1LoadModel("data/model/Stage_Obj010_c.mv1");
-	models["Stage_Obj011"]	 = MV1LoadModel("data/model/Stage_Obj011.mv1");
-	models["Stage_Obj011_c"] = MV1LoadModel("data/model/Stage_Obj011_c.mv1");
+	std::string name = "Stage_Obj";
+	char number[MODEL_NUMBER_DATA_SIZE];
+	for (int i = OBJ_MIN_NUMBER; i <= OBJ_MAX_NUMBER; i++)
+	{
+		sprintf_s<MODEL_NUMBER_DATA_SIZE >(number, "%03d", i);
+		models[(name + number)] = MV1LoadModel((path + name + number + ".mv1").c_str()); // プレイヤーに見せるモデル
+		models[(name + number + "_c")] = MV1LoadModel((path + name + number + "_c.mv1").c_str()); // 当たり判定に使用するモデル
+	}
 }
 
 void Data::InitSound()
 {
-	se["outBullet"]		= LoadSoundMem("data/sound/outBullet1.mp3");
-	se["reload"]		= LoadSoundMem("data/sound/reload.mp3");
-	se["attackEnemy"]	= LoadSoundMem("data/sound/attackEnemy.mp3");
-	se["breakEnemy"]	= LoadSoundMem("data/sound/breakEnemy.mp3");
+	std::string path = "data/sound/";
+	se["outBullet"]			= LoadSoundMem((path + "outBullet1.mp3").c_str()); // 発砲
+	se["reload"]			= LoadSoundMem((path + "reload.mp3").c_str()); // リロード
+	se["attackEnemy"]		= LoadSoundMem((path + "attackEnemy.mp3").c_str()); // 敵が撃たれている
+	se["breakEnemy"]		= LoadSoundMem((path + "breakEnemy.mp3").c_str()); // 敵がやられた
+	se["canNotOutBullet"]	= LoadSoundMem((path + "canNotOutBullet.mp3").c_str()); // 銃弾が出ない
 }
 
 void Data::InitMovie()
 {
-	movies["tutorial"] = LoadGraph("data/movie/tutorial.ogv");
-	movies["course1"] = LoadGraph("data/movie/course1.ogv");
-	movies["course2"] = LoadGraph("data/movie/course2.ogv");
-	movies["course3"] = LoadGraph("data/movie/course3.ogv");
+	std::string path = "data/movie/";
+	movies["tutorial"]	= LoadGraph((path + "tutorial.ogv").c_str());
+	movies["course1"]	= LoadGraph((path + "course1.ogv").c_str());
+	movies["course2"]	= LoadGraph((path + "course2.ogv").c_str());
+	movies["course3"]	= LoadGraph((path + "course3.ogv").c_str());
 }

@@ -80,9 +80,6 @@ void MenuScene::Update()
 		}
 		SceneManager::ChangeScene("PLAY");
 	}
-	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
-		SceneManager::Exit();
-	}
 }
 
 void MenuScene::Draw()
@@ -100,9 +97,9 @@ void MenuScene::Draw()
 	// 照準を描画
 	if (isMouseOnArea_ == true)
 	{
-		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 		DrawBox(currentSelect_.leftTop.x, currentSelect_.leftTop.y,
 			currentSelect_.rightDown.x, currentSelect_.rightDown.y, MENU_SCENE::SELECT_LINE_COLOR, FALSE, MENU_SCENE::SELECT_LINE_WIDTH);
+		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 	}
 	else
 	{

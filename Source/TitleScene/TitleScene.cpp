@@ -25,6 +25,7 @@ void TitleScene::Update()
 {
 	if (Input::IsKeyDown("outBullet"))
 	{
+		PlaySoundMem(Data::se["outBullet"], DX_PLAYTYPE_BACK, TRUE);
 		SceneManager::ChangeScene("MENU");
 	}
 	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
