@@ -10,14 +10,14 @@
 namespace STAGE
 {
 	const VECTOR3 ADD_POSITION = { -5000.0f, 0.0f, -5000.0f };
-	const int DATA_SIZE = 16;
-	const std::string FOLDER = "data/stage/";
+	const int DATA_SIZE = 64;
+	const std::string FOLDER = "data/course/";
 }
 
-Stage::Stage(int number)
+Stage::Stage(int course, int stage)
 {
 	char fileName[STAGE::DATA_SIZE];
-	sprintf_s<STAGE::DATA_SIZE>(fileName, "Stage%02d", number);
+	sprintf_s<STAGE::DATA_SIZE>(fileName, "course%02d/Stage%02d", course, stage);
 	ReadMappingData(fileName);
 }
 

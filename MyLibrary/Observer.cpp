@@ -4,6 +4,7 @@ namespace Observer
 {
 	int enemyKilledCounter;
 	int score;
+	int courseNumber; // 遊ぶコースの番号
 }
 
 void Observer::Init()
@@ -30,4 +31,15 @@ int Observer::GetEnemyKilled()
 int Observer::GetScore()
 {
 	return score;
+}
+
+int Observer::SetCourse(int number)
+{
+	courseNumber = number;
+	return courseNumber;
+}
+
+int Observer::GetCourse()
+{
+	return courseNumber;
 }

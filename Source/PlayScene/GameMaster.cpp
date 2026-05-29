@@ -22,7 +22,8 @@ namespace GameMaster
 	int createEnemyNumber;		// 生成する敵の番号
 	int playerPhaseCount;		// プレイヤーの移動フェーズのカウント数
 	int prevPlayerPhaseCount;	// 前回のプレイヤーの移動フェーズのカウント数
-	int stageNumber; // 生成するステージの番号
+	int stageNumber;			// 生成するステージの番号
+	int courseNumber;			// プレイヤーが選択したコース
 
 	bool isDebug_ = true; // true → debug処理をする
 }
@@ -35,8 +36,7 @@ int GameMaster::Init()
 	prevPlayerPhaseCount = 0;
 
 	stageNumber = 0;
-
-	//WayInfo::Init();
+	courseNumber = Observer::GetCourse();
 	StageSearch::Init();
 	camera = new Camera();
 	CreateNewStage();
@@ -89,10 +89,10 @@ int GameMaster::Update()
 			switch (createEnemyNumber)
 			{
 			case 0:
-				new Stage(1); // 石が生成される
+				new Stage(courseNumber, 1); // 石が生成される
 				break;
 			case 1:
-				new Stage(2); // 豆腐が生成される 
+				new Stage(courseNumber, 2); // 豆腐が生成される 
 				break;
 			}
 			isCreateEnemy = false;
@@ -111,7 +111,6 @@ int GameMaster::Update()
 
 int GameMaster::Draw()
 {
-	//WayInfo::WayDraw();
 	//StageSearch::Draw();
 	return 0;
 }
@@ -150,7 +149,7 @@ bool GameMaster::GetIsDebug()
 
 void GameMaster::CreateNewStage()
 {
-	new Stage(stageNumber);
+	new Stage(courseNumber, stageNumber);
 	stageNumber += 1;
 }
 

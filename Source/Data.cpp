@@ -53,6 +53,7 @@ void Data::Init()
 	InitImage();
 	InitModel();
 	InitSound();
+	InitMovie();
 }
 
 void Data::SetImage(std::string name, image* i)
@@ -198,5 +199,8 @@ void Data::InitSound()
 
 void Data::InitMovie()
 {
-	movies["tutorial"] = LoadGraph("data/movie/tutorial.mp4");
+	movies["tutorial"] = LoadGraph("data/movie/tutorial.ogv");
+	movies["course1"] = LoadGraph("data/movie/course1.ogv");
+	movies["course2"] = LoadGraph("data/movie/course2.ogv");
+	movies["course3"] = LoadGraph("data/movie/course3.ogv");
 }

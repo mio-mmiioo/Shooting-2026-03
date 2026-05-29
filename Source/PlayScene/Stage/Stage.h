@@ -4,7 +4,7 @@
 class Stage : public Object3D
 {
 public:
-	Stage(int number = 0);
+	Stage(int course, int stage);
 	~Stage();
 
 private:

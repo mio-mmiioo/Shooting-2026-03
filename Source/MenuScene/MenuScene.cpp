@@ -1,5 +1,6 @@
 #include "MenuScene.h"
 #include "../../MyLibrary/Input.h"
+#include "../../MyLibrary/Observer.h"
 
 namespace MENU_SCENE
 {
@@ -12,10 +13,10 @@ MenuScene::MenuScene()
 {
 	// courses_に値を代入
 	{
-		area tutorial	= { {100.0f, 100.0f}, {400.0f, 300.0f}, LoadGraph("data/movie/tutorial.mp4") }; // チュートリアル
-		area course1	= { {600.0f, 100.0f}, {900.0f, 300.0f}, Data::images["titleBackground"] };
-		area course2	= { {100.0f, 400.0f}, {400.0f, 600.0f}, Data::images["titleBackground"] };
-		area course3	= { {600.0f, 400.0f}, {900.0f, 600.0f}, Data::images["titleBackground"] };
+		area tutorial	= { {100.0f, 100.0f}, {400.0f, 300.0f}, Data::movies["tutorial"] }; // チュートリアル
+		area course1	= { {600.0f, 100.0f}, {900.0f, 300.0f}, Data::movies["course1"] };
+		area course2	= { {100.0f, 400.0f}, {400.0f, 600.0f}, Data::movies["course2"] };
+		area course3	= { {600.0f, 400.0f}, {900.0f, 600.0f}, Data::movies["course3"] };
 
 		courses_[COURSE::TUTORIAL] = tutorial;
 		courses_[COURSE::COURSE1] = course1;
@@ -45,14 +46,6 @@ void MenuScene::Update()
 {
 	isMouseOnArea_ = false;
 
-	if (Input::IsKeyDown("outBullet"))
-	{
-		SceneManager::ChangeScene("PLAY");
-	}
-	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
-		SceneManager::Exit();
-	}
-
 	// 照準がコースの画像上にある場合、動画を再生する
 	{
 		for (int i = 0; i < COURSE::MAX_COURSE; i++)
@@ -74,6 +67,21 @@ void MenuScene::Update()
 				SeekMovieToGraph(courses_[i].hImage, 0); // 開始位置を最初に戻す
 			}
 		}
+	}
+
+	if (Input::IsKeyDown("outBullet") && isMouseOnArea_ == true)
+	{
+		for (int i = 0; i < COURSE::MAX_COURSE; i++)
+		{
+			if (ClickArea::IsMosueInArea(courses_[i]) == true)
+			{
+				Observer::SetCourse(i);
+			}
+		}
+		SceneManager::ChangeScene("PLAY");
+	}
+	if (CheckHitKey(KEY_INPUT_ESCAPE)) {
+		SceneManager::Exit();
 	}
 }
 
