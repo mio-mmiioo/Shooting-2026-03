@@ -16,6 +16,8 @@ namespace RESULTSCENE
 
 ResultScene::ResultScene()
 {
+	// ‰æ‘œ‚ÌƒZƒbƒg
+	hBackground_ = Data::images["resultBackground"];
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 
@@ -54,6 +56,8 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
+	DrawGraph(0, 0, hBackground_, TRUE);
+
 	titleButton_->Draw();
 
 	DrawFormatString(RESULTSCENE::SCORE_X, RESULTSCENE::SCORE_Y, Color::TEXT, "score : %d", Observer::GetScore());

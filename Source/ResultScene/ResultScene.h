@@ -12,6 +12,9 @@ public:
 	void Update() override;
 	void Draw() override;
 private:
+
+	// 画像
+	int hBackground_;
 	Data::image aiming_;
 	Data::image hitAiming_;
 

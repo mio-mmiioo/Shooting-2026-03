@@ -83,8 +83,10 @@ void Balloon::Update()
 		toPosition_ = VECTOR3(0.0f, noise_ * BALLOON::FLOATING_INTENSITY_Y, 0.0f) + transform_.position_;
 		isArrive_ = false;
 	}
-	
-	SetMove(toPosition_);
+	else
+	{
+		SetMove(toPosition_);
+	}
 	
 	if (VSquareSize(transform_.position_ - toPosition_) < 10.0f)
 	{

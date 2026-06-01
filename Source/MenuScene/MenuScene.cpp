@@ -13,10 +13,10 @@ MenuScene::MenuScene()
 {
 	// courses_に値を代入
 	{
-		area tutorial	= { {100.0f, 100.0f}, {400.0f, 300.0f}, Data::movies["tutorial"] }; // チュートリアル
-		area course1	= { {600.0f, 100.0f}, {900.0f, 300.0f}, Data::movies["course1"] };
-		area course2	= { {100.0f, 400.0f}, {400.0f, 600.0f}, Data::movies["course2"] };
-		area course3	= { {600.0f, 400.0f}, {900.0f, 600.0f}, Data::movies["course3"] };
+		area tutorial	= { {235.0f, 125.0f}, {525.0f, 300.0f}, Data::movies["tutorial"] }; // チュートリアル
+		area course1	= { {745.0f, 125.0f}, {1030.0f, 300.0f}, Data::movies["course1"] };
+		area course2	= { {235.0f, 405.0f}, {525.0f, 580.0f}, Data::movies["course2"] };
+		area course3	= { {745.0f, 405.0f}, {1030.0f, 580.0f}, Data::movies["course3"] };
 
 		courses_[COURSE::TUTORIAL] = tutorial;
 		courses_[COURSE::COURSE1] = course1;
@@ -26,7 +26,8 @@ MenuScene::MenuScene()
 	
 	isMouseOnArea_ = false;
 
-	// 照準の画像をセット
+	// 画像をセット
+	hBackground_ = Data::images["menuBackground"];
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 
@@ -84,6 +85,9 @@ void MenuScene::Update()
 
 void MenuScene::Draw()
 {
+	// 背景を描画
+	DrawGraph(0, 0, hBackground_, TRUE);
+
 	// コースを描画
 	for (int i = 0; i < (int)COURSE::MAX_COURSE; i++)
 	{

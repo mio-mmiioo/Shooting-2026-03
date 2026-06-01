@@ -151,6 +151,8 @@ void Data::InitImage()
 {
 	std::string path = "data/image/";
 	images["titleBackground"]	= LoadGraph((path + "titleBackground.png").c_str());
+	images["menuBackground"]	= LoadGraph((path + "menuBackground.png").c_str());
+	images["resultBackground"]	= LoadGraph((path + "resultBackground.png").c_str());
 	images["aiming"]			= LoadGraph((path + "pointer1.png").c_str());
 	images["hitAiming"]			= LoadGraph((path + "pointer2.png").c_str());
 	images["reload"]			= LoadGraph((path + "reload.png").c_str());
