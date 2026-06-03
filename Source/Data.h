@@ -6,6 +6,14 @@
 
 namespace Data
 {
+	enum COURSE {	// 選択するコース
+		TUTORIAL,	// チュートリアル
+		COURSE1,	// コース1
+		COURSE2,	// コース2
+		COURSE3,	// コース3
+		MAX_COURSE	// コースの最大数
+	};
+
 	enum P_STATE { // プレイヤーの状態
 		MOVE, // 移動
 		STAY, // 待機

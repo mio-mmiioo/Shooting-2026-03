@@ -194,6 +194,10 @@ void Data::InitSound()
 	se["attackEnemy"]		= LoadSoundMem((path + "attackEnemy.mp3").c_str()); // “G‚ªŒ‚‚½‚ê‚Ä‚¢‚é
 	se["breakEnemy"]		= LoadSoundMem((path + "breakEnemy.mp3").c_str()); // “G‚ª‚â‚ç‚ê‚½
 	se["canNotOutBullet"]	= LoadSoundMem((path + "canNotOutBullet.mp3").c_str()); // e’e‚ªo‚È‚¢
+
+	se["cancel"] = LoadSoundMem((path + "cancel.mp3").c_str()); // ƒLƒƒƒ“ƒZƒ‹
+	se["decide"] = LoadSoundMem((path + "decide.mp3").c_str()); // Œˆ’è
+	se["select.mp3"] = LoadSoundMem((path + "select.mp3").c_str()); // ‘I‘ğ
 }
 
 void Data::InitMovie()

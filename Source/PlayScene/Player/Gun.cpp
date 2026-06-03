@@ -9,6 +9,8 @@ namespace GUN
 
 	const float START_PERCENT = 35.0f;
 	const float END_PERCENT = 115.0f;
+
+	const int FONT_SIZE = 16;
 }
 
 Gun::Gun()
@@ -49,6 +51,7 @@ Gun::Gun()
 	};
 
 	SetDrawOrder(-100);
+	SetFontSize(GUN::FONT_SIZE);
 }
 
 Gun::~Gun()

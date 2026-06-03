@@ -18,10 +18,10 @@ MenuScene::MenuScene()
 		area course2	= { {235.0f, 405.0f}, {525.0f, 580.0f}, Data::movies["course2"] };
 		area course3	= { {745.0f, 405.0f}, {1030.0f, 580.0f}, Data::movies["course3"] };
 
-		courses_[COURSE::TUTORIAL] = tutorial;
-		courses_[COURSE::COURSE1] = course1;
-		courses_[COURSE::COURSE2] = course2;
-		courses_[COURSE::COURSE3] = course3;
+		courses_[Data::COURSE::TUTORIAL] = tutorial;
+		courses_[Data::COURSE::COURSE1] = course1;
+		courses_[Data::COURSE::COURSE2] = course2;
+		courses_[Data::COURSE::COURSE3] = course3;
 	}
 	
 	isMouseOnArea_ = false;
@@ -31,13 +31,13 @@ MenuScene::MenuScene()
 	Data::SetImage("aiming", &aiming_);
 	Data::SetImage("hitAiming", &hitAiming_);
 
-	currentSelect_ = courses_[COURSE::TUTORIAL]; // 現在選択しているコースとして、チュートリアルコースをセットする
+	currentSelect_ = courses_[Data::COURSE::TUTORIAL]; // 現在選択しているコースとして、チュートリアルコースをセットする
 }
 
 MenuScene::~MenuScene()
 {
 	// この処理を入れないと動画がプレイシーンでも流れ続ける
-	for (int i = 0; i < COURSE::MAX_COURSE; i++)
+	for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 	{
 		PauseMovieToGraph(courses_[i].hImage); // 再生を止める
 	}
@@ -49,7 +49,7 @@ void MenuScene::Update()
 
 	// 照準がコースの画像上にある場合、動画を再生する
 	{
-		for (int i = 0; i < COURSE::MAX_COURSE; i++)
+		for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 		{
 			if (ClickArea::IsMosueInArea(courses_[i]) == true)
 			{
@@ -72,7 +72,7 @@ void MenuScene::Update()
 
 	if (Input::IsKeyDown("outBullet") && isMouseOnArea_ == true)
 	{
-		for (int i = 0; i < COURSE::MAX_COURSE; i++)
+		for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 		{
 			if (ClickArea::IsMosueInArea(courses_[i]) == true)
 			{
@@ -89,7 +89,7 @@ void MenuScene::Draw()
 	DrawGraph(0, 0, hBackground_, TRUE);
 
 	// コースを描画
-	for (int i = 0; i < (int)COURSE::MAX_COURSE; i++)
+	for (int i = 0; i < (int)Data::COURSE::MAX_COURSE; i++)
 	{
 		ClickArea::DrawArea(courses_[i]);
 	}

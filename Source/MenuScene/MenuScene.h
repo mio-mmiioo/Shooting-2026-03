@@ -12,16 +12,8 @@ public:
 	void Draw() override;
 
 private:
-	// 選択するコース
-	enum COURSE {
-		TUTORIAL,	// チュートリアル
-		COURSE1,	// コース1
-		COURSE2,	// コース2
-		COURSE3,	// コース3
-		MAX_COURSE	// コースの最大数
-	};
 
-	area courses_[MAX_COURSE];	// コースの描画を管理する配列
+	area courses_[Data::COURSE::MAX_COURSE];	// コースの描画を管理する配列
 	bool isMouseOnArea_;		// true -> マウスがコースの画像上にある
 
 	// 画像

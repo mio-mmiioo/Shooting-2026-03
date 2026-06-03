@@ -7,11 +7,18 @@
 namespace RESULTSCENE
 {
 	const float TIME = 30.0f;
-	const int SCORE_X = 0;
-	const int SCORE_Y = 300;
-	const int KILLED_ENEMY_NUMBER_X = 0;
-	const int KILLED_ENEMY_NUMBER_Y = 330;
 
+	// 数字を表示する位置
+	const int SCORE_X = 1000; // スコア
+	const int SCORE_Y = 530;
+	const int KILLED_ENEMY_NUMBER_X = 1000; // 敵を倒した数
+	const int KILLED_ENEMY_NUMBER_Y = 200;
+	const int TIMER_X = 1100; // タイマー
+	const int TIMER_Y = 50;
+	const int COURSE_X = 500; // コース
+	const int COURSE_Y = 100;
+
+	const int FONT_SIZE = 64;
 }
 
 ResultScene::ResultScene()
@@ -23,10 +30,12 @@ ResultScene::ResultScene()
 
 	int normalButtonImage = LoadGraph("data/image/ok.png");
 	int selectButtonImage = LoadGraph("data/image/ok-selected.png");
-	area normalArea = { {900, 600}, {1100, 700}, normalButtonImage};
-	area selectArea = { {900, 600}, {1100, 700}, selectButtonImage };
+	area normalArea = { {1050, 600}, {1250, 700}, normalButtonImage};
+	area selectArea = { {1050, 600}, {1250, 700}, selectButtonImage };
 	titleButton_ = new Button(normalArea, selectArea);
 	timer_ = RESULTSCENE::TIME;
+
+	SetFontSize(RESULTSCENE::FONT_SIZE);
 }
 
 ResultScene::~ResultScene()
@@ -60,8 +69,9 @@ void ResultScene::Draw()
 
 	titleButton_->Draw();
 
-	DrawFormatString(RESULTSCENE::SCORE_X, RESULTSCENE::SCORE_Y, Color::TEXT, "score : %d", Observer::GetScore());
-	DrawFormatString(RESULTSCENE::KILLED_ENEMY_NUMBER_X, RESULTSCENE::KILLED_ENEMY_NUMBER_Y, Color::TEXT, "倒した敵の数 : %d", Observer::GetEnemyKilled());
+	DrawFormatString(RESULTSCENE::SCORE_X, RESULTSCENE::SCORE_Y, Color::TEXT, "%d", Observer::GetScore());
+	DrawFormatString(RESULTSCENE::KILLED_ENEMY_NUMBER_X, RESULTSCENE::KILLED_ENEMY_NUMBER_Y, Color::TEXT, "%d", Observer::GetEnemyKilled());
+	DrawFormatString(RESULTSCENE::TIMER_X, RESULTSCENE::TIMER_Y, Color::TEXT, "%02d", (int)timer_);
 
 	// マウスの座標を取得
 	int x = (int)Input::GetMousePosition().x;
