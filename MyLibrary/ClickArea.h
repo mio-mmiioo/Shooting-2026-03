@@ -10,8 +10,10 @@ struct area
 
 namespace ClickArea
 {
-	bool IsMosueInArea(area a);
-	void DrawArea(area a);
+	bool IsMosueKeepInArea(area a); // 範囲内にマウスカーソルがある
+	bool IsMouseInArea(area a); // 範囲内にマウスカーソルが入った瞬間
+	bool IsMouseInArea(area a, int mouseX, int mouseY); // 範囲内にマウスカーソルが入った瞬間( マウスの座標指定あり )
+	void DrawArea(area a); // 指定した範囲の描画
 }
 
 class Button
@@ -21,11 +23,12 @@ public:
 	~Button();
 	void Update();
 	void Draw();
-	bool GetIsClickArea() { return isClickArea_; } // true → マウスで指定した範囲をクリック
-	bool GetIsOnArea() { return isOnArea_; } // true → マウスで指定した範囲上にいる
+	bool GetIsClickArea() const { return isClickArea_; } // true → マウスで指定した範囲をクリック
+	bool GetIsKeepOnArea() const { return isOnArea_; } // true → マウスで指定した範囲上にいる
+	bool GetIsOnArea(); // true → マウスで指定した範囲上にいる
 
-	int GetNormalGraph() { return normal_.hImage; } // 通常時の画像を取得
-	int GetSelectGraph() { return select_.hImage; } // 選択時の画像を取得
+	int GetNormalGraph() const { return normal_.hImage; } // 通常時の画像を取得
+	int GetSelectGraph() const { return select_.hImage; } // 選択時の画像を取得
 
 private:
 	area normal_;		// 通常時

@@ -28,12 +28,13 @@ namespace Input
     int padState;               // gamepad入力
     int mouseState;             // mouse入力
 
-    VECTOR mousePoint; // マウスの座標
+    VECTOR mousePoint = {-1, -1}; // マウスの座標
+    VECTOR prevMousePoint; // 前回のマウスの座標
 }
 
 void Input::InitActionMap()
 {
-    inputActionMap["next"] = { {InputType::keyboard,KEY_INPUT_RETURN}, {InputType::gamepad,PAD_INPUT_Z} }; // 右ショルダー 
+    inputActionMap["next"] = { {InputType::keyboard,KEY_INPUT_RETURN} };
     inputActionMap["outBullet"] = { {InputType::keyboard, KEY_INPUT_SPACE}, {InputType::mouse, MOUSE_INPUT_LEFT} };
     inputActionMap["reload"] = { {InputType::keyboard, KEY_INPUT_R},{InputType::mouse, MOUSE_INPUT_RIGHT} };
 
@@ -77,6 +78,7 @@ void Input::StateUpdate()
         int x;
         int y;
         GetMousePoint(&x, &y);
+        prevMousePoint = mousePoint;
         mousePoint = { (float)x, (float)y, 1.0f };
     }
 }
@@ -126,4 +128,9 @@ bool Input::IsKeyUp(const std::string& action)
 VECTOR Input::GetMousePosition()
 {
     return mousePoint;
+}
+
+VECTOR Input::GetPrevMousePosition()
+{
+    return prevMousePoint;
 }

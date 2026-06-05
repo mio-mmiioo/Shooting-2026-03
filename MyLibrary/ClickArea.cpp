@@ -1,14 +1,38 @@
 #include "ClickArea.h"
 #include "Input.h"
 
-bool ClickArea::IsMosueInArea(area a)
+bool ClickArea::IsMosueKeepInArea(area a)
 {
 	int x = (int)Input::GetMousePosition().x;
 	int y = (int)Input::GetMousePosition().y;
 
-	if (a.leftTop.x < x && x < a.rightDown.x)
+	if (IsMouseInArea(a, x, y) == true)
 	{
-		if (a.leftTop.y < y && y < a.rightDown.y)
+		return true;
+	}
+	return false;
+}
+
+bool ClickArea::IsMouseInArea(area a)
+{
+	int prevX = (int)Input::GetPrevMousePosition().x;
+	int prevY = (int)Input::GetPrevMousePosition().y;
+	int x = (int)Input::GetMousePosition().x;
+	int y = (int)Input::GetMousePosition().y;
+
+	if (IsMouseInArea(a, prevX, prevY) == false && IsMouseInArea(a, x, y))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool ClickArea::IsMouseInArea(area a, int mouseX, int mouseY)
+{
+	if (a.leftTop.x < mouseX && mouseX < a.rightDown.x)
+	{
+		if (a.leftTop.y < mouseY && mouseY < a.rightDown.y)
 		{
 			return true;
 		}
@@ -18,10 +42,10 @@ bool ClickArea::IsMosueInArea(area a)
 
 void ClickArea::DrawArea(area a)
 {
-	int x1 = a.leftTop.x;
-	int y1 = a.leftTop.y;
-	int x2 = a.rightDown.x;
-	int y2 = a.rightDown.y;
+	int x1 = (int)a.leftTop.x;
+	int y1 = (int)a.leftTop.y;
+	int x2 = (int)a.rightDown.x;
+	int y2 = (int)a.rightDown.y;
 
 	DrawExtendGraph(x1, y1, x2, y2, a.hImage, TRUE);
 }
@@ -42,16 +66,10 @@ void Button::Update()
 {
 	isOnArea_ = false; // 一度情報をリセット
 
-	int x = (int)Input::GetMousePosition().x;
-	int y = (int)Input::GetMousePosition().y;
-
 	// マウスがボタン上にある
-	if (normal_.leftTop.x < x && x < normal_.rightDown.x)
+	if (ClickArea::IsMosueKeepInArea(normal_) == true)
 	{
-		if (normal_.leftTop.y < y && y < normal_.rightDown.y)
-		{
-			isOnArea_ = true;
-		}
+		isOnArea_ = true;
 	}
 
 	if (Input::IsKeyDown("outBullet"))
@@ -68,19 +86,28 @@ void Button::Draw()
 	// 選択中
 	if (isOnArea_ == true)
 	{
-		int x1 = select_.leftTop.x;
-		int y1 = select_.leftTop.y;
-		int x2 = select_.rightDown.x;
-		int y2 = select_.rightDown.y;
+		int x1 = (int)select_.leftTop.x;
+		int y1 = (int)select_.leftTop.y;
+		int x2 = (int)select_.rightDown.x;
+		int y2 = (int)select_.rightDown.y;
 		DrawExtendGraph(x1, y1, x2, y2, select_.hImage, TRUE);
 	}
 	// それ以外
 	else
 	{
-		int x1 = normal_.leftTop.x;
-		int y1 = normal_.leftTop.y;
-		int x2 = normal_.rightDown.x;
-		int y2 = normal_.rightDown.y;
+		int x1 = (int)normal_.leftTop.x;
+		int y1 = (int)normal_.leftTop.y;
+		int x2 = (int)normal_.rightDown.x;
+		int y2 = (int)normal_.rightDown.y;
 		DrawExtendGraph(x1, y1, x2, y2, normal_.hImage, TRUE);
 	}
+}
+
+bool Button::GetIsOnArea()
+{
+	if (ClickArea::IsMouseInArea(normal_) == true)
+	{
+		return true;
+	}
+	return false;
 }

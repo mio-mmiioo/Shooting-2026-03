@@ -197,7 +197,7 @@ void Data::InitSound()
 
 	se["cancel"] = LoadSoundMem((path + "cancel.mp3").c_str()); // キャンセル
 	se["decide"] = LoadSoundMem((path + "decide.mp3").c_str()); // 決定
-	se["select.mp3"] = LoadSoundMem((path + "select.mp3").c_str()); // 選択
+	se["select"] = LoadSoundMem((path + "select.mp3").c_str()); // 選択
 }
 
 void Data::InitMovie()

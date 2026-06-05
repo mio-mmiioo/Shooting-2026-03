@@ -18,7 +18,7 @@ namespace RESULTSCENE
 	const int COURSE_X = 500; // コース
 	const int COURSE_Y = 100;
 
-	const int FONT_SIZE = 64;
+	const int FONT_SIZE = 64; // 文字サイズ
 }
 
 ResultScene::ResultScene()
@@ -56,6 +56,11 @@ void ResultScene::Update()
 
 	titleButton_->Update();
 
+	if (titleButton_->GetIsOnArea() == true)
+	{
+		PlaySoundMem(Data::se["select"], DX_PLAYTYPE_BACK, TRUE);
+	}
+
 	if (titleButton_->GetIsClickArea() == true)
 	{
 		PlaySoundMem(Data::se["outBullet"], DX_PLAYTYPE_BACK, TRUE);
@@ -78,7 +83,7 @@ void ResultScene::Draw()
 	int y = (int)Input::GetMousePosition().y;
 
 	// 照準を描画
-	if (titleButton_->GetIsOnArea() == true)
+	if (titleButton_->GetIsKeepOnArea() == true)
 	{
 		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 	}

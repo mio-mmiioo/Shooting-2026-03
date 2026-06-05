@@ -11,4 +11,5 @@ namespace Input
 	bool IsKeyUp(const std::string& action);		// 離された瞬間
 
 	VECTOR GetMousePosition(); // マウスの座標を入手する
+	VECTOR GetPrevMousePosition(); // 前回のマウスの座標を入手する
 }

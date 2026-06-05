@@ -51,7 +51,12 @@ void MenuScene::Update()
 	{
 		for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 		{
-			if (ClickArea::IsMosueInArea(courses_[i]) == true)
+			if (ClickArea::IsMouseInArea(courses_[i]) == true)
+			{
+				PlaySoundMem(Data::se["select"], DX_PLAYTYPE_BACK, TRUE);
+			}
+
+			if (ClickArea::IsMosueKeepInArea(courses_[i]) == true)
 			{
 				PlayMovieToGraph(courses_[i].hImage);
 				// 動画が一定時間再生された場合
@@ -70,17 +75,22 @@ void MenuScene::Update()
 		}
 	}
 
-	if (Input::IsKeyDown("outBullet") && isMouseOnArea_ == true)
+	if (isMouseOnArea_ == true)
 	{
-		for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
+		// 範囲内にあるときに発砲した
+		if (Input::IsKeyDown("outBullet"))
 		{
-			if (ClickArea::IsMosueInArea(courses_[i]) == true)
+			for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 			{
-				Observer::SetCourse(i);
+				if (ClickArea::IsMosueKeepInArea(courses_[i]) == true)
+				{
+					Observer::SetCourse(i);
+				}
 			}
+			SceneManager::ChangeScene("PLAY");
 		}
-		SceneManager::ChangeScene("PLAY");
 	}
+
 }
 
 void MenuScene::Draw()
