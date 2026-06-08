@@ -112,7 +112,7 @@ void MenuScene::Draw()
 	if (isMouseOnArea_ == true)
 	{
 		DrawBox(currentSelect_.leftTop.x, currentSelect_.leftTop.y,
-			currentSelect_.rightDown.x, currentSelect_.rightDown.y, MENU_SCENE::SELECT_LINE_COLOR, FALSE, MENU_SCENE::SELECT_LINE_WIDTH);
+			currentSelect_.rightDown.x, currentSelect_.rightDown.y, MENU_SCENE::SELECT_LINE_COLOR, FALSE);
 		DrawGraph(x - hitAiming_.halfWidth, y - hitAiming_.halfHeight, hitAiming_.hImage, TRUE);
 	}
 	else

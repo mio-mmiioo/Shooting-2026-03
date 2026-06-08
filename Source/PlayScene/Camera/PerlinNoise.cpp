@@ -25,15 +25,16 @@ namespace PerlinNoise
 	float Smootherstep(float number);					// 値を滑らかにする
 	int Inc(int number);								// ループ対応を入れる
 	float Lerp(float start, float end, float t);		// 線形補完を行う
+	int Perm(int i);									// 範囲外アクセスを防ぎながらPERLIN_NOISEを使用する
 }
 
 float PerlinNoise::Noise(VECTOR3 p)
 {
 	// 格子点を求める 3次元だから8つ
-	// 255と論理積を取り、255より大きくならない・小数点以下を切り捨てる・負の値の場合、マイナスを外す
-	int xi = (int)floor(p.x) & 255;
-	int yi = (int)floor(p.y) & 255;
-	int zi = (int)floor(p.z) & 255;
+	// PERLIN_NOISE_SIZEと論理積を取り、PERLIN_NOISE_SIZEより大きくならない・小数点以下を切り捨てる・負の値の場合、マイナスを外す
+	int xi = (int)floor(p.x) & (PERLIN_NOISE_SIZE - 1);
+	int yi = (int)floor(p.y) & (PERLIN_NOISE_SIZE - 1);
+	int zi = (int)floor(p.z) & (PERLIN_NOISE_SIZE - 1);
 
 	float xf = p.x - floor(p.x);
 	float yf = p.y - floor(p.y);
@@ -44,17 +45,15 @@ float PerlinNoise::Noise(VECTOR3 p)
 	float v = PerlinNoise::Smootherstep(yf);
 	float w = PerlinNoise::Smootherstep(zf);
 
-	auto perm = [](int i) { return PERLIN_NOISE[i & 255]; };
-
 	// 8つの頂点
-	int p0 = perm(perm(perm(xi) + yi) + zi);
-	int p1 = perm(perm(perm(Inc(xi)) + yi) + zi);
-	int p2 = perm(perm(perm(xi) + Inc(yi)) + zi);
-	int p3 = perm(perm(perm(xi) + yi) + Inc(zi));
-	int p4 = perm(perm(perm(Inc(xi)) + Inc(yi)) + zi);
-	int p5 = perm(perm(perm(xi) + Inc(yi)) + Inc(zi));
-	int p6 = perm(perm(perm(Inc(xi)) + yi) + Inc(zi));
-	int p7 = perm(perm(perm(Inc(xi)) + Inc(yi)) + Inc(zi));
+	int p0 = Perm(Perm(Perm(xi) + yi) + zi);
+	int p1 = Perm(Perm(Perm(Inc(xi)) + yi) + zi);
+	int p2 = Perm(Perm(Perm(xi) + Inc(yi)) + zi);
+	int p3 = Perm(Perm(Perm(xi) + yi) + Inc(zi));
+	int p4 = Perm(Perm(Perm(Inc(xi)) + Inc(yi)) + zi);
+	int p5 = Perm(Perm(Perm(xi) + Inc(yi)) + Inc(zi));
+	int p6 = Perm(Perm(Perm(Inc(xi)) + yi) + Inc(zi));
+	int p7 = Perm(Perm(Perm(Inc(xi)) + Inc(yi)) + Inc(zi));
 
 	// 勾配計算
 	float g0 = PerlinNoise::Grad(p0, xf, yf, zf);
@@ -75,19 +74,22 @@ float PerlinNoise::Noise(VECTOR3 p)
 	float y1 = PerlinNoise::Lerp(x2, x3, v);
 	float z0 = PerlinNoise::Lerp(y0, y1, w);
 
-	return float(z0 + 1.0f) * 0.5f;
+	return (z0 + 1.0f) * 0.5f; // 0～1
 }
 
 float PerlinNoise::Grad(int index, float x, float y, float z)
 {
-	int h = index & 15;
-	float u = h < 8 ? x : y;
+	// xy, xy, xy, xy, xz, xz, xz, xz, yz, yz, yz, yz, (xy. yz, xy, zy) ←　この16の組み合わせを作成したい
+	// 管理する数字は12だが、12よりも16の方がプログラムの計算が速い
+	int h = index & 0x00001111; // 4ビット以外を0にする
+	float u = h < 8 ? x : y; // 0～7はx, それ以外はyを代入
 	int v;
-
 	if (h < 4)
 	{
 		v = y;
 	}
+	// 飛び飛びの数字で不自然に見えるかもしれないけれど正しい
+	// 12、13とかだと、1100, 1101で、どちらも2の位が0でプラス判定になりばらつきがプラスに偏る可能性あり
 	else if (h == 12 || h == 14)
 	{
 		v = x;
@@ -96,10 +98,15 @@ float PerlinNoise::Grad(int index, float x, float y, float z)
 	{
 		v = z;
 	}
-	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+
+	// ((h & 0x0001) == 0 ? u : -u) ← (h & 0x0001) が0になるならプラス、違うならマイナス
+	// ((h & 0x0010) == 0 ? v : -v) ← (h & 0x0010) が0になるならプラス、違うならマイナス
+	return ((h & 0x0001) == 0 ? u : -u) + ((h & 0x0010) == 0 ? v : -v);
 }
 
 float PerlinNoise::Smootherstep(float number) {
+	// パーリンの5次多項式、numberをなめらかな値に変換する
+	// 6.0f, 15.0f, 10.0fはパーリンの5次多項式に出てくる定数
 	return number * number * number * (number * (number * 6.0f - 15.0f) + 10.0f);
 }
 
@@ -113,4 +120,10 @@ float PerlinNoise::Lerp(float start, float end, float t)
 {
 	// start : 始点、end : 終点、t : 補完係数
 	return (end - start) * t + start;
+}
+
+int PerlinNoise::Perm(int i)
+{
+	// 範囲外アクセスを防いでPERLIN_NOISEを使用する
+	return PERLIN_NOISE[i & (PERLIN_NOISE_SIZE - 1)];
 }
