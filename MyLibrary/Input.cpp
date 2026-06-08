@@ -34,7 +34,7 @@ namespace Input
 
 void Input::InitActionMap()
 {
-    inputActionMap["next"] = { {InputType::keyboard,KEY_INPUT_RETURN} };
+    inputActionMap["next"] = { {InputType::keyboard, KEY_INPUT_RETURN} };
     inputActionMap["outBullet"] = { {InputType::keyboard, KEY_INPUT_SPACE}, {InputType::mouse, MOUSE_INPUT_LEFT} };
     inputActionMap["reload"] = { {InputType::keyboard, KEY_INPUT_R},{InputType::mouse, MOUSE_INPUT_RIGHT} };
 

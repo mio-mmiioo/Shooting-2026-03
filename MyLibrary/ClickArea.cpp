@@ -81,7 +81,7 @@ void Button::Update()
 	}
 }
 
-void Button::Draw()
+void Button::Draw() const
 {
 	// 選択中
 	if (isOnArea_ == true)
@@ -103,7 +103,7 @@ void Button::Draw()
 	}
 }
 
-bool Button::GetIsOnArea()
+bool Button::GetIsOnArea() const
 {
 	if (ClickArea::IsMouseInArea(normal_) == true)
 	{

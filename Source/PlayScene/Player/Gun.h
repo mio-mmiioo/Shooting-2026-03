@@ -37,7 +37,7 @@ public:
 	void OutBulletEffect();
 	bool ReloadBullet(); // true → リロード処理ができた
 	void AddBurrelt(int addNumber);
-	void SetGunType(GUN::TYPE type);
+	void SetGunType(GUN::TYPE type); 
 
 	int GetAttack();
 	float GetReloadTimer(); // 残りのリロード時間

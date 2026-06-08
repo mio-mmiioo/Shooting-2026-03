@@ -20,4 +20,9 @@ private:
 
 	Button* titleButton_;
 	float timer_;
+
+	// Observerから取得する情報関連
+	std::string courseText_; // 選択したコース
+	int enemyKilled_; // たおした敵の数
+	int score_; // 得点
 };

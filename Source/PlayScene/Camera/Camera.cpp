@@ -8,8 +8,8 @@
 
 namespace
 {
-	const float CAMERA_MOVE_SPEED = 5.0f;
-	const float CAMERA_ROTATE_SPEED = 0.01f;
+	const float CAMERA_MOVE_SPEED = 5.0f; // 移動速度
+	const float CAMERA_ROTATE_SPEED = 0.01f; // 回転速度
 	const float CAMERA_NEAR = 50.0f;
 	const float CAMERA_FAR = 15000.0f;
 
@@ -18,7 +18,7 @@ namespace
 	const float HEAD_BOB_INTENSITY = 10.0f;
 
 	// パーリンノイズ関連　自然に見えるように揺らす
-	const float PERLIN_NOISE_INTENSITY = 5.0f;
+	const float PERLIN_NOISE_INTENSITY = 10.0f;
 	const float PERLIN_NOISE_TIME = 0.5f;
 
 	// 一人称視点関連
@@ -199,6 +199,11 @@ void Camera::PerlinNoise()
 	normal = VNorm(normal);
 	// カメラの位置　+= 正規化した方向ベクトル * (-0.5~0.5) * 定数 * ((最大の時間　- 時間) / 最大の時間)
 	cameraPosition_ += normal * (noise_ - 0.5f) * PERLIN_NOISE_INTENSITY * ((PERLIN_NOISE_TIME - noiseTimer_) / PERLIN_NOISE_TIME);
+}
+
+void Camera::PerlinNoise2()
+{
+	
 }
 
 void Camera::ImGuiInput()

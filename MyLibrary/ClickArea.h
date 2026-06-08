@@ -5,7 +5,7 @@ struct area
 {
 	VECTOR2 leftTop; // 左上の座標
 	VECTOR2 rightDown; // 右下の座標
-	int hImage; // 画像
+	int hImage; // 画像( 動画ok )
 };
 
 namespace ClickArea
@@ -22,10 +22,10 @@ public:
 	Button(area normal, area select);
 	~Button();
 	void Update();
-	void Draw();
+	void Draw() const ;
 	bool GetIsClickArea() const { return isClickArea_; } // true → マウスで指定した範囲をクリック
 	bool GetIsKeepOnArea() const { return isOnArea_; } // true → マウスで指定した範囲上にいる
-	bool GetIsOnArea(); // true → マウスで指定した範囲上にいる
+	bool GetIsOnArea() const ; // true → マウスで指定した範囲上にいる
 
 	int GetNormalGraph() const { return normal_.hImage; } // 通常時の画像を取得
 	int GetSelectGraph() const { return select_.hImage; } // 選択時の画像を取得

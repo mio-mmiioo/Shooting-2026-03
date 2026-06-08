@@ -27,6 +27,7 @@ private:
 
 	void HeadBob();			// 歩いている風に見せる処理
 	void PerlinNoise();		// 自然に見せるための処理
+	void PerlinNoise2();	// 自然に見せるための処理の改良版
 
 	void ImGuiInput();		// 開発時のみ使用する
 
