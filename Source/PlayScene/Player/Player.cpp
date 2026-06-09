@@ -210,6 +210,11 @@ void Player::Draw()
 void Player::AddHp(int add)
 {
 	playerHp_->AddHp(add, &hp_);
+	// ダメージを受けたことをObserverに報告、ノーダメ判定で使用する
+	if (add < 0)
+	{
+		Observer::PlayerDamaged();
+	}
 }
 
 void Player::DevelopmentInput()

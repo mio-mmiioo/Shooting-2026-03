@@ -5,12 +5,14 @@ namespace Observer
 	int enemyKilledCounter;
 	int score;
 	int courseNumber; // 遊ぶコースの番号
+	bool isPlayerNoDamage;
 }
 
 void Observer::Init()
 {
 	enemyKilledCounter = 0;
 	score = 0;
+	isPlayerNoDamage = true;
 }
 
 void Observer::AddScore(int addScore)
@@ -42,4 +44,14 @@ int Observer::SetCourse(int number)
 int Observer::GetCourse()
 {
 	return courseNumber;
+}
+
+void Observer::PlayerDamaged()
+{
+	isPlayerNoDamage = true;
+}
+
+bool Observer::GetIsPlayerNoDamage()
+{
+	return isPlayerNoDamage;
 }

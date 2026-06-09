@@ -22,6 +22,11 @@ MenuScene::MenuScene()
 		courses_[Data::COURSE::COURSE1] = course1;
 		courses_[Data::COURSE::COURSE2] = course2;
 		courses_[Data::COURSE::COURSE3] = course3;
+
+		for (int count = 0; count < Data::COURSE::MAX_COURSE; count++)
+		{
+			ChangeMovieVolumeToGraph(0, courses_[count].hImage); // 動画のボリュームを0にする
+		}
 	}
 	
 	isMouseOnArea_ = false;

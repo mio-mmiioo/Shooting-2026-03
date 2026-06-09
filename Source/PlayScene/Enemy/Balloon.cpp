@@ -35,7 +35,7 @@ Balloon::Balloon(Data::ObjectData objectData, Data::CharacterData characterData)
 
 
 	noise_ = 0.0f;
-	isArrive_ = false;
+	isArrive_ = true;
 }
 
 Balloon::~Balloon()
@@ -88,7 +88,11 @@ void Balloon::Update()
 		SetMove(toPosition_);
 	}
 	
-	if (VSquareSize(transform_.position_ - toPosition_) < 10.0f)
+	ImGui::Text("noise::%f", noise_);
+
+	float distance = VSize(transform_.position_ - toPosition_);
+
+	if (distance < 1.0f)
 	{
 		isArrive_ = true;
 	}

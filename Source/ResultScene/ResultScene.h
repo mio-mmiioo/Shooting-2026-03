@@ -25,4 +25,7 @@ private:
 	std::string courseText_; // 選択したコース
 	int enemyKilled_; // たおした敵の数
 	int score_; // 得点
+	int noDamageBonus_; // ノーダメージのボーナス得点
+
+	int currentScore_; // 見せるための得点表示に使う得点
 };

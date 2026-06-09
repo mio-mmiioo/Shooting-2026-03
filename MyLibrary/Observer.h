@@ -11,4 +11,7 @@ namespace Observer
 
 	int SetCourse(int number); // プレイヤーが選んだコースをセット
 	int GetCourse(); // プレイヤーが選んだコースをゲット
+
+	void PlayerDamaged(); // プレイヤーが攻撃された
+	bool GetIsPlayerNoDamage(); // true → プレイヤーがノーダメ
 }
