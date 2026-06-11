@@ -14,9 +14,9 @@ MenuScene::MenuScene()
 	// courses_に値を代入
 	{
 		area tutorial	= { {235.0f, 125.0f}, {525.0f, 300.0f}, Data::movies["tutorial"] }; // チュートリアル
-		area course1	= { {745.0f, 125.0f}, {1030.0f, 300.0f}, Data::movies["course1"] };
-		area course2	= { {235.0f, 405.0f}, {525.0f, 580.0f}, Data::movies["course2"] };
-		area course3	= { {745.0f, 405.0f}, {1030.0f, 580.0f}, Data::movies["course3"] };
+		area course1	= { {745.0f, 125.0f}, {1030.0f, 300.0f}, Data::images["ComingSoon"] };
+		area course2	= { {235.0f, 405.0f}, {525.0f, 580.0f}, Data::images["ComingSoon"] };
+		area course3	= { {745.0f, 405.0f}, {1030.0f, 580.0f}, Data::images["ComingSoon"] };
 
 		courses_[Data::COURSE::TUTORIAL] = tutorial;
 		courses_[Data::COURSE::COURSE1] = course1;
@@ -56,12 +56,12 @@ void MenuScene::Update()
 	{
 		for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 		{
-			if (ClickArea::IsMouseInArea(courses_[i]) == true)
+			if (ClickArea::IsMouseInArea(courses_[i]) == true && courses_[i].hImage != Data::images["ComingSoon"])
 			{
 				PlaySoundMem(Data::se["select"], DX_PLAYTYPE_BACK, TRUE);
 			}
 
-			if (ClickArea::IsMosueKeepInArea(courses_[i]) == true)
+			if (ClickArea::IsMosueKeepInArea(courses_[i]) == true && courses_[i].hImage != Data::images["ComingSoon"])
 			{
 				PlayMovieToGraph(courses_[i].hImage);
 				// 動画が一定時間再生された場合
@@ -87,7 +87,7 @@ void MenuScene::Update()
 		{
 			for (int i = 0; i < Data::COURSE::MAX_COURSE; i++)
 			{
-				if (ClickArea::IsMosueKeepInArea(courses_[i]) == true)
+				if (ClickArea::IsMosueKeepInArea(courses_[i]) == true && courses_[i].hImage != Data::images["ComingSoon"])
 				{
 					Observer::SetCourse(i);
 				}

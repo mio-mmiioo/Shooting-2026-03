@@ -90,10 +90,13 @@ ResultScene::~ResultScene()
 
 void ResultScene::Update()
 {
-	timer_ -= Time::DeltaTime();
 	if (currentScore_ < score_)
 	{
 		currentScore_ += 1;
+	}
+	else
+	{
+		timer_ -= Time::DeltaTime();
 	}
 
 	// 一定時間が経過したら、強制的にタイトルに遷移
